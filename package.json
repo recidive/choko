@@ -1,0 +1,13 @@
+{
+  "name": "choko",
+  "version": "0.0.1",
+  "description": "High performance and high level web application framework.",
+  "keywords": ["framework", "web", "choko"],
+  "repository": "git://github.com/recidive/choko.git",
+  "dependencies": {
+    "prana": "0.0.x",
+    "express": "3.3.x",
+    "connect-flash": "0.1.x",
+    "async": "0.2.x"
+  }
+}
