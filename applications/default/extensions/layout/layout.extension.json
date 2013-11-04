@@ -1,0 +1,5 @@
+{
+  "title": "Layout",
+  "description": "Structure application pages in sections, zones and regions.",
+  "dependencies": ["context"]
+}

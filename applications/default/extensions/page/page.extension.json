@@ -1,0 +1,5 @@
+{
+  "title": "Page",
+  "description": "Pages are each screen of the application.",
+  "dependencies": ["route"]
+}

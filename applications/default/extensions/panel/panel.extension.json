@@ -1,0 +1,5 @@
+{
+  "title": "Panel",
+  "description": "Pieces of content that can be added to regions.",
+  "dependencies": ["context"]
+}

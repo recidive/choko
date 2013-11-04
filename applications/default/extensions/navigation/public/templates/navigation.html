@@ -1,0 +1,3 @@
+<ul ng-controller="NavigationController" class="nav nav-pills nav-stacked">
+  <li ng-repeat="item in panel.panel.items" ng-class="{active: isActive(item.url)}"><a href="#{{item.url}}">{{item.title}}</a></li>
+</ul>

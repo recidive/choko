@@ -20,7 +20,12 @@ var settings = module.exports = {
   // A list of required core extensions.
   extensions: {
     'route': {},
-    'context': {}
+    'context': {},
+    'layout': {},
+    'panel': {},
+    'navigation': {},
+    'page': {},
+    'theme': {}
   }
 
 };

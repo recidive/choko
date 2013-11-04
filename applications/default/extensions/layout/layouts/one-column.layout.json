@@ -1,0 +1,62 @@
+{
+  "title": "One column",
+  "description": "A flexible single column layout.",
+  "fluid": false,
+  "responsive": true,
+  "sections": {
+    "header": {
+      "branding": {
+        "branding": {
+          "width": 12
+        }
+      },
+      "menu": {
+        "menu": {
+          "width": 12
+        }
+      },
+      "header": {
+        "header-first": {
+          "width": 4
+        },
+        "header-second": {
+          "width": 8
+        }
+      }
+    },
+    "content": {
+      "preface": {
+        "preface-first": {
+          "width": 4
+        },
+        "preface-second": {
+          "width": 4
+        },
+        "preface-third": {
+          "width": 4
+        }
+      },
+      "content": {
+        "content": {
+          "width": 12
+        }
+      },
+      "postscript": {
+        "postscript-first": {
+          "width": 4
+        },
+        "postscript-second": {
+          "width": 4
+        },
+        "postscript-third": {
+          "width": 4
+        }
+      }
+    },
+    "footer": {
+      "footer": {
+        "width": 12
+      }
+    }
+  }
+}

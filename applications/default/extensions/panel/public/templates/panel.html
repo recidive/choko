@@ -1,0 +1,9 @@
+<div class="panel panel-{{panel.panel.style}} panel-{{panel.name}}">
+  <div ng-if="panel.panel.title" class="panel-heading">
+    <h3 class="panel-title">{{panel.panel.title}}</h3>
+  </div>
+  <div ng-if="panel.panel.content" ng-bind-html="panel.panel.content" class="panel-body"></div>
+  <div ng-if="panel.panel.template" class="panel-body">
+    <div ng-include="panel.panel.template"></div>
+  </div>
+</div>
