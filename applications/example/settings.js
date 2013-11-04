@@ -1,5 +1,5 @@
 /*
- * Example application Settings.
+ * Example application settings.
  */
 
 /**

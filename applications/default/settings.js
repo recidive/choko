@@ -25,7 +25,8 @@ var settings = module.exports = {
     'panel': {},
     'navigation': {},
     'page': {},
-    'theme': {}
+    'theme': {},
+    'rest': {}
   }
 
 };
