@@ -22,7 +22,7 @@
 
     $ node server.js
 
-  then navigate to http://localhost to play with examples.
+  then open http://localhost:3000 in your browser to play with examples.
 
 ## Directory structure
 
@@ -33,8 +33,7 @@ applications   -> Where all applications live.
     public     -> Default application public files.
   example      -> Sample application to show case Choko features.
   [myApp]      -> You app dir should be similar to the example or default app.
-lib            -> Our homegrown serverside codebase.
-node_modules   -> Where dependencies get installed.
+lib            -> Choko serverside libraries.
 ```
 
 The only place it's advised to add or change files is in your own application
