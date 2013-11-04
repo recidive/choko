@@ -17,7 +17,10 @@ var settings = module.exports = {
     name: 'Default'
   },
 
-  // A list of extensions to enable.
-  extensions: {}
+  // A list of required core extensions.
+  extensions: {
+    'route': {},
+    'context': {}
+  }
 
 };
