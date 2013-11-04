@@ -1,0 +1,5 @@
+{
+  "title": "Example Navigation",
+  "description": "Show up how to create navigations.",
+  "dependencies": ["navigation"]
+}
