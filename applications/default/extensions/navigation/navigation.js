@@ -57,17 +57,7 @@ navigation.navigation = function(navigations, callback) {
     title: this.application.settings.application.name,
     description: 'Main navigation.',
     style: 'navbar',
-    items: [
-      {
-        title: 'Manage',
-        url: '/manage'
-      },
-      {
-        title: 'Login',
-        url: '/login',
-        pull: 'right'
-      }
-    ]
+    items: []
   };
 
   callback(null, newNavigations);

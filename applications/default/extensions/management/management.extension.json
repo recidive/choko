@@ -1,0 +1,5 @@
+{
+  "title": "Management",
+  "description": "Provide management and settings pages.",
+  "dependencies": ["page", "panel"]
+}

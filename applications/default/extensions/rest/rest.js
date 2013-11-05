@@ -15,7 +15,7 @@ rest.route = function(routes, callback) {
     var typeModel = self.application.types[typeName];
     var type = typeModel.type;
 
-    // Default path to tyoe name.
+    // Default path to type name.
     if (!type.path) {
       type.path = '/' + type.name;
     }

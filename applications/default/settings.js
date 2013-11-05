@@ -26,7 +26,8 @@ var settings = module.exports = {
     'navigation': {},
     'page': {},
     'theme': {},
-    'rest': {}
+    'rest': {},
+    'management': {}
   }
 
 };
