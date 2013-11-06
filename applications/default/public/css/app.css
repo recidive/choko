@@ -43,3 +43,7 @@
 .region.highlight .region-name {
   display: block;
 }
+
+.app-version {
+  display: none;
+}
