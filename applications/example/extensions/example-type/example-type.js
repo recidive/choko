@@ -11,12 +11,7 @@ exampleType.type = function(types, callback) {
     title: 'Article',
     description: 'Articles are pieces of text with a title.',
     path: 'article',
-    //storage: 'memory',
-    //storage: 'database',
-    // @todo: figure out a better way for passing the database connection to
-    // the storage controller.
-    //database: this.application.database,
-    //data: data,
+    storage: 'database',
     fields: {
       id: {
         title: 'Id',

@@ -7,6 +7,8 @@
  */
 var settings = module.exports = {
 
+  database: 'mongodb://localhost/example',
+
   sessionSecret: 'change-me',
 
   application: {
