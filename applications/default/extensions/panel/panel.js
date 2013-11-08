@@ -54,9 +54,9 @@ panel.reaction = function(reactions, callback) {
             }
 
             if (panel) {
-              // Set panel data and add it to the payload.
-              regionPanel.panel = panel;
-              response.payload.panels[regionName].push(regionPanel);
+              // Set panel weight and add it to the region.
+              panel.weight = regionPanel.weight;
+              response.payload.panels[regionName].push(panel);
             }
             next();
           });

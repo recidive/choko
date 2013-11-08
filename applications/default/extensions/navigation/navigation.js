@@ -1,5 +1,7 @@
-var navigation = module.exports;
+var utils = require('prana').utils;
 var async = require('async');
+
+var navigation = module.exports;
 
 /**
  * The type() hook.
@@ -26,8 +28,15 @@ navigation.panel = function(panels, callback) {
     }
     var newPanels = {};
     async.each(Object.keys(navigations), function(navigationName, next) {
-      // Start panel as the navigation object itself.
-      var panel = navigations[navigationName];
+      // Start from an empty object.
+      var panel = {}
+
+      // Add properties from the navigation object itself.
+      utils.extend(panel, navigations[navigationName]);
+
+      // Add 'navigation-' prefix to panel name.
+      panel.name = 'navigation-' + navigationName;
+
       if (!panel.template) {
         if (panel.style == 'navbar') {
           // Navbar style has a different template.
@@ -39,7 +48,8 @@ navigation.panel = function(panels, callback) {
           panel.template = 'templates/navigation.html';
         }
       }
-      newPanels['navigation-' + navigationName] = panel;
+
+      newPanels[panel.name] = panel;
       next();
     }, function() {
       callback(null, newPanels);
