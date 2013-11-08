@@ -111,7 +111,7 @@ page.context = function(contexts, callback) {
           panel: {
             'content': [{
               name: 'page-content',
-              order: 0
+              weight: 0
             }]
           }
         }

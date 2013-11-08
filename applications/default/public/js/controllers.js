@@ -27,7 +27,7 @@ function RegionController($scope, $location) {
       {
         title: 'Navigation',
         template: 'templates/navbar.html',
-        order: 0
+        weight: 0
       }
     ]
   };

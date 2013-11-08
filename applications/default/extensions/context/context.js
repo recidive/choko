@@ -121,7 +121,7 @@ context.context = function(contexts, callback) {
       panel: {
         'menu': [{
           name: 'navigation-main',
-          order: 0
+          weight: 0
         }]
       }
     }
