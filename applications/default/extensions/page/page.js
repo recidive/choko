@@ -91,37 +91,14 @@ page.route = function(routes, callback) {
  * The context() hook.
  */
 page.context = function(contexts, callback) {
-  // Create a context for every application page.
-  var Page = this.application.type('page');
-  Page.list({}, function(err, pages) {
-    if (err) {
-      return callback(err);
-    }
-    var newContexts = {};
-    async.each(Object.keys(pages), function(pageName, next) {
-      var pageInfo = pages[pageName];
-      newContexts['page-' + pageName] = {
-        title: pageInfo.title + ' context',
-        description: 'Context for the ' + pageInfo.title + ' page.',
-        access: true,
-        conditions: {
-          path: [pageInfo.path]
-        },
-        reactions: {
-          panel: {
-            'content': [{
-              name: 'page-content',
-              weight: 0
-            }]
-          }
-        }
-      };
-      next();
-    }, function(err) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, newContexts);
-    });
+  // Initialize the content region panels if not inilialized yet.
+  contexts['global'].reactions.panel['content'] = contexts['global'].reactions.panel['content'] || [];
+
+  // Add page-content panel to the 'content' region.
+  contexts['global'].reactions.panel['content'].push({
+    name: 'page-content',
+    weight: 0
   });
+
+  callback();
 };
