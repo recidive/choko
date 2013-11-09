@@ -21,7 +21,7 @@ rest.route = function(routes, callback) {
     }
 
     // List or add items.
-    newRoutes[type.path] = {
+    newRoutes['/rest' + type.path] = {
       access: true,
       callback: function(request, response, callback) {
         if (request.method == 'GET') {
@@ -35,7 +35,7 @@ rest.route = function(routes, callback) {
     };
 
     // Get, update or delete an item.
-    newRoutes[type.path + '/:' + type.name] = {
+    newRoutes['/rest' + type.path + '/:' + type.name] = {
       access: true,
       callback: function(request, response, callback) {
         if (request.method == 'GET') {
