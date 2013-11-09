@@ -34,12 +34,21 @@ function RegionController($scope, $location) {
 }
 //RegionController.$inject = ['$scope', '$location'];
 
-function PanelController($scope, $location, applicationState) {
+function PanelController($scope, $location, applicationState, Choko) {
   // Add application state to panel scope so all panels can use this
   // information.
   $scope.application = applicationState.get();
+
+  // handle 'list' type panels.
+  if ($scope.panel.type === 'list' && $scope.panel.itemType) {
+    $scope.items = {};
+
+    Choko.get({type: $scope.panel.itemType}, function(response) {
+      $scope.items = response;
+    });
+  }
 }
-//PanelController.$inject = ['$scope', '$location', 'applicationState'];
+//PanelController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
 function NavigationController($scope, $location) {
   $scope.navigation = {
