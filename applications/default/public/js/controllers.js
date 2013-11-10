@@ -22,15 +22,6 @@ function ApplicationController($scope, $routeParams, $http, applicationState) {
 ApplicationController.$inject = ['$scope', '$routeParams', '$http', 'applicationState'];
 
 function RegionController($scope, $location) {
-  $scope.blocks = {
-    'menu': [
-      {
-        title: 'Navigation',
-        template: 'templates/navbar.html',
-        weight: 0
-      }
-    ]
-  };
 }
 //RegionController.$inject = ['$scope', '$location'];
 
@@ -47,21 +38,6 @@ function PanelController($scope, $location, applicationState, Choko) {
 }
 //PanelController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
-function NavigationController($scope, $location) {
-  $scope.navigation = {
-    title: 'MyApp',
-    links: [
-      {
-        title: 'Home',
-        description: 'Go to the homepage',
-        path: '/home'
-      },
-      {
-        title: 'Other link',
-        path: '/other-link'
-      }
-    ]
-  };
 function PageController($scope, $location, applicationState, Choko) {
   $scope.page = $scope.application.page;
 
@@ -77,6 +53,8 @@ function PageController($scope, $location, applicationState, Choko) {
 }
 //PageController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
+
+function NavigationController($scope, $location) {
   $scope.isActive = function(route) {
     //var regexp = new RegExp('^' + pattern + '.*$', ["i"]);
     return route === $location.path();
