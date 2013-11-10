@@ -191,7 +191,7 @@ management.context = function(contexts, callback) {
     title: 'Management pages',
     description: 'Management pages context.',
     access: 'access application',
-    weight: 1,
+    weight: -1,
     conditions: {
       path: ['/manage', '/manage/*']
     },

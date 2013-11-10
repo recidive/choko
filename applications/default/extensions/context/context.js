@@ -59,8 +59,8 @@ context.type = function(types, callback) {
       execute: function(request, response, callback) {
         var Condition = this.application.type('condition');
         // Call callback on the first condition that pass.
-        // @todo: Eventually we may want to add an operator and also alow OR and
-        // ANDs.
+        // @todo: Eventually we may want to add an operator and also allow OR
+        // and ANDs.
         this.conditions = this.conditions || {};
         var self = this;
         async.detect(Object.keys(this.conditions), function(conditionName, next) {
@@ -112,7 +112,7 @@ context.context = function(contexts, callback) {
     title: 'Global',
     description: 'Application wide context.',
     access: 'access application',
-    weight: 0,
+    weight: -10,
     conditions: {
       siteWide: true
     },
