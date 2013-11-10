@@ -74,68 +74,36 @@ management.page = function(pages, callback) {
     path: '/manage/panels',
     title: 'Panels',
     access: 'manage panels',
-    callback: function(request, response, callback) {
-      var Panel = self.application.type('panel');
-      Panel.list({}, function(err, panels) {
-        if (err) {
-          return callback(err);
-        }
-        response.payload.page.panels = panels;
-        callback();
-      });
-    },
-    template: 'templates/panels.html'
+    type: 'list',
+    itemType: 'panel',
+    template: 'templates/list-group.html'
   };
 
   newPages['manage-contexts'] = {
     path: '/manage/contexts',
     title: 'Contexts',
     access: 'manage contexts',
-    callback: function(request, response, callback) {
-      var Context = self.application.type('context');
-      Context.list({}, function(err, contexts) {
-        if (err) {
-          return callback(err);
-        }
-        response.payload.page.contexts = contexts;
-        callback();
-      });
-    },
-    template: 'templates/contexts.html'
+    type: 'list',
+    itemType: 'context',
+    template: 'templates/list-group.html'
   };
 
   newPages['manage-layouts'] = {
     path: '/manage/layouts',
     title: 'Layouts',
     access: 'manage layouts',
-    callback: function(request, response, callback) {
-      var Layout = self.application.type('layout');
-      Layout.list({}, function(err, layouts) {
-        if (err) {
-          return callback(err);
-        }
-        response.payload.page.layouts = layouts;
-        callback();
-      });
-    },
-    template: 'templates/layouts.html'
+    type: 'list',
+    itemType: 'layout',
+    template: 'templates/list-group.html'
   };
 
   newPages['manage-navigations'] = {
     path: '/manage/navigations',
     title: 'Navigations',
     access: 'manage navigations',
-    callback: function(request, response, callback) {
-      var Navigation = self.application.type('navigation');
-      Navigation.list({}, function(err, navigations) {
-        if (err) {
-          return callback(err);
-        }
-        response.payload.page.navigations = navigations;
-        callback();
-      });
-    },
-    template: 'templates/navigations.html'
+    type: 'list',
+    itemType: 'navigation',
+    template: 'templates/list-group.html'
   };
 
   newPages['manage-types'] = {
@@ -152,10 +120,10 @@ management.page = function(pages, callback) {
           description: type.type.settings.description
         };
       }
-      response.payload.page.types = result;
+      response.payload.page.items = result;
       callback();
     },
-    template: 'templates/types.html'
+    template: 'templates/list-group.html'
   };
 
   newPages['manage-extensions'] = {
@@ -172,10 +140,10 @@ management.page = function(pages, callback) {
           description: extension.settings.description
         };
       }
-      response.payload.page.extensions = result;
+      response.payload.page.items = result;
       callback();
     },
-    template: 'templates/extensions.html'
+    template: 'templates/list-group.html'
   };
 
   callback(null, newPages);
