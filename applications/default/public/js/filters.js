@@ -7,4 +7,12 @@ angular.module('choko.filters', [])
     return function(text) {
       return String(text).replace(/\%VERSION\%/mg, version);
     }
-  }]);
+  }])
+  .filter('keys', function() {
+    return function(input) {
+      if (!input) {
+        return [];
+      }
+      return Object.keys(input);
+    }
+  });

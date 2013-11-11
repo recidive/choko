@@ -24,6 +24,7 @@ page.page = function(pages, callback) {
   newPages['home'] = {
     path: '/home',
     title: this.application.settings.application.name,
+    content: '<p>Default homepage content.</p>',
     access: 'access application'
   };
 

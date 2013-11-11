@@ -28,22 +28,10 @@
   color: red;
 }
 
-/* Hightlight regions */
-.region .region-name {
+/* Hide region names and app version */
+.region-name {
   display: none;
 }
-.region.highlight {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  background-color: #eee;
-  border: 1px solid #ddd;
-  background-color: rgba(86, 61, 124, .15);
-  border: 1px solid rgba(86, 61, 124, .2);
-}
-.region.highlight .region-name {
-  display: block;
-}
-
 .app-version {
   display: none;
 }

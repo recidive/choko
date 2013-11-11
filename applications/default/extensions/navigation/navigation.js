@@ -26,30 +26,27 @@ navigation.panel = function(panels, callback) {
     if (err) {
       return callback(err);
     }
+    // Create a panel for each navigation.
     var newPanels = {};
     async.each(Object.keys(navigations), function(navigationName, next) {
-      // Start from an empty object.
-      var panel = {}
+      var nav = navigations[navigationName];
+      var classes = ['nav'].concat(nav.classes);
 
-      // Add properties from the navigation object itself.
-      utils.extend(panel, navigations[navigationName]);
-
-      // Add 'navigation-' prefix to panel name.
-      panel.name = 'navigation-' + navigationName;
-
-      if (!panel.template) {
-        if (panel.style == 'navbar') {
-          // Navbar style has a different template.
-          panel.template = 'templates/navbar.html';
-          // Navbar style panels are better as bare.
-          panel.bare = true;
-        }
-        else {
-          panel.template = 'templates/navigation.html';
-        }
+      if (nav.stacked) {
+        classes.push('nav-stacked');
       }
 
-      newPanels[panel.name] = panel;
+      newPanels['navigation-' + navigationName] = {
+        title: nav.title,
+        description: 'The ' + nav.title + ' navigation.',
+        type: 'item',
+        bare: true,
+        classes: classes,
+        itemType: 'navigation',
+        itemKey: navigationName,
+        template: 'templates/navigation.html'
+      };
+
       next();
     }, function() {
       callback(null, newPanels);
@@ -64,9 +61,16 @@ navigation.navigation = function(navigations, callback) {
   var newNavigations = {};
 
   newNavigations['main'] = {
-    title: this.application.settings.application.name,
-    description: 'Main navigation.',
-    style: 'navbar',
+    title: 'Main',
+    description: 'Default main navigation.',
+    classes: ['navbar-nav'],
+    items: []
+  };
+
+  newNavigations['user'] = {
+    title: 'User',
+    description: 'User login and registration links.',
+    classes: ['navbar-nav'],
     items: []
   };
 

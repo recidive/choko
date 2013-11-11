@@ -1,0 +1,5 @@
+<div ng-if="column.region" ng-include="'templates/region.html'" ng-controller="RegionController"></div>
+<!-- Rows -->
+<div ng-repeat="name in column.rows | keys" ng-init="row = column.rows[name]" ng-controller="RowController" class="{{rowName}} row-fluid">
+  <div ng-include="getTemplate()"></div>
+</div>

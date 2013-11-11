@@ -1,0 +1,5 @@
+<div ng-if="row.region" ng-include="'templates/region.html'" ng-controller="RegionController"></div>
+<!-- Columns -->
+<div ng-repeat="name in row.columns | keys" ng-init="column = row.columns[name]" ng-controller="ColumnController" class="{{columnName}} col-md-{{column.width}}">
+  <div ng-include="getTemplate()"></div>
+</div>

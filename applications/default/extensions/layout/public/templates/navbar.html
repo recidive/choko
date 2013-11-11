@@ -1,0 +1,37 @@
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <!-- Panels -->
+        <span ng-repeat="panel in panels['navbar-header']" ng-controller="PanelController" class="panel-wrapper">
+          <span ng-include="template"></span>
+        </span>
+      </a>
+    </div>
+
+    <!-- Collect content for toggling -->
+    <div class="collapse navbar-collapse">
+      <div class="navbar-left">
+        <!-- Panels -->
+        <div ng-repeat="panel in panels['navbar-left']" ng-controller="PanelController" class="panel-wrapper">
+          <div ng-include="template"></div>
+        </div>
+      </div>
+      <div class="navbar-right">
+        <!-- Panels -->
+        <div ng-repeat="panel in panels['navbar-right']" ng-controller="PanelController" class="panel-wrapper">
+          <div ng-include="template"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>

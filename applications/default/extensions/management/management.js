@@ -13,7 +13,7 @@ management.navigation = function(navigations, callback) {
   newNavigations['manage'] = {
     title: 'Manage',
     description: 'Site management navigation.',
-    style: 'pills',
+    classes: ['nav-pills'],
     stacked: true,
     items: [
       {

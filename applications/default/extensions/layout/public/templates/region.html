@@ -1,0 +1,7 @@
+<div ng-controller="RegionController" class="{{$parent.name}}">
+  <div class="region-name">{{$parent.name}}</div>
+  <!-- Panels -->
+  <div ng-repeat="panel in panels[$parent.name]" ng-controller="PanelController" class="panel-wrapper">
+    <div ng-include="template"></div>
+  </div>
+</div>

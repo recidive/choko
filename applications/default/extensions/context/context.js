@@ -119,8 +119,16 @@ context.context = function(contexts, callback) {
     reactions: {
       layout: 'one-column',
       panel: {
-        'menu': [{
+        'navbar-header': [{
+          name: 'brand',
+          weight: 0
+        }],
+        'navbar-left': [{
           name: 'navigation-main',
+          weight: 0
+        }],
+        'footer': [{
+          name: 'powered-by',
           weight: 0
         }]
       }

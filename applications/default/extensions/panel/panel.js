@@ -18,6 +18,29 @@ panel.type = function(types, callback) {
 };
 
 /**
+ * The panel() hook.
+ */
+panel.panel = function(panels, callback) {
+  var newPanels = {};
+
+  newPanels['brand'] = {
+    title: 'Brand',
+    description: 'Application name or logo.',
+    bare: true,
+    content: this.application.settings.application.name
+  };
+
+  newPanels['powered-by'] = {
+    title: 'Powered by',
+    description: 'Powered by Choko.',
+    bare: true,
+    content: '<p>Powered by Choko</p>'
+  };
+
+  callback(null, newPanels);
+};
+
+/**
  * The reaction() hook.
  */
 panel.reaction = function(reactions, callback) {

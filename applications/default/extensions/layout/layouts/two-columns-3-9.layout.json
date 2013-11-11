@@ -1,65 +1,73 @@
 {
   "title": "Two columns 3/9",
   "description": "A flexible two columns layout with a 3 columns left sidebar and a 9 columns content area.",
-  "fluid": false,
+  "fluid": true,
   "responsive": true,
-  "sections": {
-    "header": {
-      "branding": {
-        "branding": {
-          "width": 12
-        }
-      },
-      "menu": {
-        "menu": {
-          "width": 12
-        }
-      },
-      "header": {
-        "header-first": {
-          "width": 4
+  "rows": {
+    "navbar": {
+      "title": "Navbar",
+      "template": "templates/navbar.html",
+      "columns": {
+        "navbar-header": {
+          "title": "Navbar header",
+          "region": true
         },
-        "header-second": {
-          "width": 8
+        "navbar-nav": {
+          "title": "Navbar navigation",
+          "region": true
+        },
+        "navbar-left": {
+          "title": "Navbar left",
+          "region": true
+        },
+        "navbar-right": {
+          "title": "Navbar right",
+          "region": true
+        }
+      }
+    },
+    "highlight": {
+      "title": "Highlight",
+      "region": true
+    },
+    "feature": {
+      "title": "Feature",
+      "columns": {
+        "feature-first": {
+          "title": "Feature first",
+          "width": 4,
+          "region": true
+        },
+        "feature-second": {
+          "title": "Feature second",
+          "width": 4,
+          "region": true
+        },
+        "feature-third": {
+          "title": "Feature third",
+          "width": 4,
+          "region": true
         }
       }
     },
     "content": {
-      "preface": {
-        "preface-first": {
-          "width": 4
-        },
-        "preface-second": {
-          "width": 4
-        },
-        "preface-third": {
-          "width": 4
-        }
-      },
-      "content": {
+      "title": "Content",
+      "columns": {
         "sidebar": {
-          "width": 3
+          "title": "Sidebar",
+          "width": 3,
+          "region": true
         },
         "content": {
-          "width": 9
-        }
-      },
-      "postscript": {
-        "postscript-first": {
-          "width": 4
-        },
-        "postscript-second": {
-          "width": 4
-        },
-        "postscript-third": {
-          "width": 4
+          "title": "Content",
+          "width": 9,
+          "region": true
         }
       }
     },
     "footer": {
-      "footer": {
-        "width": 12
-      }
+      "title": "Footer",
+      "region": true
     }
   }
 }

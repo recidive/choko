@@ -1,19 +1,9 @@
-<!-- Sections -->
-<div ng-repeat="sectionName in notSorted(layout.layout.sections)" ng-init="section = layout.layout.sections[sectionName]" class="section section-{{sectionName}} container">
-  <!-- Zones -->
-  <div ng-repeat="zoneName in notSorted(section)" ng-init="zone = section[zoneName]" class="zone zone-{{zoneName}} row-fluid">
-    <!-- Regions -->
-    <div ng-repeat="regionName in notSorted(zone)" ng-init="region = zone[regionName]" ng-controller="RegionController" class="region region-{{regionName}} col-md-{{region.width}}">
-      <div class="region-name">{{regionName}}</div>
-      <!-- Panels -->
-      <div ng-repeat="panel in panels[regionName]" ng-controller="PanelController" class="panel-wrapper">
-        <!-- This is broken in AngularJS 1.2RC3
-        <div ng-if="panel.panel.bare" ng-include="panel.panel.template"></div>
-        <div ng-if="!panel.panel.bare" ng-include="'templates/panel.html'"></div>
-        -->
-        <div ng-include="panel.bare && panel.template"></div>
-        <div ng-include="!panel.bare && 'templates/panel.html'"></div>
-      </div>
-    </div>
+<!-- Rows -->
+<div ng-repeat="name in layout.layout.rows | keys" ng-init="row = layout.layout.rows[name]" ng-controller="RowController" class="{{rowName}} row-fluid">
+  <div class="container">
+
+    <div ng-if="row.template" ng-include="row.template"></div>
+    <div ng-if="!row.template" ng-include="'templates/row.html'"></div>
+
   </div>
 </div>
