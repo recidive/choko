@@ -38,10 +38,10 @@ layout.reaction = function(reactions, callback) {
         if (err) {
           return callback(err);
         }
-        response.payload.layout = {
-          name: value,
-          layout: layout
-        };
+
+        if (layout) {
+          response.payload.layout = layout;
+        }
         callback();
       });
     }

@@ -3,60 +3,80 @@
   "description": "A flexible single column layout.",
   "fluid": true,
   "responsive": true,
-  "rows": {
-    "navbar": {
+  "rows": [
+    {
+      "name": "navbar",
       "title": "Navbar",
       "template": "templates/navbar.html",
-      "columns": {
-        "navbar-header": {
+      "columns": [
+        {
+          "name": "navbar-header",
           "title": "Navbar header",
           "region": true
         },
-        "navbar-nav": {
+        {
+          "name": "navbar-nav",
           "title": "Navbar navigation",
           "region": true
         },
-        "navbar-left": {
+        {
+          "name": "navbar-left",
           "title": "Navbar left",
           "region": true
         },
-        "navbar-right": {
+        {
+          "name": "navbar-right",
           "title": "Navbar right",
           "region": true
         }
-      }
+      ],
+      "weight": 0
     },
-    "highlight": {
+    {
+      "name": "highlight",
       "title": "Highlight",
-      "region": true
+      "region": true,
+      "weight": 1
     },
-    "feature": {
+    {
+      "name": "feature",
       "title": "Feature",
-      "columns": {
-        "feature-first": {
+      "columns": [
+        {
+          "name": "feature-first",
           "title": "Feature first",
           "width": 4,
-          "region": true
+          "region": true,
+          "weight": 0
         },
-        "feature-second": {
+        {
+          "name": "feature-second",
           "title": "Feature second",
           "width": 4,
-          "region": true
+          "region": true,
+          "weight": 1
         },
-        "feature-third": {
+        {
+          "name": "feature-third",
           "title": "Feature third",
           "width": 4,
-          "region": true
+          "region": true,
+          "weight": 2
         }
-      }
+      ],
+      "weight": 2
     },
-    "content": {
+    {
+      "name": "content",
       "title": "Content",
-      "region": true
+      "region": true,
+      "weight": 3
     },
-    "footer": {
+    {
+      "name": "footer",
       "title": "Footer",
-      "region": true
+      "region": true,
+      "weight": 4
     }
-  }
+  ]
 }

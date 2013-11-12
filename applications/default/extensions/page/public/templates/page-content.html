@@ -1,13 +1,13 @@
 <div class="page" ng-controller="PageController">
-  <div ng-if="application.page.title" class="page-header">
-    <h1>{{application.page.title}} <small ng-if="application.page.subtitle">{{application.page.subtitle}}</small></h1>
+  <div ng-if="page.title" class="page-header">
+    <h1>{{page.title}} <small ng-if="page.subtitle">{{page.subtitle}}</small></h1>
   </div>
-  <p class="lead">{{application.page.description}}</p>
+  <p class="lead">{{page.description}}</p>
 
   <!-- This is broken in AngularJS 1.2RC3
   <div ng-if="application.page.template" ng-include="application.page.template"></div>
   <div ng-if="!application.page.template" ng-bind-html="application.page.content"></div>
   -->
-  <div ng-include="application.page.template && application.page.template"></div>
-  <div ng-bind-html="!application.page.template && application.page.content"></div>
+  <div ng-include="page.template && page.template"></div>
+  <div ng-bind-html="!page.template && page.content"></div>
 </div>

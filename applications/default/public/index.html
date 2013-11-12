@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="choko">
+<html lang="en" ng-app="choko" ng-controller="ApplicationController">
 <head>
   <meta charset="utf-8">
   <title>{{page.title}}</title>
@@ -24,7 +24,8 @@
 </head>
 <body>
 
-  <div ng-view></div>
+  <div ng-include="'templates/layout.html'"></div>
+
   <div class="app-version">Choko v<span app-version></span></div>
 
   <!-- Le javascript

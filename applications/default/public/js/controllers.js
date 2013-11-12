@@ -1,21 +1,40 @@
 'use strict';
 
-function ApplicationController($scope, $routeParams, $http, applicationState) {
-  $http.get($routeParams.path).success(function(data) {
-    // Merge data from the server.
-    angular.extend($scope, data.data);
+function ApplicationController($scope, $location, $http, applicationState, Choko) {
+  $scope.state = {};
 
-    // Store scope as application state.
-    applicationState.set($scope);
+  $scope.changeState = function() {
+    var path = $location.path() || '/home';
+
+    $http.get(path).success(function(data) {
+      // Rebuild the layout only when context changes.
+      if ($scope.contexts instanceof Array && $scope.contexts.toString() == data.data.contexts.toString()) {
+        // Update only panels in content region, and page information.
+        // @todo: get the region the page-content panel is attached to
+        // dinamically currently this is hadcoded to 'content' and will not work
+        // if the page-content panel is attacehd to a different region.
+        $scope.panels['content'] = data.data.panels['content'];
+        $scope.page = data.data.page;
+      }
+      else {
+        // Merge data from the server.
+        angular.extend($scope, data.data);
+
+        // Store scope as application state.
+        applicationState.set($scope);
+      }
+    });
+  }
+
+  $scope.$watch(function() {
+    return $location.path();
+  }, function(){
+    $scope.changeState();
   });
 }
-ApplicationController.$inject = ['$scope', '$routeParams', '$http', 'applicationState'];
+//ApplicationController.$inject = ['$scope', '$location', '$http', 'applicationState', 'Choko'];
 
 function PanelController($scope, $location, applicationState, Choko) {
-  // Add application state to panel scope so all panels can use this
-  // information.
-  $scope.application = applicationState.get();
-
   if ($scope.panel.type && $scope.panel.type !== 'default') {
     // Set view to the panel itself and call ViewController.
     $scope.view = $scope.panel;
@@ -32,8 +51,6 @@ function PanelController($scope, $location, applicationState, Choko) {
 //PanelController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
 function PageController($scope, $location, applicationState, Choko) {
-  $scope.page = $scope.application.page;
-
   if (!$scope.page.type || $scope.page.type === 'default') {
     $scope.items = $scope.page.items || {};
   }
@@ -45,15 +62,9 @@ function PageController($scope, $location, applicationState, Choko) {
 }
 //PageController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
-function ItemController($scope, $location, applicationState, Choko) {
-}
-//ItemController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
-
-function ContainerController($scope, $location, applicationState, Choko) {
-}
-//ContainerController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
-
 function RowController($scope, $location, applicationState, Choko) {
+  $scope.name = $scope.row.name;
+
   $scope.getTemplate = function() {
     return $scope.template || 'templates/row.html';
   }
@@ -61,6 +72,8 @@ function RowController($scope, $location, applicationState, Choko) {
 //RowController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
 function ColumnController($scope, $location, applicationState, Choko) {
+  $scope.name = $scope.column.name;
+
   $scope.getTemplate = function() {
     return $scope.template || 'templates/column.html';
   }
@@ -80,7 +93,7 @@ function NavigationController($scope, $location, applicationState, Choko) {
 //NavigationController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
 function ViewController($scope, $location, applicationState, Choko) {
-  // handle 'list' type views.
+  // Handle 'list' type views.
   if ($scope.view.type === 'list' && $scope.view.itemType) {
     $scope.items = {};
 
@@ -89,7 +102,7 @@ function ViewController($scope, $location, applicationState, Choko) {
     });
   }
 
-  // handle 'item' type views.
+  // Handle 'item' type views.
   if ($scope.view.type === 'item' && $scope.view.itemType) {
     $scope.item = {};
 
