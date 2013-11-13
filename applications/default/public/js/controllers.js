@@ -51,6 +51,8 @@ function PanelController($scope, $location, applicationState, Choko) {
 //PanelController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
 function PageController($scope, $location, applicationState, Choko) {
+  $scope.title = $scope.page.title;
+
   if (!$scope.page.type || $scope.page.type === 'default') {
     $scope.items = $scope.page.items || {};
   }
@@ -111,6 +113,9 @@ function ViewController($scope, $location, applicationState, Choko) {
     $scope.item = {};
 
     Choko.get({type: $scope.view.itemType, key: $scope.view.itemKey}, function(response) {
+      if ($scope.view.path) {
+        $scope.title = response.title;
+      }
       $scope.item = response;
     });
   }

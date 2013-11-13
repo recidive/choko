@@ -1,4 +1,6 @@
 var async = require('async');
+var utils = require('prana').utils;
+
 var page = module.exports;
 
 /**
@@ -51,6 +53,8 @@ page.panel = function(panels, callback) {
  * The route() hook.
  */
 page.route = function(routes, callback) {
+  var self = this;
+
   // Create a route for every application page.
   var Page = this.application.type('page');
   Page.list({}, function(err, pages) {
@@ -64,9 +68,32 @@ page.route = function(routes, callback) {
         title: pageInfo.title || null,
         access: true,
         callback: function(request, response, callback) {
-          response.payload.page = pageInfo;
-          if (!pageInfo.content && pageInfo.callback) {
-            pageInfo.callback(request, response, function(err) {
+          // Create a new object to avoid altering page structure since it's
+          // stored in memory storage which return references to objects.
+          var page = {
+            params: {}
+          };
+
+          // Add page info.
+          utils.extend(page, pageInfo);
+
+          // Add the params found on the request if any.
+          utils.extend(page.params, request.params);
+
+          if (page.type === 'item' && page.itemType && !page.itemKey) {
+            // Try to get key from request params.
+            var keyProperty = self.application.type(page.itemType).type.settings.keyProperty;
+            if (keyProperty in page.params) {
+              page.itemKey = page.params[keyProperty];
+            }
+          }
+
+          // Add page data to payload.
+          response.payload.page = page;
+
+          // Run callback if any.
+          if (!page.content && page.callback) {
+            page.callback(request, response, function(err) {
               if (err) {
                 return callback(err);
               }
