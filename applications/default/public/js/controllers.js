@@ -92,6 +92,10 @@ function NavigationController($scope, $location, applicationState, Choko) {
 }
 //NavigationController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
+function ItemController($scope, $location, applicationState, Choko) {
+}
+//ItemController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+
 function ViewController($scope, $location, applicationState, Choko) {
   // Handle 'list' type views.
   if ($scope.view.type === 'list' && $scope.view.itemType) {
