@@ -51,10 +51,9 @@ function PanelController($scope, $location, applicationState, Choko) {
 //PanelController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
 function PageController($scope, $location, applicationState, Choko) {
-  $scope.title = $scope.page.title;
-
   if (!$scope.page.type || $scope.page.type === 'default') {
     $scope.items = $scope.page.items || {};
+    $scope.title = $scope.page.title;
   }
   else {
     // Set view to the panel itself and call ViewController.
@@ -104,6 +103,7 @@ function ViewController($scope, $location, applicationState, Choko) {
     $scope.items = {};
 
     Choko.get({type: $scope.view.itemType}, function(response) {
+      $scope.title = $scope.page.title;
       $scope.items = response;
     });
   }
