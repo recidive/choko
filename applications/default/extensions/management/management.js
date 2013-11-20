@@ -79,9 +79,9 @@ management.page = function(pages, callback) {
     title: 'Pages',
     subtitle: 'Application screens',
     description: 'Pages are used to create sections and display application content and UI elements on the application.',
-    access: 'manage panels',
+    access: 'manage pages',
     type: 'list',
-    itemType: 'panel',
+    itemType: 'page',
     template: 'templates/list-group.html'
   };
 
