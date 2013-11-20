@@ -21,6 +21,10 @@ management.navigation = function(navigations, callback) {
         url: '/manage'
       },
       {
+        title: 'Pages',
+        url: '/manage/pages'
+      },
+      {
         title: 'Panels',
         url: '/manage/panels'
       },
@@ -70,9 +74,20 @@ management.page = function(pages, callback) {
     content: '<p class="lead">Dashboard content.</p>'
   };
 
+  newPages['manage-pages'] = {
+    path: '/manage/pages',
+    title: 'Pages',
+    access: 'manage panels',
+    type: 'list',
+    itemType: 'panel',
+    template: 'templates/list-group.html'
+  };
+
   newPages['manage-panels'] = {
     path: '/manage/panels',
     title: 'Panels',
+    subtitle: 'Chunks of information',
+    description: 'Panels are chunks of content or UI that can be added to layout regions.',
     access: 'manage panels',
     type: 'list',
     itemType: 'panel',
