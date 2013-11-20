@@ -77,6 +77,8 @@ management.page = function(pages, callback) {
   newPages['manage-pages'] = {
     path: '/manage/pages',
     title: 'Pages',
+    subtitle: 'Application screens',
+    description: 'Pages are used to create sections and display application content and UI elements on the application.',
     access: 'manage panels',
     type: 'list',
     itemType: 'panel',
@@ -86,7 +88,7 @@ management.page = function(pages, callback) {
   newPages['manage-panels'] = {
     path: '/manage/panels',
     title: 'Panels',
-    subtitle: 'Chunks of information',
+    subtitle: 'Pieces of information',
     description: 'Panels are chunks of content or UI that can be added to layout regions.',
     access: 'manage panels',
     type: 'list',
@@ -97,6 +99,8 @@ management.page = function(pages, callback) {
   newPages['manage-contexts'] = {
     path: '/manage/contexts',
     title: 'Contexts',
+    subtitle: 'Add dynamicity',
+    description: 'Contexts are a set of conditions that creates a particular scenario on the application.',
     access: 'manage contexts',
     type: 'list',
     itemType: 'context',
@@ -106,6 +110,8 @@ management.page = function(pages, callback) {
   newPages['manage-layouts'] = {
     path: '/manage/layouts',
     title: 'Layouts',
+    subtitle: 'Page structure',
+    description: 'Layouts rule how pages are structured in rows, columns and regions.',
     access: 'manage layouts',
     type: 'list',
     itemType: 'layout',
@@ -115,6 +121,8 @@ management.page = function(pages, callback) {
   newPages['manage-navigations'] = {
     path: '/manage/navigations',
     title: 'Navigations',
+    subtitle: 'Navigation menus and links',
+    description: 'Groups of structured links that allow users to change application state.',
     access: 'manage navigations',
     type: 'list',
     itemType: 'navigation',
@@ -124,6 +132,8 @@ management.page = function(pages, callback) {
   newPages['manage-types'] = {
     path: '/manage/types',
     title: 'Types',
+    subtitle: 'Resource types',
+    description: 'Types can be everything from application metadata to media objects.',
     access: 'manage types',
     callback: function(request, response, callback) {
       var types = self.application.types;
@@ -144,6 +154,8 @@ management.page = function(pages, callback) {
   newPages['manage-extensions'] = {
     path: '/manage/extensions',
     title: 'Extensions',
+    subtitle: 'The building blocks',
+    description: 'Extensions are groups of functionality.',
     access: 'manage extensions',
     callback: function(request, response, callback) {
       var extensions = self.application.extensions;
