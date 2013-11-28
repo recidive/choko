@@ -1,5 +1,3 @@
 <div ng-if="column.region" ng-include="'templates/region.html'" ng-controller="RegionController"></div>
 <!-- Rows -->
-<div ng-repeat="row in column.rows | orderBy:'weight'" ng-controller="RowController" class="row-{{row.name}} row-fluid">
-  <div ng-include="getTemplate()"></div>
-</div>
+<div ng-repeat="row in column.rows | orderBy:'weight'" ng-controller="RowController" ng-include="getTemplate()" class="row-{{row.name}} row-fluid"></div>

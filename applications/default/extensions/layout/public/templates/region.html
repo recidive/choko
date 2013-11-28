@@ -1,7 +1,5 @@
 <div ng-controller="RegionController" class="{{name}}">
   <div class="region-name">{{name}}</div>
   <!-- Panels -->
-  <div ng-repeat="panel in panels[name]" ng-controller="PanelController" class="panel-wrapper">
-    <div ng-include="template"></div>
-  </div>
+  <div ng-repeat="panel in panels[name]" ng-controller="PanelController" ng-include="template" class="panel-wrapper"></div>
 </div>

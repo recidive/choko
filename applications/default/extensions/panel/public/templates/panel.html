@@ -3,7 +3,5 @@
     <h3 class="panel-title">{{panel.title}}</h3>
   </div>
   <div ng-if="panel.content" ng-bind-html="panel.content" class="panel-body"></div>
-  <div ng-if="panel.template" class="panel-body">
-    <div ng-include="panel.template"></div>
-  </div>
+  <div ng-if="panel.template" ng-include="panel.template"></div>
 </div>

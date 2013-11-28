@@ -11,9 +11,7 @@
       </button>
       <a class="navbar-brand" href="#">
         <!-- Panels -->
-        <span ng-repeat="panel in panels['navbar-header']" ng-controller="PanelController" class="panel-wrapper">
-          <span ng-include="template"></span>
-        </span>
+        <span ng-repeat="panel in panels['navbar-header']" ng-controller="PanelController" ng-include="template" class="panel-wrapper"></span>
       </a>
     </div>
 
@@ -21,15 +19,11 @@
     <div class="collapse navbar-collapse">
       <div class="navbar-left">
         <!-- Panels -->
-        <div ng-repeat="panel in panels['navbar-left']" ng-controller="PanelController" class="panel-wrapper">
-          <div ng-include="template"></div>
-        </div>
+        <div ng-repeat="panel in panels['navbar-left']" ng-controller="PanelController" ng-include="template" class="panel-wrapper"></div>
       </div>
       <div class="navbar-right">
         <!-- Panels -->
-        <div ng-repeat="panel in panels['navbar-right']" ng-controller="PanelController" class="panel-wrapper">
-          <div ng-include="template"></div>
-        </div>
+        <div ng-repeat="panel in panels['navbar-right']" ng-controller="PanelController" ng-include="template" class="panel-wrapper"></div>
       </div>
     </div>
 

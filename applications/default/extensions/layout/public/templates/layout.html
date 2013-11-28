@@ -1,9 +1,2 @@
 <!-- Rows -->
-<div ng-repeat="row in layout.rows | orderBy:'weight'" ng-controller="RowController" class="row-{{row.name}} row-fluid">
-  <div class="container">
-
-    <div ng-if="row.template" ng-include="row.template"></div>
-    <div ng-if="!row.template" ng-include="'templates/row.html'"></div>
-
-  </div>
-</div>
+<div ng-repeat="row in layout.rows | orderBy:'weight'" ng-controller="RowController" ng-include="row.template || 'templates/row.html'" class="row-{{row.name}} row-fluid"></div>
