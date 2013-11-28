@@ -4,10 +4,6 @@
   </div>
   <p class="lead">{{page.description}}</p>
 
-  <!-- This is broken in AngularJS 1.2RC3
-  <div ng-if="application.page.template" ng-include="application.page.template"></div>
-  <div ng-if="!application.page.template" ng-bind-html="application.page.content"></div>
-  -->
-  <div ng-include="page.template && page.template"></div>
-  <div ng-bind-html="!page.template && page.content"></div>
+  <div ng-if="page.template" ng-include="page.template"></div>
+  <div ng-if="!page.template" ng-bind-html="page.content" class="page-content"></div>
 </div>
