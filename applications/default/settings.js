@@ -27,6 +27,7 @@ var settings = module.exports = {
     'page': {},
     'theme': {},
     'rest': {},
+    'form': {},
     'management': {}
   }
 

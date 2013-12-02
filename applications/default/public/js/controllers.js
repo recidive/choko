@@ -4,7 +4,7 @@ function ApplicationController($scope, $location, $http, applicationState, Choko
   $scope.state = {};
 
   $scope.changeState = function() {
-    var path = $location.path() || '/home';
+    var path = (!$location.path() || $location.path() == '/') ? '/home' : $location.path();
 
     $http.get(path).success(function(data) {
       // Rebuild the layout only when context changes.
@@ -34,11 +34,11 @@ function ApplicationController($scope, $location, $http, applicationState, Choko
 }
 //ApplicationController.$inject = ['$scope', '$location', '$http', 'applicationState', 'Choko'];
 
-function PanelController($scope, $location, applicationState, Choko) {
+function PanelController($scope, $location, $http, applicationState, Choko) {
   if ($scope.panel.type && $scope.panel.type !== 'default') {
     // Set view to the panel itself and call ViewController.
     $scope.view = $scope.panel;
-    ViewController($scope, $location, applicationState, Choko);
+    ViewController($scope, $location, $http, applicationState, Choko);
   }
 
   if ($scope.panel.bare) {
@@ -48,9 +48,9 @@ function PanelController($scope, $location, applicationState, Choko) {
     $scope.template = 'templates/panel.html';
   }
 }
-//PanelController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//PanelController.$inject = ['$scope', '$location', '$http', 'applicationState', 'Choko'];
 
-function PageController($scope, $location, applicationState, Choko) {
+function PageController($scope, $location, $http, applicationState, Choko) {
   if (!$scope.page.type || $scope.page.type === 'default') {
     $scope.items = $scope.page.items || {};
     $scope.title = $scope.page.title;
@@ -58,10 +58,10 @@ function PageController($scope, $location, applicationState, Choko) {
   else {
     // Set view to the panel itself and call ViewController.
     $scope.view = $scope.page;
-    ViewController($scope, $location, applicationState, Choko);
+    ViewController($scope, $location, $http, applicationState, Choko);
   }
 }
-//PageController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//PageController.$inject = ['$scope', '$location', '$http', 'applicationState', 'Choko'];
 
 function RowController($scope, $location, applicationState, Choko) {
   $scope.name = $scope.row.name;
@@ -97,7 +97,7 @@ function ItemController($scope, $location, applicationState, Choko) {
 }
 //ItemController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
-function ViewController($scope, $location, applicationState, Choko) {
+function ViewController($scope, $location, $http, applicationState, Choko) {
   // Handle 'list' type views.
   if ($scope.view.type === 'list' && $scope.view.itemType) {
     $scope.items = {};
@@ -119,5 +119,35 @@ function ViewController($scope, $location, applicationState, Choko) {
       $scope.item = response;
     });
   }
+
+  // Handle 'form' type views.
+  if ($scope.view.type === 'form' && $scope.view.formName) {
+    $scope.data = {};
+
+    $scope.submit = function(url) {
+      $http.post(url, $scope.data)
+        .success(function(data, status, headers, config) {
+          $scope.data = data;
+          $location.path('/');
+        })
+        .error(function(data, status, headers, config) {
+          $scope.status = status;
+        });
+    };
+
+    Choko.get({type: 'form', key: $scope.view.formName}, function(response) {
+      if ($scope.view.path) {
+        $scope.title = response.title;
+      }
+      $scope.form = response;
+      $scope.view.template = $scope.view.template || $scope.form.template;
+      $scope.view.template = $scope.view.template || 'templates/form.html';
+    });
+  }
 }
-//ViewController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//ViewController.$inject = ['$scope', '$location', '$http', 'applicationState', 'Choko'];
+
+function FieldController($scope, $location, applicationState, Choko) {
+  $scope.field.template = $scope.field.template || 'templates/' + $scope.field.type + '.html';
+}
+//FieldController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
