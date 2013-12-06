@@ -1,0 +1,104 @@
+{
+  "title": "Three columns 3/6/3",
+  "description": "A flexible two columns layout with a 3 columns left sidebar, a 6 columns content area and a 3 columns right sidebar.",
+  "fluid": true,
+  "responsive": true,
+  "rows": [
+    {
+      "name": "navbar",
+      "title": "Navbar",
+      "template": "templates/navbar.html",
+      "columns": [
+        {
+          "name": "navbar-header",
+          "title": "Navbar header",
+          "region": true
+        },
+        {
+          "name": "navbar-nav",
+          "title": "Navbar navigation",
+          "region": true
+        },
+        {
+          "name": "navbar-left",
+          "title": "Navbar left",
+          "region": true
+        },
+        {
+          "name": "navbar-right",
+          "title": "Navbar right",
+          "region": true
+        }
+      ],
+      "weight": 0
+    },
+    {
+      "name": "highlight",
+      "title": "Highlight",
+      "region": true,
+      "weight": 1
+    },
+    {
+      "name": "feature",
+      "title": "Feature",
+      "columns": [
+        {
+          "name": "feature-first",
+          "title": "Feature first",
+          "width": 4,
+          "region": true,
+          "weight": 0
+        },
+        {
+          "name": "feature-second",
+          "title": "Feature second",
+          "width": 4,
+          "region": true,
+          "weight": 1
+        },
+        {
+          "name": "feature-third",
+          "title": "Feature third",
+          "width": 4,
+          "region": true,
+          "weight": 2
+        }
+      ],
+      "weight": 2
+    },
+    {
+      "name": "content",
+      "title": "Content",
+      "columns": [
+        {
+          "name": "sidebar-left",
+          "title": "Sidebar left",
+          "width": 3,
+          "region": true,
+          "weight": 0
+        },
+        {
+          "name": "content",
+          "title": "Content",
+          "width": 9,
+          "region": true,
+          "weight": 1
+        },
+        {
+          "name": "sidebar-right",
+          "title": "Sidebar right",
+          "width": 3,
+          "region": true,
+          "weight": 2
+        }
+      ],
+      "weight": 3
+    },
+    {
+      "name": "footer",
+      "title": "Footer",
+      "region": true,
+      "weight": 4
+    }
+  ]
+}
