@@ -1,0 +1,15 @@
+{
+  "title": "Authenticated user",
+  "description": "An authenticated user is usinng the application.",
+  "conditions": {
+    "anonymous": false
+  },
+  "reactions": {
+    "panel": {
+      "navbar-right": [{
+        "name": "sign-out",
+        "weight": 0
+      }]
+    }
+  }
+}

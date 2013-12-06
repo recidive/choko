@@ -1,0 +1,41 @@
+{
+  "title": "Create an account",
+  "description": "Create your account.",
+  "fields": [
+    {
+      "name": "email",
+      "title": "Your email address",
+      "type": "email",
+      "required": true,
+      "weight": -5
+    },
+    {
+      "name": "username",
+      "title": "Choose your username",
+      "type": "text",
+      "required": true,
+      "weight": 0
+    },
+    {
+      "name": "password",
+      "title": "Create a password",
+      "type": "password",
+      "required": true,
+      "weight": 5
+    },
+    {
+      "name": "password-confirm",
+      "title": "Confirm your password",
+      "type": "password",
+      "required": true,
+      "weight": 10
+    },
+    {
+      "name": "submit",
+      "title": "Create an account",
+      "type": "submit",
+      "url": "/create-account-submit",
+      "weight": 15
+    }
+  ]
+}

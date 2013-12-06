@@ -1,0 +1,15 @@
+{
+  "title": "Anonymous user",
+  "description": "An anonymous user is using the application.",
+  "conditions": {
+    "anonymous": true
+  },
+  "reactions": {
+    "panel": {
+      "navbar-right": [{
+        "name": "sign-in",
+        "weight": 0
+      }]
+    }
+  }
+}
