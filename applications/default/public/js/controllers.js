@@ -147,7 +147,7 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
 }
 //ViewController.$inject = ['$scope', '$location', '$http', 'applicationState', 'Choko'];
 
-function FieldController($scope, $location, applicationState, Choko) {
-  $scope.field.template = $scope.field.template || 'templates/' + $scope.field.type + '.html';
+function ElementController($scope, $location, applicationState, Choko) {
+  $scope.element.template = $scope.element.template || 'templates/' + $scope.element.type + '.html';
 }
-//FieldController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//ElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];

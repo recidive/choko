@@ -1,3 +1,3 @@
 <form name="{{form.name}}" role="form">
-  <div ng-repeat="field in form.fields | orderBy:'weight'" ng-include="field.template || 'templates/input.html'" ng-controller="FieldController" class="form-group"></div>
+  <div ng-repeat="element in form.elements | orderBy:'weight'" ng-include="element.template || 'templates/input.html'" ng-controller="ElementController" class="form-group"></div>
 </form>

@@ -1,7 +1,7 @@
 {
   "title": "Create an account",
   "description": "Create your account.",
-  "fields": [
+  "elements": [
     {
       "name": "email",
       "title": "Your email address",
