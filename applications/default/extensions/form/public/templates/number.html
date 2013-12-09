@@ -1,2 +1,2 @@
-<label ng-if="element.title" for="element-{{element.name}}">{{element.title}}</label>
-<input ng-model="data[element.name]" ng-required="element.required" type="number" class="form-control" id="element-{{element.name}}" placeholder="{{element.placeholder}}">
+<label ng-if="element.title" for="element-{{form.name}}-{{element.name}}">{{element.title}}</label>
+<input ng-model="data[element.name]" ng-required="element.required" type="number" class="form-control" id="element-{{form.name}}-{{element.name}}" placeholder="{{element.placeholder}}">
