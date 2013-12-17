@@ -36,7 +36,7 @@ theme.reaction = function(reactions, callback) {
     },
     react: function(request, response, value, callback) {
       response.payload.theme = value;
-      callback(null);
+      callback();
     }
   };
 
