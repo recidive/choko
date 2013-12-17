@@ -74,7 +74,7 @@ user.type = function(types, callback) {
     storage: 'database',
     keyProperty: 'username',
     fields: {
-      name: {
+      username: {
         title: 'Username',
         type: 'text'
       },
