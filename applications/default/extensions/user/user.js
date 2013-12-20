@@ -268,7 +268,7 @@ user.route = function(routes, callback) {
           return callback(null, ['This username is not available, please choose another one.'], 409);
         }
         if (data.password != data['password-confirm']) {
-          return callback(null, ['Passwords must match.'], 409);
+          return callback(null, ['Passwords must match.'], 400);
         }
 
         // Create new user resource and save it.
