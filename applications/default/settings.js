@@ -19,6 +19,7 @@ var settings = module.exports = {
 
   // A list of required core extensions.
   extensions: {
+    'field': {},
     'route': {},
     'context': {},
     'layout': {},

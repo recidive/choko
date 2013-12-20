@@ -12,6 +12,7 @@
     "connect-flash": "0.1.x",
     "async": "0.2.x",
     "passport": "0.1.x",
-    "passport-local": "0.1.x"
+    "passport-local": "0.1.x",
+    "validator": "2.0.x"
   }
 }
