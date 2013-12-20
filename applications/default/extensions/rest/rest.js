@@ -10,6 +10,21 @@ rest.route = function(routes, callback) {
   var application = this.application;
   var newRoutes = {};
 
+  var validationResponseCallback = function(callback) {
+    return function(error, item, errors) {
+      if (error) {
+        // Application error.
+        return callback(error);
+      }
+      if (errors && errors.length > 0) {
+        // Validation errors.
+        return callback(null, errors, 400);
+      }
+      // Validation passed.
+      callback(null, item);
+    };
+  };
+
   var self = this;
   async.each(Object.keys(this.application.types), function(typeName, next) {
     var typeModel = self.application.types[typeName];
@@ -28,7 +43,7 @@ rest.route = function(routes, callback) {
           return typeModel.list(request.query, callback);
         }
         if (request.method == 'POST') {
-          return typeModel.save(request.body, callback);
+          return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
         }
         callback();
       }
@@ -42,7 +57,7 @@ rest.route = function(routes, callback) {
           return typeModel.load(request.params[type.name], callback);
         }
         if (request.method == 'PUT') {
-          return typeModel.save(request.body, callback);
+          return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
         }
         if (request.method == 'POST') {
           return typeModel.load(request.params[type.name], function(err, item) {
@@ -50,7 +65,7 @@ rest.route = function(routes, callback) {
               utils.extend(item, request.body);
               request.body = item;
             }
-            typeModel.save(request.body, callback);
+            typeModel.validateAndSave(request.body, validationResponseCallback(callback));
           });
         }
         if (request.method == 'DELETE') {

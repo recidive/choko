@@ -128,10 +128,12 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
       $http.post(url, $scope.data)
         .success(function(data, status, headers, config) {
           $scope.data = data;
+          delete $scope.errors;
           $location.path('/');
         })
         .error(function(data, status, headers, config) {
           $scope.status = status;
+          $scope.errors = data.data;
         });
     };
 

@@ -1,3 +1,8 @@
 <form name="{{form.name}}" role="form" id="form-{{form.name}}">
+  <div ng-if="errors" class="alert alert-danger">
+    <ul>
+      <li ng-repeat="error in errors">{{error}}</li>
+    </ul>
+  </div>
   <div ng-repeat="element in form.elements | orderBy:'weight'" ng-include="element.template" ng-controller="ElementController" class="form-group"></div>
 </form>

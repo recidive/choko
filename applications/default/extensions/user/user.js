@@ -76,15 +76,18 @@ user.type = function(types, callback) {
     fields: {
       username: {
         title: 'Username',
-        type: 'text'
+        type: 'text',
+        required: true
       },
       email: {
         title: 'Email',
-        type: 'email'
+        type: 'email',
+        required: true
       },
       password: {
         title: 'Password',
-        type: 'password'
+        type: 'password',
+        required: true
       },
       salt: {
         title: 'Salt',
@@ -96,7 +99,7 @@ user.type = function(types, callback) {
       },
       active: {
         title: 'Active',
-        type: Boolean
+        type: 'boolean'
       }
     },
     methods: {
@@ -154,7 +157,7 @@ user.type = function(types, callback) {
 
           // Create new user resource and save it.
           var user = application.new('user', data);
-          user.save(callback);
+          user.validateAndSave(callback);
         });
       },
       hash: function(password, salt, callback) {
