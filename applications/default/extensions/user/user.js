@@ -294,6 +294,12 @@ user.route = function(routes, callback) {
   newRoutes['/sign-in-submit'] = {
     access: true,
     callback: function(request, response, callback) {
+      // Check if there are both an username and a password.
+      // @todo in the long run we may need a way to validate forms that aren't
+      // directly related to a type.
+      if (!request.body.username || !request.body.password) {
+        return callback(null, ['Please provide an username and a password.'], 400);
+      }
       passport.authenticate('local', function(error, user, info) {
         if (error) {
           return callback(error);
