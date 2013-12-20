@@ -137,30 +137,6 @@ user.type = function(types, callback) {
           }
         });
       },
-      create: function(data, callback) {
-        // @todo: Check if username and email already exists and return a
-        // 409 (Conflict) error if so.
-        // Generate a salt and hash the password.
-        var salt = this.salt();
-        this.hash(data.password, salt, function(error, password) {
-          if (error) {
-            return callback(error);
-          }
-
-          // Replace password with hashed one.
-          data.password = password.toString('base64');
-
-          // Encode and add salt to payload.
-          data.salt = salt.toString('base64');
-
-          // Remove password confirmation.
-          delete data['password-confirm'];
-
-          // Create new user resource and save it.
-          var user = application.new('user', data);
-          user.validateAndSave(callback);
-        });
-      },
       hash: function(password, salt, callback) {
         // Generate a 512 bits hash with PBKDF2 algorithm.
         crypto.pbkdf2(password, salt, 10000, 512, function(error, key) {
@@ -198,6 +174,37 @@ user.type = function(types, callback) {
   };
 
   callback(null, newTypes);
+};
+
+/**
+ * The preSave() hook.
+ */
+user.preSave = function(type, data, callback) {
+  if (type.name != 'user') {
+    // Return early on types that are not the user type.
+    return callback(null, data);
+  }
+
+  var User = this.application.type('user');
+
+  // Generate a salt and hash the password.
+  var salt = User.salt();
+  User.hash(data.password, salt, function(error, password) {
+    if (error) {
+      return callback(error);
+    }
+
+    // Replace password with hashed one.
+    data.password = password.toString('base64');
+
+    // Encode and add salt to payload.
+    data.salt = salt.toString('base64');
+
+    // Remove password confirmation.
+    delete data['password-confirm'];
+
+    callback(null, data);
+  });
 };
 
 /**
@@ -250,14 +257,37 @@ user.route = function(routes, callback) {
     access: true,
     callback: function(request, response, callback) {
       var data = request.body;
+
       var User = application.type('user');
-      User.create(request.body, function(error, user) {
+
+      User.load(data.username, function(error, user) {
         if (error) {
           return callback(error);
         }
+        if (user) {
+          return callback(null, ['This username is not available, please choose another one.'], 409);
+        }
+        if (data.password != data['password-confirm']) {
+          return callback(null, ['Passwords must match.'], 409);
+        }
 
-        callback(null, user, 201);
+        // Create new user resource and save it.
+        var user = new User(data);
+        user.validateAndSave(function(error, user, errors) {
+          if (error) {
+            return callback(error);
+          }
+
+          if (errors && errors.length > 0) {
+            // Validation errors.
+            return callback(null, errors, 400);
+          }
+
+          callback(null, user, 201);
+        });
+
       });
+
     }
   };
 
