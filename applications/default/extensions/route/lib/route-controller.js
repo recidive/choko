@@ -40,6 +40,10 @@ RouteController.prototype.handle = function(request, response) {
   var settings = this.settings;
 
   this.access(request, response, function(err, allow) {
+    if (err) {
+      self.error(request, response, err);
+    }
+
     if (allow) {
       // A route can have either a content or callback property.
       if (settings.content) {
@@ -47,6 +51,10 @@ RouteController.prototype.handle = function(request, response) {
       }
       else if (settings.callback) {
         settings.callback(request, response, function(err, content, code) {
+          if (err) {
+            self.error(request, response, err);
+          }
+
           if (content) {
             self.respond(request, response, content, code);
           }
@@ -119,6 +127,20 @@ RouteController.prototype.respond = function(request, response, content, code) {
   }
 
   response.send(code, payload);
+};
+
+/**
+ * Respond to a request with a "server error".
+ *
+ * @param {Request} request Request object.
+ * @param {Response} response Response object.
+ */
+RouteController.prototype.error = function(request, response, error) {
+  this.respond(request, response, {
+    title: 'Server error',
+    description: "The server couldn't process the request.",
+    error: error.toString()
+  }, 500);
 };
 
 /**
