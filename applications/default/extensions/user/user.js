@@ -92,6 +92,7 @@ user.type = function(types, callback) {
       salt: {
         title: 'Salt',
         type: 'text',
+        internal: true
       },
       roles: {
         title: 'Roles',

@@ -34,7 +34,8 @@ form.form = function(forms, callback) {
       form.elements = [];
       for (var fieldName in typeSettings.fields) {
         var fieldSettings = typeSettings.fields[fieldName];
-        if (typeof fieldSettings.type === 'string') {
+        // By pass 'internal' fields.
+        if (!fieldSettings.internal && typeof fieldSettings.type === 'string') {
           form.elements.push({
             name: fieldName,
             title: fieldSettings.title,
