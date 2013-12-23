@@ -1,6 +1,20 @@
 var form = module.exports;
 
 /**
+ * The permission() hook.
+ */
+form.permission = function(permissions, callback) {
+  var newPermissions = {};
+
+  newPermissions['manage-forms'] = {
+    title: 'Manage forms',
+    description: 'List, create and edit forms.'
+  };
+
+  callback(null, newPermissions);
+};
+
+/**
  * The type() hook.
  */
 form.type = function(types, callback) {
@@ -8,7 +22,15 @@ form.type = function(types, callback) {
 
   newTypes['form'] = {
     title: 'Form',
-    description: 'Structures that can be rendered as forms.'
+    description: 'Structures that can be rendered as forms.',
+    access: {
+      // @todo: 'list' and 'load' should take into account form permissions.
+      'list': true,
+      'load': true,
+      'add': 'manage-forms',
+      'edit': 'manage-forms',
+      'delete': 'manage-forms'
+    }
   };
 
   callback(null, newTypes);

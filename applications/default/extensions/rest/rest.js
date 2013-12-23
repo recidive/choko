@@ -35,6 +35,19 @@ rest.route = function(routes, callback) {
       type.path = '/' + type.name;
     }
 
+    // Initialize access rules.
+    type.settings.access = type.settings.access || {};
+
+    // Add default access rules.
+    var access = {
+      'list': false,
+      'load': false,
+      'add': false,
+      'edit': false,
+      'delete': false
+    };
+    utils.extend(access, type.settings.access);
+
     // List or add items.
     newRoutes['/rest' + type.path] = {
       access: true,
@@ -44,6 +57,15 @@ rest.route = function(routes, callback) {
         }
         if (request.method == 'POST') {
           return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
+        }
+        callback();
+      },
+      access: function(request, response, callback) {
+        if (request.method == 'GET') {
+          return application.access(request, access.list, callback);
+        }
+        if (request.method == 'POST') {
+          return application.access(request, access.add, callback);
         }
         callback();
       }
@@ -70,6 +92,18 @@ rest.route = function(routes, callback) {
         }
         if (request.method == 'DELETE') {
           return typeModel.delete(request.params[type.name], callback);
+        }
+        callback();
+      },
+      access: function(request, response, callback) {
+        if (request.method == 'GET') {
+          return application.access(request, access.load, callback);
+        }
+        if (request.method == 'PUT' || request.method == 'POST') {
+          return application.access(request, access.add, callback);
+        }
+        if (request.method == 'DELETE') {
+          return application.access(request, access.delete, callback);
         }
         callback();
       }

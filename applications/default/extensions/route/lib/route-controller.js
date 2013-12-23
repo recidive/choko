@@ -80,7 +80,6 @@ RouteController.prototype.handle = function(request, response) {
  * @param {Function} callaback Function called with the access check results.
  */
 RouteController.prototype.access = function(request, response, callback) {
-  var self = this;
   var settings = this.settings;
 
   // If this is an object, do access check and other mandatory stuff.
@@ -88,6 +87,9 @@ RouteController.prototype.access = function(request, response, callback) {
     if (typeof settings.access === 'boolean') {
       // Access check is a string/permission key.
       return callback(null, settings.access);
+    }
+    else if (typeof settings.access === 'string') {
+      return this.application.access(request, settings.access, callback);
     }
     else if (typeof settings.access === 'function') {
       // Access check is a callback.

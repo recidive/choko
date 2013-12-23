@@ -3,6 +3,20 @@ var async = require('async');
 var panel = module.exports;
 
 /**
+ * The permission() hook.
+ */
+panel.permission = function(permissions, callback) {
+  var newPermissions = {};
+
+  newPermissions['manage-panels'] = {
+    title: 'Manage panels',
+    description: 'List, create and edit panels.'
+  };
+
+  callback(null, newPermissions);
+};
+
+/**
  * The type() hook.
  */
 panel.type = function(types, callback) {
@@ -11,7 +25,14 @@ panel.type = function(types, callback) {
 
   newTypes['panel'] = {
     title: 'Panel',
-    description: 'A piece of content to be displayed on a layout region.'
+    description: 'A piece of content to be displayed on a layout region.',
+    access: {
+      'list': 'manage-panels',
+      'load': 'manage-panels',
+      'add': 'manage-panels',
+      'edit': 'manage-panels',
+      'delete': 'manage-panels'
+    }
   };
 
   callback(null, newTypes);

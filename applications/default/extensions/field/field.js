@@ -10,7 +10,14 @@ field.type = function(types, callback) {
 
   newTypes['field'] = {
     title: 'Field',
-    description: 'Fields add schema to types and provide validation and output sanitizing.'
+    description: 'Fields add schema to types and provide validation and output sanitizing.',
+    access: {
+      'list': true,
+      'load': true,
+      'add': false,
+      'edit': false,
+      'delete': false
+    },
   };
 
   callback(null, newTypes);

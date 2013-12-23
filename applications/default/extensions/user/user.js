@@ -5,6 +5,7 @@
 var crypto = require('crypto');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var async = require('async');
 var utils = require('prana').utils;
 
 var user = module.exports;
@@ -57,8 +58,29 @@ user.init = function(application, callback) {
     callback(null, user);
   });
 
+
+  // Add access check method to application object.
+  var self = this;
+  application.access = function(request, permission, callback) {
+    self.access(request, permission, callback);
+  };
+
   // Call init() callback.
   callback();
+};
+
+/**
+ * The permission() hook.
+ */
+user.permission = function(permissions, callback) {
+  var newPermissions = {};
+
+  newPermissions['manage-users'] = {
+    title: 'Manage users',
+    description: 'List, create and edit users and manage permissions.'
+  };
+
+  callback(null, newPermissions);
 };
 
 /**
@@ -102,6 +124,13 @@ user.type = function(types, callback) {
         title: 'Active',
         type: 'boolean'
       }
+    },
+    access: {
+      'list': 'manage-users',
+      'load': 'manage-users',
+      'add': 'manage-users',
+      'edit': 'manage-users',
+      'delete': 'manage-users'
     },
     methods: {
       logout: function() {
@@ -170,6 +199,39 @@ user.type = function(types, callback) {
         title: 'Description',
         type: 'text'
       }
+    },
+    access: {
+      'list': 'manage-users',
+      'load': 'manage-users',
+      'add': 'manage-users',
+      'edit': 'manage-users',
+      'delete': 'manage-users'
+    }
+  };
+
+  newTypes['permission'] = {
+    title: 'Permission',
+    description: 'Permission.',
+    fields: {
+      name: {
+        title: 'Name',
+        type: 'text'
+      },
+      title: {
+        title: 'Title',
+        type: 'text'
+      },
+      description: {
+        title: 'Description',
+        type: 'text'
+      }
+    },
+    access: {
+      'list': 'manage-users',
+      'load': 'manage-users',
+      'add': false,
+      'edit': false,
+      'delete': false
     }
   };
 
@@ -334,6 +396,35 @@ user.route = function(routes, callback) {
 };
 
 /**
+ * The role() hook.
+ */
+user.role = function(routes, callback) {
+  var newRoles = {};
+
+  // The 'anonymous' role is a magic role that's set to every user that's not
+  // logged in.
+  newRoles['anonymous'] = {
+    title: 'Anonymous',
+    description: 'Anonymous, unauthenticated user.'
+  };
+
+  // The 'authenticated' role is a magic role that's set to every authenticated
+  // user.
+  newRoles['authenticated'] = {
+    title: 'Authenticated',
+    description: 'Authenticated, signed in user.'
+  };
+
+  // The 'administrator' role is a magic default role that's used to grant
+  // administration powers to users.
+  newRoles['administrator'] = {
+    title: 'Administrators, or super users.'
+  };
+
+  callback(null, newRoles);
+};
+
+/**
  * The panel() hook.
  */
 user.panel = function(panels, callback) {
@@ -377,4 +468,39 @@ user.condition = function(conditions, callback) {
   };
 
   callback(null, newConditions);
+};
+
+/**
+ * Do access check against current user.
+ */
+user.access = function(request, permission, callback) {
+  // Permission can be a bollean to disable certain operations or allow access
+  // to all users.
+  if (typeof permission === 'boolean') {
+    return callback(null, permission);
+  }
+
+  // If user is administrator bypass access check.
+  if (request.user && request.user.roles.indexOf('administrator') !== -1) {
+    return callback(null, true);
+  }
+
+  // Create a mock user for anonymous access.
+  var user = request.user || {
+    username: 'anonymous',
+    roles: ['anonymous']
+  };
+
+  var application = this.application;
+  async.detect(user.roles, function(roleName, next) {
+    application.load('role', roleName, function(error, role) {
+      role.permissions = role.permissions || [];
+      next(!error && role && role.permissions.indexOf(permission) !== -1);
+    });
+  }, function(result) {
+    // @todo Add cache. Sort user roles, glue them together and use as cache id.
+    // async.detect() returns roleName or undefined when nothing was detected,
+    // so we need to convert it to boolean in some way.
+    callback(null, (result === true));
+  });
 };

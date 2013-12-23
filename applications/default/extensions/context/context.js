@@ -32,6 +32,20 @@ context.init = function(application, callback) {
 };
 
 /**
+ * The permission() hook.
+ */
+context.permission = function(permissions, callback) {
+  var newPermissions = {};
+
+  newPermissions['manage-contexts'] = {
+    title: 'Manage contexts',
+    description: 'List, create and edit contexts.'
+  };
+
+  callback(null, newPermissions);
+};
+
+/**
  * The type() hook.
  */
 context.type = function(types, callback) {
@@ -54,6 +68,13 @@ context.type = function(types, callback) {
         title: 'Reactions',
         type: 'reaction'
       }
+    },
+    access: {
+      'list': 'manage-contexts',
+      'load': 'manage-contexts',
+      'add': 'manage-contexts',
+      'edit': 'manage-contexts',
+      'delete': 'manage-contexts'
     },
     methods: {
       execute: function(request, response, callback) {

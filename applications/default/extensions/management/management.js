@@ -5,6 +5,20 @@
 var management = module.exports;
 
 /**
+ * The permission() hook.
+ */
+management.permission = function(permissions, callback) {
+  var newPermissions = {};
+
+  newPermissions['manage-application'] = {
+    title: 'Manage application',
+    description: 'Access application managemnt pages.'
+  };
+
+  callback(null, newPermissions);
+};
+
+/**
  * The navigation() hook.
  */
 management.navigation = function(navigations, callback) {
@@ -70,7 +84,7 @@ management.page = function(pages, callback) {
   newPages['manage'] = {
     path: '/manage',
     title: 'Dashboard',
-    access: 'manage application',
+    access: 'manage-application',
     content: '<p class="lead">Dashboard content.</p>'
   };
 
@@ -79,7 +93,7 @@ management.page = function(pages, callback) {
     title: 'Pages',
     subtitle: 'Application screens',
     description: 'Pages are used to create sections and display application content and UI elements on the application.',
-    access: 'manage pages',
+    access: 'manage-pages',
     type: 'list',
     itemType: 'page',
     template: 'templates/list-group.html'
@@ -90,7 +104,7 @@ management.page = function(pages, callback) {
     title: 'Panels',
     subtitle: 'Pieces of information',
     description: 'Panels are chunks of content or UI that can be added to layout regions.',
-    access: 'manage panels',
+    access: 'manage-panels',
     type: 'list',
     itemType: 'panel',
     template: 'templates/list-group.html'
@@ -101,7 +115,7 @@ management.page = function(pages, callback) {
     title: 'Contexts',
     subtitle: 'Add dynamicity',
     description: 'Contexts are a set of conditions that creates a particular scenario on the application.',
-    access: 'manage contexts',
+    access: 'manage-contexts',
     type: 'list',
     itemType: 'context',
     template: 'templates/list-group.html'
@@ -112,7 +126,7 @@ management.page = function(pages, callback) {
     title: 'Layouts',
     subtitle: 'Page structure',
     description: 'Layouts rule how pages are structured in rows, columns and regions.',
-    access: 'manage layouts',
+    access: 'manage-layouts',
     type: 'list',
     itemType: 'layout',
     template: 'templates/list-group.html'
@@ -123,7 +137,7 @@ management.page = function(pages, callback) {
     title: 'Navigations',
     subtitle: 'Navigation menus and links',
     description: 'Groups of structured links that allow users to change application state.',
-    access: 'manage navigations',
+    access: 'manage-navigations',
     type: 'list',
     itemType: 'navigation',
     template: 'templates/list-group.html'
@@ -134,7 +148,7 @@ management.page = function(pages, callback) {
     title: 'Types',
     subtitle: 'Resource types',
     description: 'Types can be everything from application metadata to media objects.',
-    access: 'manage types',
+    access: 'manage-types',
     callback: function(request, response, callback) {
       var types = self.application.types;
       var result = {};
@@ -156,7 +170,7 @@ management.page = function(pages, callback) {
     title: 'Extensions',
     subtitle: 'The building blocks',
     description: 'Extensions are groups of functionality.',
-    access: 'manage extensions',
+    access: 'manage-extensions',
     callback: function(request, response, callback) {
       var extensions = self.application.extensions;
       var result = {};
@@ -185,7 +199,7 @@ management.context = function(contexts, callback) {
   newContexts['manage'] = {
     title: 'Management pages',
     description: 'Management pages context.',
-    access: 'access application',
+    access: 'manage-application',
     weight: -1,
     conditions: {
       path: ['/manage', '/manage/*']

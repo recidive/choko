@@ -4,6 +4,20 @@ var async = require('async');
 var navigation = module.exports;
 
 /**
+ * The permission() hook.
+ */
+navigation.permission = function(permissions, callback) {
+  var newPermissions = {};
+
+  newPermissions['manage-navigations'] = {
+    title: 'Manage navigations',
+    description: 'List, create and edit navigations.'
+  };
+
+  callback(null, newPermissions);
+};
+
+/**
  * The type() hook.
  */
 navigation.type = function(types, callback) {
@@ -11,7 +25,14 @@ navigation.type = function(types, callback) {
 
   newTypes['navigation'] = {
     title: 'Navigation',
-    description: 'Navigation menus and breadcrumbs.'
+    description: 'Navigation structures.',
+    access: {
+      'list': true,
+      'load': true,
+      'add': 'manage-navigations',
+      'edit': 'manage-navigations',
+      'delete': 'manage-navigations'
+    }
   };
 
   callback(null, newTypes);

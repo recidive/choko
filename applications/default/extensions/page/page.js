@@ -4,6 +4,20 @@ var utils = require('prana').utils;
 var page = module.exports;
 
 /**
+ * The permission() hook.
+ */
+page.permission = function(permissions, callback) {
+  var newPermissions = {};
+
+  newPermissions['manage-pages'] = {
+    title: 'Manage pages',
+    description: 'List, create and edit pages.'
+  };
+
+  callback(null, newPermissions);
+};
+
+/**
  * The type() hook.
  */
 page.type = function(types, callback) {
@@ -11,7 +25,14 @@ page.type = function(types, callback) {
 
   newTypes['page'] = {
     title: 'Page',
-    description: 'An application page.'
+    description: 'An application page.',
+    access: {
+      'list': 'manage-pages',
+      'load': 'manage-pages',
+      'add': 'manage-pages',
+      'edit': 'manage-pages',
+      'delete': 'manage-pages'
+    }
   };
 
   callback(null, newTypes);
