@@ -27,9 +27,8 @@ user.init = function(application, callback) {
           return callback(error);
         }
         if (!user) {
-          // We put the same message in both cases, to avoid malicious users
-          // to use this to guess usernames. 
-          return callback(null, false, {message: 'Invalid username or password.'});
+          // User and/or password is invalid.
+          return callback(null, false);
         }
 
         // Start from an empty container and merge in user data.
@@ -362,13 +361,13 @@ user.route = function(routes, callback) {
       if (!request.body.username || !request.body.password) {
         return callback(null, ['Please provide an username and a password.'], 400);
       }
-      passport.authenticate('local', function(error, user, info) {
+      passport.authenticate('local', function(error, user) {
         if (error) {
           return callback(error);
         }
 
         if (!user) {
-          return callback(null, info, 400);
+          return callback(null, ['Invalid username or password.'], 401);
         }
 
         // Log user in.
