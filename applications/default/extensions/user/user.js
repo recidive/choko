@@ -188,11 +188,13 @@ user.type = function(types, callback) {
     fields: {
       name: {
         title: 'Name',
-        type: 'text'
+        type: 'text',
+        required: true
       },
       title: {
         title: 'Title',
-        type: 'text'
+        type: 'text',
+        required: true
       },
       description: {
         title: 'Description',
