@@ -419,7 +419,8 @@ user.role = function(routes, callback) {
   // The 'administrator' role is a magic default role that's used to grant
   // administration powers to users.
   newRoles['administrator'] = {
-    title: 'Administrators, or super users.'
+    title: 'Administrator',
+    description: 'Administrators, or super users. This role has access to everything.'
   };
 
   callback(null, newRoles);
