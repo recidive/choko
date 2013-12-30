@@ -65,12 +65,6 @@ management.navigation = function(navigations, callback) {
     ]
   };
 
-  // Add main navigation item for the management pages.
-  navigations['main'].items.push({
-    title: 'Manage',
-    url: '/manage'
-  });
-
   callback(null, newNavigations);
 };
 
@@ -199,7 +193,6 @@ management.context = function(contexts, callback) {
   newContexts['manage'] = {
     title: 'Management pages',
     description: 'Management pages context.',
-    access: 'manage-application',
     weight: -1,
     conditions: {
       path: ['/manage', '/manage/*']
@@ -211,6 +204,22 @@ management.context = function(contexts, callback) {
         'sidebar': [{
           name: 'navigation-manage',
           weight: 0
+        }]
+      }
+    }
+  };
+  newContexts['manager'] = {
+    title: 'Manager user',
+    description: 'Context for users that can access management pages.',
+    weight: -1,
+    conditions: {
+      access: 'manage-application'
+    },
+    reactions: {
+      panel: {
+        'navbar-right': [{
+          name: 'manage-button',
+          weight: 1
         }]
       }
     }
