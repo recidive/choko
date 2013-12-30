@@ -279,7 +279,7 @@ user.page = function(pages, callback) {
   newPages['user'] = {
     path: '/user/:name',
     title: 'User page',
-    access: 'manage users',
+    access: 'manage-users',
     content: '<p class="lead">User page content.</p>'
   };
 
@@ -287,7 +287,7 @@ user.page = function(pages, callback) {
     path: '/sign-in',
     title: 'Sign in',
     description: 'Sign in to continue.',
-    access: 'sign in',
+    access: 'sign-in',
     type: 'form',
     formName: 'sign-in',
     class: ['col-md-4', 'col-md-offset-4', 'well']
@@ -297,7 +297,7 @@ user.page = function(pages, callback) {
     path: '/create-account',
     title: 'Create an account',
     description: 'Create your account.',
-    access: 'create account',
+    access: 'create-account',
     type: 'form',
     formName: 'create-account',
     class: ['col-md-6', 'col-md-offset-3', 'well']

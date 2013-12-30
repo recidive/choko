@@ -87,7 +87,8 @@ page.route = function(routes, callback) {
       var pageInfo = pages[pageName];
       newRoutes[pageInfo.path] = {
         title: pageInfo.title || null,
-        access: true,
+        // Default page access to "allow".
+        access: pageInfo.access || true,
         callback: function(request, response, callback) {
           // Create a new object to avoid altering page structure since it's
           // stored in memory storage which return references to objects.

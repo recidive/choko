@@ -132,7 +132,6 @@ context.context = function(contexts, callback) {
   newContexts['global'] = {
     title: 'Global',
     description: 'Application wide context.',
-    access: 'access application',
     weight: -10,
     conditions: {
       siteWide: true
