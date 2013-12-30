@@ -200,7 +200,7 @@ context.condition = function(conditions, callback) {
       async.detect(urls, function(url, next) {
         next(regex.exec(request.url));
       }, function(result) {
-        callback(Boolean(result));
+        callback(result !== undefined);
       });
     }
   };
