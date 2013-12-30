@@ -81,7 +81,7 @@ rest.route = function(routes, callback) {
         if (request.method == 'PUT') {
           return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
         }
-        if (request.method == 'POST') {
+        if (request.method == 'POST' || request.method == 'PATCH') {
           return typeModel.load(request.params[type.name], function(err, item) {
             if (item) {
               utils.extend(item, request.body);
@@ -99,8 +99,8 @@ rest.route = function(routes, callback) {
         if (request.method == 'GET') {
           return application.access(request, access.load, callback);
         }
-        if (request.method == 'PUT' || request.method == 'POST') {
-          return application.access(request, access.add, callback);
+        if (request.method == 'PUT' || request.method == 'POST' || request.method == 'PATCH') {
+          return application.access(request, access.edit, callback);
         }
         if (request.method == 'DELETE') {
           return application.access(request, access.delete, callback);
