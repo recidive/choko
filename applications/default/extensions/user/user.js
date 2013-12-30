@@ -316,8 +316,7 @@ user.route = function(routes, callback) {
   // We create routes to form submits until we figure out what approach to use
   // for handling form submits.
   newRoutes['/create-account-submit'] = {
-    //access: 'create account',
-    access: true,
+    access: 'create-account',
     callback: function(request, response, callback) {
       var data = request.body;
 
@@ -355,7 +354,7 @@ user.route = function(routes, callback) {
   };
 
   newRoutes['/sign-in-submit'] = {
-    access: true,
+    access: 'sign-in',
     callback: function(request, response, callback) {
       // Check if there are both an username and a password.
       // @todo in the long run we may need a way to validate forms that aren't
@@ -385,7 +384,7 @@ user.route = function(routes, callback) {
   };
 
   newRoutes['/sign-out'] = {
-    access: true,
+    access: 'sign-out',
     callback: function(request, response, callback) {
       // Log user out.
       request.logout();
@@ -406,14 +405,21 @@ user.role = function(routes, callback) {
   // logged in.
   newRoles['anonymous'] = {
     title: 'Anonymous',
-    description: 'Anonymous, unauthenticated user.'
+    description: 'Anonymous, unauthenticated user.',
+    permissions: [
+      'create-account',
+      'sign-in'
+    ]
   };
 
   // The 'authenticated' role is a magic role that's set to every authenticated
   // user.
   newRoles['authenticated'] = {
     title: 'Authenticated',
-    description: 'Authenticated, signed in user.'
+    description: 'Authenticated, signed in user.',
+    permissions: [
+      'sign-out'
+    ]
   };
 
   // The 'administrator' role is a magic default role that's used to grant
