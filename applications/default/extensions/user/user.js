@@ -457,6 +457,7 @@ user.panel = function(panels, callback) {
  */
 user.condition = function(conditions, callback) {
   var newConditions = {};
+  var application = this.application;
 
   newConditions['anonymous'] = {
     title: 'Anonymous user',
@@ -472,6 +473,24 @@ user.condition = function(conditions, callback) {
     },
     check: function(request, value, callback) {
       callback(!request.user == value);
+    }
+  };
+  newConditions['access'] = {
+    title: 'Access',
+    arguments: {
+      operator: {
+        title: 'Operator',
+        type: 'String'
+      },
+      value: {
+        title: 'Value',
+        type: 'String'
+      }
+    },
+    check: function(request, permission, callback) {
+      application.access(request, permission, function(error, result) {
+        callback(result);
+      });
     }
   };
 
