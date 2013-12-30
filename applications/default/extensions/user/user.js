@@ -503,6 +503,6 @@ user.access = function(request, permission, callback) {
     // @todo Add cache. Sort user roles, glue them together and use as cache id.
     // async.detect() returns roleName or undefined when nothing was detected,
     // so we need to convert it to boolean in some way.
-    callback(null, (result === true));
+    callback(null, result !== undefined);
   });
 };
