@@ -12,7 +12,14 @@ theme.type = function(types, callback) {
 
   newTypes['theme'] = {
     title: 'Theme',
-    description: 'Themes change application look & feel.'
+    description: 'Themes change application look & feel.',
+    access: {
+      'list': 'manage-themes',
+      'load': 'manage-themes',
+      'add': 'manage-themes',
+      'edit': 'manage-themes',
+      'delete': 'manage-themes'
+    }
   };
 
   callback(null, newTypes);
@@ -23,6 +30,7 @@ theme.type = function(types, callback) {
  */
 theme.reaction = function(reactions, callback) {
   var newReactions = {};
+  var application = this.application;
 
   newReactions['theme'] = {
     title: 'Set theme',
@@ -35,8 +43,25 @@ theme.reaction = function(reactions, callback) {
       }
     },
     react: function(request, response, value, callback) {
-      response.payload.theme = value;
-      callback();
+      application.load('theme', value, function(error, theme) {
+        if (error) {
+          return callback(error);
+        }
+        if (theme) {
+          response.payload.theme = theme;
+          callback();
+        }
+        else {
+          // If theme is not found use the default theme.
+          application.load('theme', 'default', function(error, theme) {
+            if (error) {
+              return callback(error);
+            }
+            response.payload.theme = theme;
+            callback();
+          });
+        }
+      });
     }
   };
 

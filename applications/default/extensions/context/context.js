@@ -137,6 +137,7 @@ context.context = function(contexts, callback) {
       siteWide: true
     },
     reactions: {
+      theme: 'default',
       layout: 'one-column',
       panel: {
         'navbar-header': [{

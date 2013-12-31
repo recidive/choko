@@ -1,0 +1,8 @@
+{
+  "title": "Default",
+  "description": "Basic Bootstrap.",
+  "thumbnail": "/bootswatch/default/thumbnail.png",
+  "styles": [
+    "/lib/bootstrap/css/bootstrap.min.css"
+  ]
+}

@@ -137,6 +137,17 @@ management.page = function(pages, callback) {
     template: 'templates/list-group.html'
   };
 
+  newPages['manage-themes'] = {
+    path: '/manage/themes',
+    title: 'Themes',
+    subtitle: 'Dress your application',
+    description: 'Configure application look & feel.',
+    access: 'manage-themes',
+    type: 'list',
+    itemType: 'theme',
+    template: 'templates/list-group.html'
+  };
+
   newPages['manage-types'] = {
     path: '/manage/types',
     title: 'Types',
