@@ -1,0 +1,8 @@
+{
+  "title": "Spacelab",
+  "description": "Silvery and sleek.",
+  "thumbnail": "/bootswatch/spacelab/thumbnail.png",
+  "styles": [
+    "/bootswatch/spacelab/bootstrap.min.css"
+  ]
+}

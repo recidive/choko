@@ -1,0 +1,8 @@
+{
+  "title": "Journal",
+  "description": "Crisp like a new sheet of paper.",
+  "thumbnail": "/bootswatch/journal/thumbnail.png",
+  "styles": [
+    "/bootswatch/journal/bootstrap.min.css"
+  ]
+}

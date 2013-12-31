@@ -1,0 +1,8 @@
+{
+  "title": "Amelia",
+  "description": "Sweet and cheery.",
+  "thumbnail": "/bootswatch/amelia/thumbnail.png",
+  "styles": [
+    "/bootswatch/amelia/bootstrap.min.css"
+  ]
+}

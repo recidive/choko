@@ -1,0 +1,8 @@
+{
+  "title": "Cosmo",
+  "description": "An ode to Metro.",
+  "thumbnail": "/bootswatch/cosmo/thumbnail.png",
+  "styles": [
+    "/bootswatch/cosmo/bootstrap.min.css"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Flatly",
+  "description": "Flat and modern.",
+  "thumbnail": "/bootswatch/flatly/thumbnail.png",
+  "styles": [
+    "/bootswatch/flatly/bootstrap.min.css"
+  ]
+}

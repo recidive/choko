@@ -1,0 +1,8 @@
+{
+  "title": "Readable",
+  "description": "Optimized for legibility.",
+  "thumbnail": "/bootswatch/readable/thumbnail.png",
+  "styles": [
+    "/bootswatch/readable/bootstrap.min.css"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "United",
+  "description": "Ubuntu orange and unique font.",
+  "thumbnail": "/bootswatch/united/thumbnail.png",
+  "styles": [
+    "/bootswatch/united/bootstrap.min.css"
+  ]
+}

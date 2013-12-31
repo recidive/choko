@@ -1,0 +1,8 @@
+{
+  "title": "Simplex",
+  "description": "Mini and minimalist.",
+  "thumbnail": "/bootswatch/simplex/thumbnail.png",
+  "styles": [
+    "/bootswatch/simplex/bootstrap.min.css"
+  ]
+}
