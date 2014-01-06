@@ -1,8 +1,0 @@
-{
-  "title": "Cerulean",
-  "description": "A calm blue sky.",
-  "thumbnail": "/bootswatch/celurean/thumbnail.png",
-  "styles": [
-    "/bootswatch/celurean/bootstrap.min.css"
-  ]
-}
