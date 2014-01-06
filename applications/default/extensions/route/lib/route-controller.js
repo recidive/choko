@@ -41,33 +41,33 @@ RouteController.prototype.handle = function(request, response) {
 
   this.access(request, response, function(err, allow) {
     if (err) {
-      self.error(request, response, err);
+      RouteController.error(request, response, err);
     }
 
     if (allow) {
       // A route can have either a content or callback property.
       if (settings.content) {
-        self.respond(request, response, settings.content);
+        RouteController.respond(request, response, settings.content);
       }
       else if (settings.callback) {
         settings.callback(request, response, function(err, content, code) {
           if (err) {
-            self.error(request, response, err);
+            RouteController.error(request, response, err);
           }
 
           if (content) {
-            self.respond(request, response, content, code);
+            RouteController.respond(request, response, content, code);
           }
           else {
             // If there's no content, return 404 error.
-            self.notFound(request, response);
+            RouteController.notFound(request, response);
           }
         });
       }
     }
     else {
       // Access denied.
-      self.forbidden(request, response);
+      RouteController.forbidden(request, response);
     }
   });
 };
@@ -109,7 +109,7 @@ RouteController.prototype.access = function(request, response, callback) {
  * @param {Object|String} content Content to send.
  * @param {Number} [code] HTTP status code.
  */
-RouteController.prototype.respond = function(request, response, content, code) {
+RouteController.respond = function(request, response, content, code) {
   // Default to 200 (success).
   var code = code || 200;
 
@@ -137,8 +137,8 @@ RouteController.prototype.respond = function(request, response, content, code) {
  * @param {Request} request Request object.
  * @param {Response} response Response object.
  */
-RouteController.prototype.error = function(request, response, error) {
-  this.respond(request, response, {
+RouteController.error = function(request, response, error) {
+  RouteController.respond(request, response, {
     title: 'Server error',
     description: "The server couldn't process the request.",
     error: error.toString()
@@ -151,8 +151,8 @@ RouteController.prototype.error = function(request, response, error) {
  * @param {Request} request Request object.
  * @param {Response} response Response object.
  */
-RouteController.prototype.notFound = function(request, response) {
-  this.respond(request, response, {
+RouteController.notFound = function(request, response) {
+  RouteController.respond(request, response, {
     title: 'Page not found',
     description: "The page you're looking for wasn't found."
   }, 404);
@@ -164,8 +164,8 @@ RouteController.prototype.notFound = function(request, response) {
  * @param {Request} request Request object.
  * @param {Response} response Response object.
  */
-RouteController.prototype.forbidden = function(request, response) {
-  this.respond(request, response, {
+RouteController.forbidden = function(request, response) {
+  RouteController.respond(request, response, {
     title: 'Forbidden',
     description: "You don't have permission to access this page."
   }, 403);
