@@ -23,6 +23,11 @@ route.init = function(application, callback) {
       // Initialize the router middleware.
       self.application.application.use(self.application.application.router);
 
+      // The last middleware is the one that catches 404 errors.
+      self.application.application.use(function(req, res, next){
+        RouteController.notFound(req, res);
+      });
+
       callback();
     });
   });

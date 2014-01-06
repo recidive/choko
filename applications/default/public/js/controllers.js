@@ -6,7 +6,8 @@ function ApplicationController($scope, $location, $http, applicationState, Choko
   $scope.changeState = function() {
     var path = (!$location.path() || $location.path() == '/') ? '/home' : $location.path();
 
-    $http.get(path).success(function(data) {
+    $http.get(path)
+    .success(function(data, status, headers, config) {
       // Rebuild the layout only when context changes.
       if ($scope.contexts instanceof Array && $scope.contexts.toString() == data.data.contexts.toString()) {
         // Update only panels in content region, and page information.
@@ -23,6 +24,15 @@ function ApplicationController($scope, $location, $http, applicationState, Choko
         // Store scope as application state.
         applicationState.set($scope);
       }
+    })
+    .error(function(data, status, headers, config) {
+      // Merge data from the server.
+      angular.extend($scope.page, data.data);
+
+      $scope.page.template = '/templates/error.html';
+
+      // Store scope as application state.
+      applicationState.set($scope);
     });
   }
 
@@ -103,7 +113,6 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
     $scope.items = {};
 
     Choko.get({type: $scope.view.itemType}, function(response) {
-      $scope.title = $scope.page.title;
       $scope.items = response;
     });
   }
@@ -113,10 +122,16 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
     $scope.item = {};
 
     Choko.get({type: $scope.view.itemType, key: $scope.view.itemKey}, function(response) {
-      if ($scope.view.path) {
-        $scope.title = response.title;
-      }
       $scope.item = response;
+    },
+    function(response) {
+      // Error.
+      if ($scope.page) {
+        // If it's a page, show error, otherwise fail silently.
+        $scope.item = response.data;
+        $scope.page.title = response.data.title;
+        $scope.view.template = '/templates/error.html';
+      }
     });
   }
 
@@ -138,9 +153,6 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
     };
 
     Choko.get({type: 'form', key: $scope.view.formName}, function(response) {
-      if ($scope.view.path) {
-        $scope.title = response.title;
-      }
       $scope.form = response;
       $scope.view.template = $scope.view.template || $scope.form.template;
       $scope.view.template = $scope.view.template || 'templates/form.html';
