@@ -120,16 +120,17 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
   // Handle 'item' type views.
   if ($scope.view.type === 'item' && $scope.view.itemType) {
     $scope.item = {};
-
+    $scope.view.title = '';
     Choko.get({type: $scope.view.itemType, key: $scope.view.itemKey}, function(response) {
       $scope.item = response;
+      $scope.view.title = response.title;
     },
     function(response) {
       // Error.
       if ($scope.page) {
         // If it's a page, show error, otherwise fail silently.
         $scope.item = response.data;
-        $scope.page.title = response.data.title;
+        $scope.view.title = response.data.title;
         $scope.view.template = '/templates/error.html';
       }
     });
