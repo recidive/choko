@@ -143,19 +143,19 @@ user.type = function(types, callback) {
     statics: {
       login: function(data, callback) {
         var User = this;
-        this.load(data.username, function(error, user) {
+        this.load(data.username, function(error, account) {
           if (error) {
             return callback(error);
           }
-          if (user) {
-            User.hash(data.password, new Buffer(user.salt, 'base64'), function(error, password) {
+          if (account) {
+            User.hash(data.password, new Buffer(account.salt, 'base64'), function(error, password) {
               if (error) {
                 return callback(error);
               }
 
-              if (user.password == password.toString('base64')) {
+              if (account.password == password.toString('base64')) {
                 // Password matches.
-                callback(null, user);
+                callback(null, account);
               }
               else {
                 // Wrong password.
@@ -326,11 +326,11 @@ user.route = function(routes, callback) {
 
       var User = application.type('user');
 
-      User.load(data.username, function(error, user) {
+      User.load(data.username, function(error, account) {
         if (error) {
           return callback(error);
         }
-        if (user) {
+        if (account) {
           return callback(null, ['This username is not available, please choose another one.'], 409);
         }
         if (data.password != data['password-confirm']) {
@@ -338,8 +338,8 @@ user.route = function(routes, callback) {
         }
 
         // Create new user resource and save it.
-        var user = new User(data);
-        user.validateAndSave(function(error, user, errors) {
+        var newAccount = new User(data);
+        newAccount.validateAndSave(function(error, newAccount, errors) {
           if (error) {
             return callback(error);
           }
@@ -349,7 +349,7 @@ user.route = function(routes, callback) {
             return callback(null, errors, 400);
           }
 
-          callback(null, user, 201);
+          callback(null, newAccount, 201);
         });
 
       });
@@ -366,21 +366,21 @@ user.route = function(routes, callback) {
       if (!request.body.username || !request.body.password) {
         return callback(null, ['Please provide an username and a password.'], 400);
       }
-      passport.authenticate('local', function(error, user) {
+      passport.authenticate('local', function(error, account) {
         if (error) {
           return callback(error);
         }
 
-        if (!user) {
+        if (!account) {
           return callback(null, ['Invalid username or password.'], 401);
         }
 
         // Log user in.
-        request.login(user, function(error) {
+        request.login(account, function(error) {
           if (error) {
             return callback(error);
           }
-          callback(null, user);
+          callback(null, account);
         });
 
       })(request, response, callback);
@@ -517,13 +517,13 @@ user.access = function(request, permission, callback) {
   }
 
   // Create a mock user for anonymous access.
-  var user = request.user || {
+  var account = request.user || {
     username: 'anonymous',
     roles: ['anonymous']
   };
 
   var application = this.application;
-  async.detect(user.roles, function(roleName, next) {
+  async.detect(account.roles, function(roleName, next) {
     application.load('role', roleName, function(error, role) {
       role.permissions = role.permissions || [];
       next(!error && role && role.permissions.indexOf(permission) !== -1);
