@@ -107,6 +107,29 @@ function ItemController($scope, $location, applicationState, Choko) {
 }
 //ItemController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
+function ReferenceElementController($scope, $location, applicationState, Choko) {
+  Choko.get({type: $scope.element.reference.type}, function(response) {
+    $scope.element.options = response;
+  });
+
+  $scope.data[$scope.element.name] = $scope.data[$scope.element.name] || [];
+
+  // Toggle selection for a given option by name.
+  $scope.toggleSelection = function(option) {
+    var index = $scope.data[$scope.element.name].indexOf(option);
+
+    // Is currently selected.
+    if (index > -1) {
+      $scope.data[$scope.element.name].splice(index, 1);
+    }
+    // Is newly selected.
+    else {
+      $scope.data[$scope.element.name].push(option);
+    }
+  };
+}
+//ReferenceElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+
 function ViewController($scope, $location, $http, applicationState, Choko) {
   // Handle 'list' type views.
   if ($scope.view.type === 'list' && $scope.view.itemType) {
