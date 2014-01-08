@@ -57,16 +57,23 @@ form.form = function(forms, callback) {
       for (var fieldName in typeSettings.fields) {
         var fieldSettings = typeSettings.fields[fieldName];
         // By pass 'internal' fields.
-        if (!fieldSettings.internal && typeof fieldSettings.type === 'string') {
-          form.elements.push({
-            name: fieldName,
-            title: fieldSettings.title,
-            // @todo: don't relate field types with element types directly.
-            type: fieldSettings.type,
-            required: fieldSettings.required || false,
-            weight: fieldSettings.weight || 0,
-          });
+        if (fieldSettings.internal) {
+          continue;
         }
+        var element = {
+          name: fieldName,
+          title: fieldSettings.title,
+          // @todo: don't relate field types with element types directly.
+          type: fieldSettings.type,
+          required: fieldSettings.required || false,
+          weight: fieldSettings.weight || 0
+        };
+
+        if (fieldSettings.type === 'reference') {
+          element.reference = fieldSettings.reference;
+        }
+
+        form.elements.push(element);
       }
       form.elements.push({
         name: 'submit',

@@ -117,7 +117,11 @@ user.type = function(types, callback) {
       },
       roles: {
         title: 'Roles',
-        type: ['role']
+        type: 'reference',
+        reference: {
+          type: 'role',
+          multiple: true
+        }
       },
       active: {
         title: 'Active',
