@@ -1,4 +1,5 @@
 {
   "title": "User",
-  "description": "Provide user management and authentication."
+  "description": "Provide user management and authentication.",
+  "dependencies": ["session"]
 }

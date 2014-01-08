@@ -29,6 +29,7 @@ var settings = module.exports = {
     'theme': {},
     'rest': {},
     'form': {},
+    'session': {},
     'user': {},
     'management': {}
   }
