@@ -35,6 +35,10 @@ management.navigation = function(navigations, callback) {
         url: '/manage'
       },
       {
+        title: 'Users',
+        url: '/manage/users'
+      },
+      {
         title: 'Pages',
         url: '/manage/pages'
       },
@@ -80,6 +84,23 @@ management.page = function(pages, callback) {
     title: 'Dashboard',
     access: 'manage-application',
     content: '<p class="lead">Dashboard content.</p>'
+  };
+
+  newPages['manage-users'] = {
+    path: '/manage/users',
+    title: 'Users',
+    access: 'manage-users',
+    type: 'list',
+    itemType: 'user',
+    template: 'templates/user-list.html'
+  };
+
+  newPages['manage-users-add-user'] = {
+    path: '/manage/users/add-user',
+    title: 'Add user',
+    access: 'manage-users',
+    type: 'form',
+    formName: 'type-user'
   };
 
   newPages['manage-pages'] = {
