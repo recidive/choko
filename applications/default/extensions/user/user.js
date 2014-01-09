@@ -135,11 +135,6 @@ user.type = function(types, callback) {
       'edit': 'manage-users',
       'delete': 'manage-users'
     },
-    methods: {
-      logout: function() {
-
-      }
-    },
     statics: {
       login: function(data, callback) {
         var User = this;
