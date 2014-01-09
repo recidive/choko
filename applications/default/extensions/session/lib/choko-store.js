@@ -75,7 +75,7 @@ ChokoStore.prototype.set = function(hash, data, callback) {
  * @param {String} hash
  * @param {Function} callback
  */
-ChokoStore.prototype.destroy = function(hash, callback){
+ChokoStore.prototype.destroy = function(hash, callback) {
   this.model.delete(hash, function(error) {
     if (error && callback) {
       return callback(error);
@@ -89,7 +89,7 @@ ChokoStore.prototype.destroy = function(hash, callback){
  *
  * @param {Function} callback
  */
-ChokoStore.prototype.all = function(callback){
+ChokoStore.prototype.all = function(callback) {
   this.model.query({}, function(error, sessions) {
     if (error) {
       return callback(error);
@@ -115,7 +115,7 @@ ChokoStore.prototype.all = function(callback){
  *
  * @param {Function} callback
  */
-ChokoStore.prototype.clear = function(callback){
+ChokoStore.prototype.clear = function(callback) {
   this.model.query({}, function(error, sessions) {
     if (error) {
       return callback(error);
@@ -138,7 +138,7 @@ ChokoStore.prototype.clear = function(callback){
  *
  * @param {Function} callback
  */
-ChokoStore.prototype.length = function(callback){
+ChokoStore.prototype.length = function(callback) {
   this.model.query({}, function(error, sessions) {
     if (error) {
       return callback(error);
