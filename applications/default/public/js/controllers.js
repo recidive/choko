@@ -96,6 +96,8 @@ function RegionController($scope, $location, applicationState, Choko) {
 //RegionController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
 function NavigationController($scope, $location, applicationState, Choko) {
+  $scope.panel.classes.unshift('nav');
+
   $scope.isActive = function(route) {
     //var regexp = new RegExp('^' + pattern + '.*$', ["i"]);
     return route === $location.path();

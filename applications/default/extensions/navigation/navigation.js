@@ -51,21 +51,16 @@ navigation.panel = function(panels, callback) {
     var newPanels = {};
     async.each(Object.keys(navigations), function(navigationName, next) {
       var nav = navigations[navigationName];
-      var classes = ['nav'].concat(nav.classes);
-
-      if (nav.stacked) {
-        classes.push('nav-stacked');
-      }
 
       newPanels['navigation-' + navigationName] = {
         title: nav.title,
         description: 'The ' + nav.title + ' navigation.',
         type: 'item',
         bare: true,
-        classes: classes,
+        classes: nav.classes,
         itemType: 'navigation',
         itemKey: navigationName,
-        template: 'templates/navigation.html'
+        template: nav.template || 'templates/navigation.html'
       };
 
       next();
