@@ -1,3 +1,5 @@
+var async = require('async');
+
 var form = module.exports;
 
 /**
@@ -41,40 +43,44 @@ form.type = function(types, callback) {
  */
 form.form = function(forms, callback) {
   var newForms = {};
+  var self = this;
 
   // Create forms for every type on the system except 'type' and 'extension',
   // the ones that have the 'form' property set to false and the ones that have
   // no fields.
-  for (var typeName in this.application.types) {
-    var typeSettings = this.application.types[typeName].type.settings;
-    if (typeName != 'type' && typeName != 'extension' && typeSettings.fields) {
-      var form = newForms['type-' + typeName] = {
-        title: typeSettings.title,
-        description: 'Form for the ' + typeSettings.title + ' type.'
-      };
-      // Add fields.
-      form.elements = [];
-      for (var fieldName in typeSettings.fields) {
-        var fieldSettings = typeSettings.fields[fieldName];
-        // By pass 'internal' fields.
-        if (fieldSettings.internal) {
-          continue;
-        }
-        var element = {
-          name: fieldName,
-          title: fieldSettings.title,
-          // @todo: don't relate field types with element types directly.
-          type: fieldSettings.type,
-          required: fieldSettings.required || false,
-          weight: fieldSettings.weight || 0
-        };
-
-        if (fieldSettings.type === 'reference') {
-          element.reference = fieldSettings.reference;
-        }
-
-        form.elements.push(element);
+  async.each(Object.keys(self.application.types), function(typeName, next) {
+    var typeSettings = self.application.types[typeName].type.settings;
+    if (typeName == 'type' || typeName == 'extension' || !typeSettings.fields) {
+      return next();
+    }
+    var form = newForms['type-' + typeName] = {
+      title: typeSettings.title,
+      description: 'Form for the ' + typeSettings.title + ' type.'
+    };
+    // Add fields.
+    form.elements = [];
+    async.eachSeries(Object.keys(typeSettings.fields), function(fieldName, next) {
+      var fieldSettings = typeSettings.fields[fieldName];
+      // By pass 'internal' fields.
+      if (fieldSettings.internal) {
+        return next();
       }
+      var element = {
+        name: fieldName,
+        title: fieldSettings.title,
+        // @todo: don't relate field types with element types directly.
+        type: fieldSettings.type,
+        required: fieldSettings.required || false,
+        weight: fieldSettings.weight || 0
+      };
+
+      if (fieldSettings.type == 'reference') {
+        element.reference = fieldSettings.reference;
+      }
+
+      form.elements.push(element);
+      next();
+    }, function() {
       form.elements.push({
         name: 'submit',
         title: 'Save',
@@ -82,8 +88,10 @@ form.form = function(forms, callback) {
         url: '/rest/' + typeName,
         weight: 15
       });
-    }
-  }
+      next();
+    });
+  }, function() {
+    callback(null, newForms);
+  });
 
-  callback(null, newForms);
 };
