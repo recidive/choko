@@ -10,15 +10,15 @@
         <span class="icon-bar"></span>
       </button>
       <!-- Navbar header panels -->
-      <a ng-repeat="panel in panels['navbar-header']" ng-controller="PanelController" ng-include="template" href="#" class="panel-wrapper navbar-brand"></a>
+      <a ng-repeat="panel in panels['navbar-header'] | orderBy:'weight'" ng-controller="PanelController" ng-include="template" href="#" class="panel-wrapper navbar-brand"></a>
     </div>
 
     <!-- Collect content for toggling -->
     <div class="collapse navbar-collapse">
       <!-- Navbar left panels -->
-      <div ng-repeat="panel in panels['navbar-left']" ng-controller="PanelController" ng-include="template" class="panel-wrapper navbar-left"></div>
+      <div ng-repeat="panel in panels['navbar-left'] | orderBy:'weight'" ng-controller="PanelController" ng-include="template" class="panel-wrapper navbar-left"></div>
       <!-- Navbar right panels -->
-      <div ng-repeat="panel in panels['navbar-right']" ng-controller="PanelController" ng-include="template" class="panel-wrapper navbar-right"></div>
+      <div ng-repeat="panel in panels['navbar-right'] | orderBy:'weight'" ng-controller="PanelController" ng-include="template" class="panel-wrapper navbar-right"></div>
     </div>
 
   </div>

@@ -251,7 +251,7 @@ management.context = function(contexts, callback) {
       panel: {
         'navbar-right': [{
           name: 'manage-button',
-          weight: 1
+          weight: -1
         }]
       }
     }
