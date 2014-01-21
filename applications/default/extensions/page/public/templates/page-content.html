@@ -4,7 +4,7 @@
       <div ng-repeat="panel in panels['page-header'] | orderBy:'weight'" ng-controller="PanelController" ng-include="template" class="panel-wrapper pull-right"></div>
     </h1>
   </div>
-  <p class="lead">{{page.description}}</p>
+  <p ng-if="page.description" class="lead">{{page.description}}</p>
 
   <div ng-if="page.template" ng-include="page.template"></div>
   <div ng-if="!page.template" ng-bind-html="page.content" class="page-content"></div>
