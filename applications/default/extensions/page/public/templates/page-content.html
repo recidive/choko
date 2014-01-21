@@ -6,6 +6,8 @@
   </div>
   <p ng-if="page.description" class="lead">{{page.description}}</p>
 
+  <div ng-repeat="panel in panels['page-top'] | orderBy:'weight'" ng-controller="PanelController" ng-include="template" class="panel-wrapper"></div>
+
   <div ng-if="page.template" ng-include="page.template"></div>
   <div ng-if="!page.template" ng-bind-html="page.content" class="page-content"></div>
 </div>
