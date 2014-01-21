@@ -198,6 +198,14 @@ user.type = function(types, callback) {
       description: {
         title: 'Description',
         type: 'text'
+      },
+      permissions: {
+        title: 'Permissions',
+        type: 'reference',
+        reference: {
+          type: 'permission',
+          multiple: true
+        }
       }
     },
     access: {
