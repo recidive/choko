@@ -1,3 +1,5 @@
+<div ng-repeat="panel in panels[panel.name] | orderBy:'weight'" ng-controller="PanelController" ng-include="template" class="panel-wrapper" ng-class="{'pull-right': !panel.stacked}"></div>
+
 <ul ng-controller="NavigationController" ng-class="panel.classes">
   <li ng-repeat="itemA in item.items" ng-class="{active: isActive(itemA.url)}"><a href="#{{itemA.url}}">{{itemA.title}}</a></li>
 </ul>
