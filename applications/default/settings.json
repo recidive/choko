@@ -1,0 +1,22 @@
+{
+  "database": "mongodb://localhost/choko",
+  "sessionSecret": "overwrite-and-change-me",
+  "application": {
+    "name": "Default"
+  },
+  "extensions": {
+    "field": {},
+    "route": {},
+    "context": {},
+    "layout": {},
+    "panel": {},
+    "navigation": {},
+    "page": {},
+    "theme": {},
+    "rest": {},
+    "form": {},
+    "session": {},
+    "user": {},
+    "management": {}
+  }
+}
