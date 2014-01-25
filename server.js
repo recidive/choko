@@ -3,7 +3,7 @@
  */
 var Server = require('./lib/server');
 
-var server = new Server();
+var server = new Server('./applications');
 server.start(getPort());
 
 // Get port from command line argument "-p" or fallback to 3000.
