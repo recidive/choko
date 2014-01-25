@@ -1,5 +1,4 @@
 {
-  "database": "mongodb://localhost/choko",
   "sessionSecret": "overwrite-and-change-me",
   "application": {
     "name": "Default"

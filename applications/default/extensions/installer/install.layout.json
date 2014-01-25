@@ -1,0 +1,27 @@
+{
+  "title": "Installation layout",
+  "description": "A single column layout used on installation.",
+  "fluid": true,
+  "responsive": true,
+  "rows": [
+    {
+      "name": "header",
+      "title": "Header",
+      "region": true,
+      "weight": 1
+    },
+    {
+      "name": "content",
+      "title": "Content",
+      "region": true,
+      "weight": 3,
+      "classes": ["col-md-4", "col-md-offset-4", "well"]
+    },
+    {
+      "name": "footer",
+      "title": "Footer",
+      "region": true,
+      "weight": 4
+    }
+  ]
+}

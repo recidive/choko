@@ -1,0 +1,55 @@
+{
+  "title": "Application information",
+  "description": "Fill this out to create your application.",
+  "elements": [
+    {
+      "name": "hostname",
+      "title": "Application hostname",
+      "type": "text",
+      "required": true,
+      "weight": -15
+    },
+    {
+      "name": "name",
+      "title": "Application name",
+      "type": "text",
+      "required": true,
+      "weight": -10
+    },
+    {
+      "name": "email",
+      "title": "Application email address",
+      "type": "email",
+      "required": true,
+      "weight": -5
+    },
+    {
+      "name": "username",
+      "title": "Administrator username",
+      "type": "text",
+      "required": true,
+      "weight": 0
+    },
+    {
+      "name": "password",
+      "title": "Create an administrator password",
+      "type": "password",
+      "required": true,
+      "weight": 5
+    },
+    {
+      "name": "password-confirm",
+      "title": "Confirm administrator password",
+      "type": "password",
+      "required": true,
+      "weight": 10
+    },
+    {
+      "name": "submit",
+      "title": "Create application",
+      "type": "submit",
+      "url": "/create-account-submit",
+      "weight": 15
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Install",
+  "description": "Install context.",
+  "conditions": {
+    "path": ["/install"]
+  },
+  "reactions": {
+    "layout": "install",
+    "panel": {
+      "content": [{
+        "name": "choko-logo",
+        "weight": -1
+      }]
+    }
+  }
+}

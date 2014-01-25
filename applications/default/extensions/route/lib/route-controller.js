@@ -119,11 +119,6 @@ RouteController.respond = function(request, response, content, code) {
     }
   };
 
-  var alerts = request.flash();
-  if (Object.keys(alerts).length > 0) {
-    payload.alerts = alerts;
-  }
-
   if (content) {
     payload.data = content;
   }

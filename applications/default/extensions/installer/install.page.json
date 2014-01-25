@@ -1,0 +1,7 @@
+{
+  "path": "/install",
+  "title": "Install",
+  "description": "Install application.",
+  "type": "form",
+  "formName": "install"
+}
