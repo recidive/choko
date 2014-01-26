@@ -105,6 +105,19 @@ management.navigation = function(navigations, callback) {
     ]
   };
 
+  newNavigations['navigation-management-toolbar'] = {
+    title: 'Navigation management toolbar',
+    template: '/templates/btn-group.html',
+    classes: ['btn-group-sm'],
+    items: [
+      {
+        title: 'Add navigation',
+        url: '/manage/navigations/add-navigation',
+        classes: ['btn-primary']
+      }
+    ]
+  };
+
   callback(null, newNavigations);
 };
 
@@ -201,12 +214,20 @@ management.page = function(pages, callback) {
   newPages['manage-navigations'] = {
     path: '/manage/navigations',
     title: 'Navigations',
-    subtitle: 'Navigation menus and links',
+    subtitle: 'Navigation menus and toolbars',
     description: 'Groups of structured links that allow users to change application state.',
     access: 'manage-navigations',
     type: 'list',
     itemType: 'navigation',
     template: 'templates/list-group.html'
+  };
+
+  newPages['manage-navigations-add-navigation'] = {
+    path: '/manage/navigations/add-navigation',
+    title: 'Add navigation',
+    access: 'manage-navigations',
+    type: 'form',
+    formName: 'type-navigation'
   };
 
   newPages['manage-themes'] = {
@@ -306,6 +327,22 @@ management.context = function(contexts, callback) {
         }],
         'navigation-user-management-tabs': [{
           name: 'navigation-user-management-toolbar',
+          weight: 0
+        }]
+      }
+    }
+  };
+  newContexts['manage-navigation'] = {
+    title: 'Navigaiton management pages',
+    description: 'Navigation management pages context.',
+    weight: -1,
+    conditions: {
+      path: ['/manage/navigations', '/manage/navigations/*']
+    },
+    reactions: {
+      panel: {
+        'page-header': [{
+          name: 'navigation-navigation-management-toolbar',
           weight: 0
         }]
       }
