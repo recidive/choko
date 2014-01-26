@@ -132,6 +132,57 @@ function ReferenceElementController($scope, $location, applicationState, Choko) 
 }
 //ReferenceElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
+function InlineReferenceElementController($scope, $location, applicationState, Choko) {
+  var multiple = $scope.element.reference.multiple;
+
+  // Subform errors are handled separately.
+  $scope.errors = [];
+
+  if (multiple) {
+    if ($scope.data[$scope.element.name]) {
+      $scope.items = $scope.data[$scope.element.name];
+    }
+    else {
+      $scope.items = $scope.data[$scope.element.name] = [];
+    }
+
+    $scope.data = {};
+
+    $scope.addItem = function() {
+      // @todo: validate item.
+      $scope.items.push($scope.data);
+      $scope.data = {};
+    };
+    $scope.removeItem = function(index) {
+      $scope.items.splice(index, 1);
+    };
+  }
+  else {
+    if ($scope.data[$scope.element.name]) {
+      $scope.data = $scope.data[$scope.element.name];
+    }
+    else {
+      $scope.data = $scope.data[$scope.element.name] = {};
+    }
+  }
+
+  Choko.get({type: 'form', key: 'type-' + $scope.element.reference.type}, function(response) {
+    var subform = $scope.element.subform = response;
+
+    if (multiple) {
+      subform.elements.push({
+        name: 'add',
+        title: 'Add',
+        type: 'button',
+        click: 'addItem',
+        classes: ['btn-default'],
+        weight: 15
+      });
+    }
+  });
+}
+//InlineReferenceElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+
 function ViewController($scope, $location, $http, applicationState, Choko) {
   // Handle 'list' type views.
   if ($scope.view.type === 'list' && $scope.view.itemType) {
@@ -191,3 +242,15 @@ function ElementController($scope, $location, applicationState, Choko) {
   $scope.element.template = $scope.element.template || 'templates/' + $scope.element.type + '.html';
 }
 //ElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+
+function SubElementController($scope, $location, applicationState, Choko) {
+  $scope.subElement.template = $scope.subElement.template || 'templates/' + $scope.subElement.type + '.html';
+}
+//SubElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+
+function ButtonController($scope, $location, applicationState, Choko) {
+  $scope.call = function(func) {
+    $scope[func]();
+  };
+}
+//ButtonController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];

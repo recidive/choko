@@ -73,6 +73,51 @@ management.navigation = function(navigations, callback) {
     ]
   };
 
+  newNavigations['user-management-toolbar'] = {
+    title: 'User management toolbar',
+    template: '/templates/btn-group.html',
+    classes: ['btn-group-sm'],
+    items: [
+      {
+        title: 'Add user',
+        url: '/manage/users/add-user',
+        classes: ['btn-primary']
+      },
+      {
+        title: 'Add role',
+        url: '/manage/users/add-role'
+      }
+    ]
+  };
+
+  newNavigations['user-management-tabs'] = {
+    title: 'User management toolbar',
+    classes: ['nav-tabs'],
+    items: [
+      {
+        title: 'Users',
+        url: '/manage/users'
+      },
+      {
+        title: 'Roles',
+        url: '/manage/users/roles'
+      }
+    ]
+  };
+
+  newNavigations['navigation-management-toolbar'] = {
+    title: 'Navigation management toolbar',
+    template: '/templates/btn-group.html',
+    classes: ['btn-group-sm'],
+    items: [
+      {
+        title: 'Add navigation',
+        url: '/manage/navigations/add-navigation',
+        classes: ['btn-primary']
+      }
+    ]
+  };
+
   callback(null, newNavigations);
 };
 
@@ -92,7 +137,6 @@ management.page = function(pages, callback) {
 
   newPages['manage-users'] = {
     path: '/manage/users',
-    title: 'Users',
     access: 'manage-users',
     type: 'list',
     itemType: 'user',
@@ -105,6 +149,22 @@ management.page = function(pages, callback) {
     access: 'manage-users',
     type: 'form',
     formName: 'type-user'
+  };
+
+  newPages['manage-users-roles'] = {
+    path: '/manage/users/roles',
+    access: 'manage-users',
+    type: 'list',
+    itemType: 'role',
+    template: 'templates/list-group.html'
+  };
+
+  newPages['manage-users-add-role'] = {
+    path: '/manage/users/add-role',
+    title: 'Add role',
+    access: 'manage-users',
+    type: 'form',
+    formName: 'type-role'
   };
 
   newPages['manage-pages'] = {
@@ -154,12 +214,20 @@ management.page = function(pages, callback) {
   newPages['manage-navigations'] = {
     path: '/manage/navigations',
     title: 'Navigations',
-    subtitle: 'Navigation menus and links',
+    subtitle: 'Navigation menus and toolbars',
     description: 'Groups of structured links that allow users to change application state.',
     access: 'manage-navigations',
     type: 'list',
     itemType: 'navigation',
     template: 'templates/list-group.html'
+  };
+
+  newPages['manage-navigations-add-navigation'] = {
+    path: '/manage/navigations/add-navigation',
+    title: 'Add navigation',
+    access: 'manage-navigations',
+    type: 'form',
+    formName: 'type-navigation'
   };
 
   newPages['manage-themes'] = {
@@ -239,6 +307,42 @@ management.context = function(contexts, callback) {
       panel: {
         'sidebar': [{
           name: 'navigation-manage',
+          weight: 0
+        }]
+      }
+    }
+  };
+  newContexts['manage-users'] = {
+    title: 'User management pages',
+    description: 'User management pages context.',
+    weight: -1,
+    conditions: {
+      path: ['/manage/users', '/manage/users/*']
+    },
+    reactions: {
+      panel: {
+        'content': [{
+          name: 'navigation-user-management-tabs',
+          weight: -1
+        }],
+        'navigation-user-management-tabs': [{
+          name: 'navigation-user-management-toolbar',
+          weight: 0
+        }]
+      }
+    }
+  };
+  newContexts['manage-navigation'] = {
+    title: 'Navigaiton management pages',
+    description: 'Navigation management pages context.',
+    weight: -1,
+    conditions: {
+      path: ['/manage/navigations', '/manage/navigations/*']
+    },
+    reactions: {
+      panel: {
+        'page-header': [{
+          name: 'navigation-navigation-management-toolbar',
           weight: 0
         }]
       }
