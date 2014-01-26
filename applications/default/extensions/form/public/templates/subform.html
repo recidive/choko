@@ -1,0 +1,8 @@
+<div>
+  <div ng-if="errors" class="alert alert-danger">
+    <ul>
+      <li ng-repeat="error in errors">{{error}}</li>
+    </ul>
+  </div>
+  <div ng-repeat="element in element.subform.elements | orderBy:'weight'" ng-include="element.template" ng-controller="ElementController" class="form-group"></div>
+</div>

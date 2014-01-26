@@ -81,13 +81,18 @@ form.form = function(forms, callback) {
       form.elements.push(element);
       next();
     }, function() {
-      form.elements.push({
-        name: 'submit',
-        title: 'Save',
-        type: 'submit',
-        url: '/rest/' + typeName,
-        weight: 15
-      });
+      // The standalone setting says the the type can't exist on its own, and
+      // its form is usually used on subforms on reference type fields.
+      if (typeSettings.standalone !== false) {
+        form.elements.push({
+          name: 'submit',
+          title: 'Save',
+          type: 'submit',
+          url: '/rest/' + typeName,
+          classes: ['btn-primary'],
+          weight: 15
+        });
+      }
       next();
     });
   }, function() {
