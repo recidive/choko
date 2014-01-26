@@ -135,6 +135,9 @@ function ReferenceElementController($scope, $location, applicationState, Choko) 
 function InlineReferenceElementController($scope, $location, applicationState, Choko) {
   var multiple = $scope.element.reference.multiple;
 
+  // Subform errors are handled separately.
+  $scope.errors = [];
+
   if (multiple) {
     if ($scope.data[$scope.element.name]) {
       $scope.items = $scope.data[$scope.element.name];
