@@ -26,12 +26,49 @@ navigation.type = function(types, callback) {
   newTypes['navigation'] = {
     title: 'Navigation',
     description: 'Navigation structures.',
+    fields: {
+      name: {
+        title: 'Name',
+        type: 'text',
+        required: 'true'
+      },
+      title: {
+        title: 'Title',
+        type: 'text',
+        required: 'true'
+      },
+      items: {
+        title: 'Items',
+        type: 'reference',
+        reference: {
+          type: 'link',
+          multiple: true,
+          inline: true
+        }
+      }
+    },
     access: {
       'list': true,
       'load': true,
       'add': 'manage-navigations',
       'edit': 'manage-navigations',
       'delete': 'manage-navigations'
+    }
+  };
+
+  newTypes['link'] = {
+    title: 'Navigation',
+    description: 'Navigation structures.',
+    standalone: false,
+    fields: {
+      title: {
+        title: 'Title',
+        type: 'text'
+      },
+      url: {
+        title: 'URL',
+        type: 'text'
+      }
     }
   };
 
