@@ -1,0 +1,10 @@
+{
+  "path": "/manage/navigations",
+  "title": "Navigations",
+  "subtitle": "Navigation menus and toolbars",
+  "description": "Groups of structured links that allow users to change application state.",
+  "access": "manage-navigations",
+  "type": "list",
+  "itemType": "navigation",
+  "template": "templates/list-group.html"
+}

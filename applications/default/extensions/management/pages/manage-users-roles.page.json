@@ -1,0 +1,7 @@
+{
+  "path": "/manage/users/roles",
+  "access": "manage-users",
+  "type": "list",
+  "itemType": "role",
+  "template": "templates/list-group.html"
+}

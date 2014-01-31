@@ -1,0 +1,10 @@
+{
+  "path": "/manage/contexts",
+  "title": "Contexts",
+  "subtitle": "Add dynamicity",
+  "description": "Contexts are a set of conditions that creates a particular scenario on the application.",
+  "access": "manage-contexts",
+  "type": "list",
+  "itemType": "context",
+  "template": "templates/list-group.html"
+}

@@ -1,0 +1,7 @@
+{
+  "path": "/manage/users/add-role",
+  "title": "Add role",
+  "access": "manage-users",
+  "type": "form",
+  "formName": "type-role"
+}

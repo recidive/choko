@@ -1,0 +1,10 @@
+{
+  "path": "/manage/layouts",
+  "title": "Layouts",
+  "subtitle": "Page structure",
+  "description": "Layouts rule how pages are structured in rows, columns and regions.",
+  "access": "manage-layouts",
+  "type": "list",
+  "itemType": "layout",
+  "template": "templates/list-group.html"
+}

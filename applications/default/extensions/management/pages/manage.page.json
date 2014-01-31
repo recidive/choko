@@ -1,0 +1,6 @@
+{
+  "path": "/manage",
+  "title": "Activity",
+  "access": "manage-application",
+  "content": "<p class=\"lead\">Dashboard content.</p>"
+}

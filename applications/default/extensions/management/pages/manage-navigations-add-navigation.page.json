@@ -1,0 +1,7 @@
+{
+  "path": "/manage/navigations/add-navigation",
+  "title": "Add navigation",
+  "access": "manage-navigations",
+  "type": "form",
+  "formName": "type-navigation"
+}
