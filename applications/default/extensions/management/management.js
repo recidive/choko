@@ -63,6 +63,10 @@ management.navigation = function(navigations, callback) {
         url: '/manage/navigations'
       },
       {
+        title: 'Themes',
+        url: '/manage/themes'
+      },
+      {
         title: 'Types',
         url: '/manage/types'
       },
