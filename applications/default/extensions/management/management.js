@@ -91,7 +91,7 @@ management.navigation = function(navigations, callback) {
   };
 
   newNavigations['user-management-tabs'] = {
-    title: 'User management toolbar',
+    title: 'User management tabs',
     classes: ['nav-tabs'],
     items: [
       {
