@@ -16,12 +16,6 @@
       "region": true,
       "weight": 3,
       "classes": ["col-md-4", "col-md-offset-4", "well"]
-    },
-    {
-      "name": "footer",
-      "title": "Footer",
-      "region": true,
-      "weight": 4
     }
   ]
 }

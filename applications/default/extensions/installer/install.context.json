@@ -11,6 +11,11 @@
         "name": "choko-logo",
         "weight": -1
       }]
+    },
+    "add-css": {
+      "styles": [
+        "/css/installer.css"
+      ]
     }
   }
 }

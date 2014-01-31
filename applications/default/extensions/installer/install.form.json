@@ -3,53 +3,67 @@
   "description": "Fill this out to create your application.",
   "elements": [
     {
-      "name": "hostname",
-      "title": "Application hostname",
-      "type": "text",
-      "required": true,
-      "weight": -15
-    },
-    {
       "name": "name",
       "title": "Application name",
       "type": "text",
       "required": true,
-      "weight": -10
+      "weight": -20
     },
     {
       "name": "email",
       "title": "Application email address",
       "type": "email",
       "required": true,
+      "weight": -15
+    },
+    {
+      "name": "databaseName",
+      "title": "Database name",
+      "type": "text",
+      "required": true,
+      "weight": -10
+    },
+    {
+      "name": "databaseServer",
+      "title": "Database server",
+      "type": "text",
+      "required": true,
       "weight": -5
+    },
+    {
+      "name": "userEmail",
+      "title": "Administrator email address",
+      "type": "email",
+      "required": true,
+      "weight": 0
     },
     {
       "name": "username",
       "title": "Administrator username",
       "type": "text",
       "required": true,
-      "weight": 0
+      "weight": 5
     },
     {
       "name": "password",
       "title": "Create an administrator password",
       "type": "password",
       "required": true,
-      "weight": 5
+      "weight": 10
     },
     {
       "name": "password-confirm",
       "title": "Confirm administrator password",
       "type": "password",
       "required": true,
-      "weight": 10
+      "weight": 15
     },
     {
       "name": "submit",
       "title": "Create application",
       "type": "submit",
-      "url": "/create-account-submit",
-      "weight": 15
+      "url": "/install-submit",
+      "weight": 20
     }
   ]
 }
