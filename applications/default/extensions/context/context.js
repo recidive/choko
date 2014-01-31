@@ -207,3 +207,28 @@ context.condition = function(conditions, callback) {
 
   callback(null, newConditions);
 };
+
+/**
+ * The reaction() hook.
+ */
+context.reaction = function(reactions, callback) {
+  var newReactions = {};
+
+  newReactions['add-css'] = {
+    title: 'Add CSS',
+    description: 'Add a CSS file.',
+    arguments: {
+      'styles': {
+        title: 'Styles',
+        description: 'Styles to add.',
+        type: ['Object']
+      }
+    },
+    react: function(request, response, styles, callback) {
+      response.payload.styles = response.payload.styles ? response.payload.styles.merge(styles) : styles;
+      callback();
+    }
+  };
+
+  callback(null, newReactions);
+};
