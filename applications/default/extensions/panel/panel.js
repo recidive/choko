@@ -58,6 +58,13 @@ panel.panel = function(panels, callback) {
     content: '<p>Powered by Choko</p>'
   };
 
+  newPanels['choko-logo'] = {
+    title: 'Choko logo',
+    description: 'Choko logo.',
+    bare: true,
+    content: '<img src="/img/logo.png" alt="Choko logo">'
+  };
+
   callback(null, newPanels);
 };
 
