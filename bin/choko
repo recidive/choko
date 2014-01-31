@@ -1,0 +1,66 @@
+#!/usr/bin/env node
+
+var os = require('os');
+var fs = require('fs');
+var path = require('path');
+var util = require('util');
+var program = require('commander');
+var Server = require('../lib/server');
+
+program
+  .version('0.0.1')
+  .usage('[options] [dir]')
+  .option('-p, --port <number>', 'start server at specified port', parseInt, 3000)
+  .parse(process.argv);
+
+// If a dirname wasn't passed, run applications in current folder.
+var dir = program.args.length ? path.normalize(program.args[0]) : path.normalize(process.cwd());
+var port = program.port;
+
+var start = function(callback) {
+  var server = new Server(dir);
+
+  // Get port from -p or --port argument or fallback to 3000.
+  server.start(port, callback);
+}
+
+var installed = fs.existsSync(path.join(dir, '/applications.json'));
+
+if (!installed) {
+  var dirMode = program.args.length ? 'specified' : 'current';
+  program.confirm('No applications found on ' + dirMode + ' folder, create an application repository on the ' + dirMode + ' path? ', function(ok) {
+    if (!ok) {
+      return process.stdin.destroy();
+    }
+
+    var hostname = os.hostname();
+    program.prompt("What should be the initial domain for your application? [" + hostname + "] ", function(domain) {
+      var domain = domain || hostname;
+
+      var initialApps = {};
+      initialApps[domain] = domain;
+
+      fs.writeFileSync(path.join(dir, '/applications.json'), JSON.stringify(initialApps, null, '  '), {flag: 'w'});
+
+      var appDir = path.join(dir, domain);
+      fs.mkdirSync(appDir);
+      fs.mkdirSync(path.join(appDir, '/public'));
+      fs.mkdirSync(path.join(appDir, '/extensions'));
+
+      var initialSettings = {
+        application: {
+          name: domain
+        },
+        extensions: {}
+      };
+      fs.writeFileSync(path.join(appDir, '/settings.json'), JSON.stringify(initialSettings, null, '  '), {flag: 'w'});
+
+      start(function() {
+        util.log('Navigate to http://' + domain + ':' + port + '/#/install' + ' to create your first application.');
+      });
+    });
+  });
+}
+else {
+  start();
+}
