@@ -1,0 +1,20 @@
+{
+  "title": "User management toolbar",
+  "template": "/templates/btn-group.html",
+  "classes": [
+    "btn-group-sm"
+  ],
+  "items": [
+    {
+      "title": "Add user",
+      "url": "/manage/users/add-user",
+      "classes": [
+        "btn-primary"
+      ]
+    },
+    {
+      "title": "Add role",
+      "url": "/manage/users/add-role"
+    }
+  ]
+}

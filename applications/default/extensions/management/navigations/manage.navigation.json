@@ -1,0 +1,51 @@
+{
+  "title": "Manage",
+  "description": "Site management navigation.",
+  "classes": [
+    "nav-pills",
+    "nav-stacked"
+  ],
+  "stacked": true,
+  "items": [
+    {
+      "title": "Dashboard",
+      "url": "/manage"
+    },
+    {
+      "title": "Users",
+      "url": "/manage/users"
+    },
+    {
+      "title": "Pages",
+      "url": "/manage/pages"
+    },
+    {
+      "title": "Panels",
+      "url": "/manage/panels"
+    },
+    {
+      "title": "Contexts",
+      "url": "/manage/contexts"
+    },
+    {
+      "title": "Layouts",
+      "url": "/manage/layouts"
+    },
+    {
+      "title": "Navigations",
+      "url": "/manage/navigations"
+    },
+    {
+      "title": "Themes",
+      "url": "/manage/themes"
+    },
+    {
+      "title": "Types",
+      "url": "/manage/types"
+    },
+    {
+      "title": "Extensions",
+      "url": "/manage/extensions"
+    }
+  ]
+}

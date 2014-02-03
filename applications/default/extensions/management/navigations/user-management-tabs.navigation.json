@@ -1,0 +1,16 @@
+{
+  "title": "User management tabs",
+  "classes": [
+    "nav-tabs"
+  ],
+  "items": [
+    {
+      "title": "Users",
+      "url": "/manage/users"
+    },
+    {
+      "title": "Roles",
+      "url": "/manage/users/roles"
+    }
+  ]
+}
