@@ -37,21 +37,6 @@ installer.route = function(routes, callback) {
       };
       fs.writeFileSync(path.join(application.settings.applicationDir, '/settings.json'), JSON.stringify(newSettings, null, '  '), {flag: 'w'});
 
-      // Re-start application with new settings.
-      var settings = {}
-      var defaultSettings = JSON.parse(fs.readFileSync(path.join(application.settings.baseDir, '/applications/default/settings.json'), 'utf-8'));
-      utils.extend(settings, defaultSettings);
-      utils.extend(settings, newSettings);
-
-      // Add extensions from default app.
-      settings.extensions = {};
-      utils.extend(settings.extensions, defaultSettings.extensions);
-      utils.extend(settings.extensions, newSettings.extensions);
-
-      // Add stuff added by application factory.
-      settings.baseDir = application.settings.baseDir;
-      settings.applicationDir = application.settings.applicationDir;
-
       // Copy values to a new user object so we can use it after the server
       // was restarted.
       var adminUser = {
@@ -81,6 +66,8 @@ installer.route = function(routes, callback) {
       };
 
       var hostname = application.settings.hostname;
+
+      // Re-start the server with new settings.
       application.server.restart(function(server) {
         var application = server.applications[hostname];
 
