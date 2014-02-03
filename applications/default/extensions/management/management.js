@@ -26,7 +26,7 @@ management.permission = function(permissions, callback) {
  * The page() hook.
  */
 management.page = function(pages, callback) {
-  var self= this;
+  var self = this;
   var newPages = {};
 
   newPages['manage-types'] = {

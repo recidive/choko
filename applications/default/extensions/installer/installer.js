@@ -23,7 +23,6 @@ installer.route = function(routes, callback) {
         return callback(null, ['Passwords must match.'], 400);
       }
 
-      // @todo: test database connection.
       var dbURL = 'mongodb://' + data.databaseServer + '/' + data.databaseName;
 
       // Check database connection.
