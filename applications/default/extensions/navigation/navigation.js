@@ -106,26 +106,3 @@ navigation.panel = function(panels, callback) {
     });
   });
 };
-
-/**
- * The navigation() hook.
- */
-navigation.navigation = function(navigations, callback) {
-  var newNavigations = {};
-
-  newNavigations['main'] = {
-    title: 'Main',
-    description: 'Default main navigation.',
-    classes: ['navbar-nav'],
-    items: []
-  };
-
-  newNavigations['user'] = {
-    title: 'User',
-    description: 'User login and registration links.',
-    classes: ['navbar-nav'],
-    items: []
-  };
-
-  callback(null, newNavigations);
-};

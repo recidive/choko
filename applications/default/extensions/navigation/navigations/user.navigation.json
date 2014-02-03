@@ -1,0 +1,8 @@
+{
+  "title": "User",
+  "description": "User login and registration links.",
+  "classes": [
+    "navbar-nav"
+  ],
+  "items": []
+}

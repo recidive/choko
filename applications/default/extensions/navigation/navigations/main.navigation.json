@@ -1,0 +1,8 @@
+{
+  "title": "Main",
+  "description": "Default main navigation.",
+  "classes": [
+    "navbar-nav"
+  ],
+  "items": []
+}
