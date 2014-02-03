@@ -1,0 +1,6 @@
+{
+  "title": "Choko logo",
+  "description": "Choko logo.",
+  "bare": true,
+  "content": "<img src=\"/img/logo.png\" alt=\"Choko logo\">"
+}

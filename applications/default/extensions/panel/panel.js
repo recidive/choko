@@ -39,36 +39,6 @@ panel.type = function(types, callback) {
 };
 
 /**
- * The panel() hook.
- */
-panel.panel = function(panels, callback) {
-  var newPanels = {};
-
-  newPanels['brand'] = {
-    title: 'Brand',
-    description: 'Application name or logo.',
-    bare: true,
-    content: this.application.settings.application.name
-  };
-
-  newPanels['powered-by'] = {
-    title: 'Powered by',
-    description: 'Powered by Choko.',
-    bare: true,
-    content: '<p>Powered by Choko</p>'
-  };
-
-  newPanels['choko-logo'] = {
-    title: 'Choko logo',
-    description: 'Choko logo.',
-    bare: true,
-    content: '<img src="/img/logo.png" alt="Choko logo">'
-  };
-
-  callback(null, newPanels);
-};
-
-/**
  * The reaction() hook.
  */
 panel.reaction = function(reactions, callback) {
