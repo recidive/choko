@@ -1,0 +1,23 @@
+{
+  "title": "Management pages",
+  "description": "Management pages context.",
+  "weight": -1,
+  "conditions": {
+    "path": [
+      "/manage",
+      "/manage/*"
+    ]
+  },
+  "reactions": {
+    "theme": "default",
+    "layout": "two-columns-3-9",
+    "panel": {
+      "sidebar": [
+        {
+          "name": "navigation-manage",
+          "weight": 0
+        }
+      ]
+    }
+  }
+}

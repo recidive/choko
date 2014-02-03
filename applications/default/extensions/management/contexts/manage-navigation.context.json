@@ -1,0 +1,21 @@
+{
+  "title": "Navigaiton management pages",
+  "description": "Navigation management pages context.",
+  "weight": -1,
+  "conditions": {
+    "path": [
+      "/manage/navigations",
+      "/manage/navigations/*"
+    ]
+  },
+  "reactions": {
+    "panel": {
+      "page-header": [
+        {
+          "name": "navigation-navigation-management-toolbar",
+          "weight": 0
+        }
+      ]
+    }
+  }
+}

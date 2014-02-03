@@ -1,0 +1,27 @@
+{
+  "title": "User management pages",
+  "description": "User management pages context.",
+  "weight": -1,
+  "conditions": {
+    "path": [
+      "/manage/users",
+      "/manage/users/*"
+    ]
+  },
+  "reactions": {
+    "panel": {
+      "content": [
+        {
+          "name": "navigation-user-management-tabs",
+          "weight": -1
+        }
+      ],
+      "navigation-user-management-tabs": [
+        {
+          "name": "navigation-user-management-toolbar",
+          "weight": 0
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "title": "Manager user",
+  "description": "Context for users that can access management pages.",
+  "weight": -1,
+  "conditions": {
+    "access": "manage-application"
+  },
+  "reactions": {
+    "panel": {
+      "navbar-right": [
+        {
+          "name": "manage-button",
+          "weight": -1
+        }
+      ]
+    }
+  }
+}
