@@ -87,9 +87,6 @@ installer.route = function(routes, callback) {
         // Re-start the server with new settings.
         application.server.restart(function(server) {
           var application = server.applications[hostname];
-
-          util.log('Application "' + application.settings.application.name + '" started at "' + application.settings.hostname + '".');
-
           createAdminUser(application, callback);
         });
       });
