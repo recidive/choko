@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var url = require('url');
 var util = require('util');
+var MongoClient = require('mongodb').MongoClient;
 var utils = require('prana').utils;
 
 var installer = module.exports = {};
@@ -23,10 +24,21 @@ installer.route = function(routes, callback) {
       }
 
       // @todo: test database connection.
+      var dbURL = 'mongodb://' + data.databaseServer + '/' + data.databaseName;
+
+      // Check database connection.
+      var checkDBConnection = function(callback) {
+        MongoClient.connect(dbURL, function(error, database) {
+          callback(!error && database);
+          if (database) {
+            database.close();
+          }
+        });
+      };
 
       // Recreate application settings
       var newSettings = {
-        database: 'mongodb://' + data.databaseServer + '/' + data.databaseName,
+        database: dbURL,
         sessionSecret: require('crypto').randomBytes(32).toString('base64'),
 
         application: {
@@ -46,6 +58,7 @@ installer.route = function(routes, callback) {
         roles: ['administrator']
       };
 
+      // Create admin user.
       var createAdminUser = function(app, callback) {
         // Create the administrator user.
         var User = app.type('user');
@@ -65,15 +78,20 @@ installer.route = function(routes, callback) {
         });
       };
 
-      var hostname = application.settings.hostname;
+      checkDBConnection(function(success) {
+        if (!success) {
+          return callback(null, ["Couldn't connect to the database with the information provided."], 400);
+        }
+        var hostname = application.settings.hostname;
 
-      // Re-start the server with new settings.
-      application.server.restart(function(server) {
-        var application = server.applications[hostname];
+        // Re-start the server with new settings.
+        application.server.restart(function(server) {
+          var application = server.applications[hostname];
 
-        util.log('Application "' + application.settings.application.name + '" started at "' + application.settings.hostname + '".');
+          util.log('Application "' + application.settings.application.name + '" started at "' + application.settings.hostname + '".');
 
-        createAdminUser(application, callback);
+          createAdminUser(application, callback);
+        });
       });
     }
   };
