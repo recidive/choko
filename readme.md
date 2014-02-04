@@ -10,19 +10,24 @@
 
 ## Installation
 
-  By now you need to clone the repository:
+  You can install Choko globally using [NPM](http://npmjs.org):
 
-    $ git clone https://github.com/recidive/choko.git
-    $ cd choko
-    $ npm install
+    npm install -g choko
+
+## Dependencies
+
+  Choko depends on [Node.js](http://nodejs.org), [NPM](http://npmjs.org) and
+  [MongoDB](http://www.mongodb.org).
 
 ## Getting started
 
-  Running the examples:
+  To create your first application with Choko, you should create a folder that
+  will be your applications repository, then run Choko on that folder.
 
-    $ node server.js
+    mkdir applications
+    choko applications
 
-  then open http://localhost:3000 in your browser to play with examples.
+  Then follow the steps to have access to the installer.
 
 ## Directory structure
 
@@ -32,12 +37,11 @@ applications   -> Where all applications live.
     extensions -> Default application extensions.
     public     -> Default application public files.
   example      -> Sample application to show case Choko features.
-  [myApp]      -> You app dir should be similar to the example or default app.
 lib            -> Choko serverside libraries.
 ```
 
-The only place it's advised to add or change files is in your own application
-folder.
+The only place it's advised to add or change files is in your own applications
+repository folder.
 
 ## Coding style
 
