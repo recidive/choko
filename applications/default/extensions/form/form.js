@@ -1,4 +1,5 @@
 var async = require('async');
+var utils = require('prana').utils;
 
 var form = module.exports;
 
@@ -68,7 +69,8 @@ form.form = function(forms, callback) {
       var element = {
         name: fieldName,
         title: fieldSettings.title,
-        // @todo: don't relate field types with element types directly.
+        // Default type to field type. This can be overriden with element
+        // property.
         type: fieldSettings.type,
         required: fieldSettings.required || false,
         weight: fieldSettings.weight || 0
@@ -76,6 +78,11 @@ form.form = function(forms, callback) {
 
       if (fieldSettings.type == 'reference') {
         element.reference = fieldSettings.reference;
+      }
+
+      if (fieldSettings.element) {
+        // Merge in element settings.
+        utils.extend(element, fieldSettings.element);
       }
 
       form.elements.push(element);
