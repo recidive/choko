@@ -1,0 +1,13 @@
+{
+  "path": "/create-account",
+  "title": "Create an account",
+  "description": "Create your account.",
+  "access": "create-account",
+  "type": "form",
+  "formName": "create-account",
+  "class": [
+    "col-md-6",
+    "col-md-offset-3",
+    "well"
+  ]
+}

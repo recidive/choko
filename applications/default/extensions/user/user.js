@@ -278,42 +278,6 @@ user.preSave = function(type, data, callback) {
 };
 
 /**
- * The page() hook.
- */
-user.page = function(pages, callback) {
-  var newPages = {};
-
-  newPages['user'] = {
-    path: '/user/:name',
-    title: 'User page',
-    access: 'manage-users',
-    content: '<p class="lead">User page content.</p>'
-  };
-
-  newPages['sign-in'] = {
-    path: '/sign-in',
-    title: 'Sign in',
-    description: 'Sign in to continue.',
-    access: 'sign-in',
-    type: 'form',
-    formName: 'sign-in',
-    class: ['col-md-4', 'col-md-offset-4', 'well']
-  };
-
-  newPages['create-account'] = {
-    path: '/create-account',
-    title: 'Create an account',
-    description: 'Create your account.',
-    access: 'create-account',
-    type: 'form',
-    formName: 'create-account',
-    class: ['col-md-6', 'col-md-offset-3', 'well']
-  };
-
-  callback(null, newPages);
-};
-
-/**
  * The route() hook.
  */
 user.route = function(routes, callback) {

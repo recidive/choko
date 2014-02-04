@@ -1,0 +1,13 @@
+{
+  "path": "/sign-in",
+  "title": "Sign in",
+  "description": "Sign in to continue.",
+  "access": "sign-in",
+  "type": "form",
+  "formName": "sign-in",
+  "class": [
+    "col-md-4",
+    "col-md-offset-4",
+    "well"
+  ]
+}
