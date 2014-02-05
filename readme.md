@@ -10,9 +10,10 @@
 
 ## Installation
 
-  You can install Choko globally using [NPM](http://npmjs.org):
+  You can install the latest version of Choko globally using
+  [NPM](http://npmjs.org):
 
-    npm install -g choko
+    sudo npm install -g choko
 
 ## Dependencies
 
@@ -28,6 +29,12 @@
     choko applications
 
   Then follow the steps to have access to the installer.
+
+## Update
+
+  To update to the latest version of Choko you can run:
+
+    sudo npm update -g choko
 
 ## Directory structure
 
