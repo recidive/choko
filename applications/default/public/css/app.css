@@ -28,6 +28,11 @@
   margin-bottom: 20px;
 }
 
+.home .row-feature {
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
 .negative {
   color: red;
 }
