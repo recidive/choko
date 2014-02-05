@@ -16,7 +16,8 @@
 
 <div ng-if="element.reference.inline" ng-controller="InlineReferenceElementController" class="controls well">
   <fieldset>
-    <div class="list-group">
+    <p ng-if="items.length == 0">No items added yet.</p>
+    <div ng-if="items.length > 0" class="list-group">
       <div ng-repeat="(key, item) in items" ng-controller="ItemController" class="list-group-item">
         <button ng-click="removeItem(key)" type="button" class="close" aria-hidden="true">&times;</button>
         <h4 class="list-group-item-heading">{{item.title}}</h4>
