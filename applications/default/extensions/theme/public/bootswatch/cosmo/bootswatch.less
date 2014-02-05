@@ -1,4 +1,4 @@
-// Cosmo 3.0.3
+// Cosmo 3.1.0
 // Bootswatch
 // -----------------------------------------------------
 
@@ -106,14 +106,6 @@
 	}
 }
 
-.pagination {
-
-	.active > a,
-	.active > a:hover {
-		border-color: #ddd;
-	}
-}
-
 // Indicators =================================================================
 
 .alert {
@@ -141,3 +133,11 @@
 }
 
 // Containers =================================================================
+
+.panel {
+	&-heading,
+	&-footer {
+		border-top-right-radius: 0;
+		border-top-left-radius: 0;
+	}
+}
