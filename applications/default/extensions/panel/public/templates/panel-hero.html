@@ -1,0 +1,7 @@
+<div class="hero">
+  <h3>
+    <span ng-if="panel.icon" ng-class="panel.icon"></span>
+    {{panel.title}}
+  </h3>
+  <div ng-if="panel.content" ng-bind-html="panel.content"></div>
+</div>
