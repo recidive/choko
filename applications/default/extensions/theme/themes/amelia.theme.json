@@ -3,6 +3,7 @@
   "description": "Sweet and cheery.",
   "thumbnail": "/bootswatch/amelia/thumbnail.png",
   "styles": [
-    "/bootswatch/amelia/bootstrap.min.css"
+    "/bootswatch/amelia/bootstrap.min.css",
+    "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }

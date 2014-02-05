@@ -3,6 +3,7 @@
   "description": "A friendly foundation.",
   "thumbnail": "/bootswatch/yeti/thumbnail.png",
   "styles": [
-    "/bootswatch/yeti/bootstrap.min.css"
+    "/bootswatch/yeti/bootstrap.min.css",
+    "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }

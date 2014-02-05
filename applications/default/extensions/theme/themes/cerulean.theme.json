@@ -3,6 +3,7 @@
   "description": "A calm blue sky.",
   "thumbnail": "/bootswatch/cerulean/thumbnail.png",
   "styles": [
-    "/bootswatch/cerulean/bootstrap.min.css"
+    "/bootswatch/cerulean/bootstrap.min.css",
+    "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }

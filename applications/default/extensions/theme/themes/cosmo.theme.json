@@ -3,6 +3,7 @@
   "description": "An ode to Metro.",
   "thumbnail": "/bootswatch/cosmo/thumbnail.png",
   "styles": [
-    "/bootswatch/cosmo/bootstrap.min.css"
+    "/bootswatch/cosmo/bootstrap.min.css",
+    "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }

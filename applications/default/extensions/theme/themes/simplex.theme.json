@@ -3,6 +3,7 @@
   "description": "Mini and minimalist.",
   "thumbnail": "/bootswatch/simplex/thumbnail.png",
   "styles": [
-    "/bootswatch/simplex/bootstrap.min.css"
+    "/bootswatch/simplex/bootstrap.min.css",
+    "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }

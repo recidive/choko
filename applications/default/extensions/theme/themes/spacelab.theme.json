@@ -3,6 +3,7 @@
   "description": "Silvery and sleek.",
   "thumbnail": "/bootswatch/spacelab/thumbnail.png",
   "styles": [
-    "/bootswatch/spacelab/bootstrap.min.css"
+    "/bootswatch/spacelab/bootstrap.min.css",
+    "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }

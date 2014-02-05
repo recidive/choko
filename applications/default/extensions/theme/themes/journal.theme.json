@@ -3,6 +3,7 @@
   "description": "Crisp like a new sheet of paper.",
   "thumbnail": "/bootswatch/journal/thumbnail.png",
   "styles": [
-    "/bootswatch/journal/bootstrap.min.css"
+    "/bootswatch/journal/bootstrap.min.css",
+    "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }

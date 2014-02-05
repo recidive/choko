@@ -3,6 +3,7 @@
   "description": "Flat and modern.",
   "thumbnail": "/bootswatch/flatly/thumbnail.png",
   "styles": [
-    "/bootswatch/flatly/bootstrap.min.css"
+    "/bootswatch/flatly/bootstrap.min.css",
+    "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }

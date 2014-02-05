@@ -3,6 +3,7 @@
   "description": "Ubuntu orange and unique font.",
   "thumbnail": "/bootswatch/united/thumbnail.png",
   "styles": [
-    "/bootswatch/united/bootstrap.min.css"
+    "/bootswatch/united/bootstrap.min.css",
+    "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }
