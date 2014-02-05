@@ -26,6 +26,22 @@ page.type = function(types, callback) {
   newTypes['page'] = {
     title: 'Page',
     description: 'An application page.',
+    fields: {
+      name: {
+        title: 'Name',
+        type: 'text',
+        required: 'true'
+      },
+      path: {
+        title: 'Path',
+        type: 'text'
+      },
+      title: {
+        title: 'Title',
+        type: 'text',
+        required: 'true'
+      }
+    },
     access: {
       'list': 'manage-pages',
       'load': 'manage-pages',
