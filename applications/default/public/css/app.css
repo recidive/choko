@@ -33,6 +33,13 @@
   padding-bottom: 60px;
 }
 
+.footer {
+  margin-top: 21px;
+  padding-top: 21px;
+  padding-bottom: 21px;
+  border-top: 1px solid #e5e5e5;
+}
+
 .negative {
   color: red;
 }
