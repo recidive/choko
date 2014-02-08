@@ -1,0 +1,9 @@
+{
+  "title": "Superhero",
+  "description": "The brave and the blue.",
+  "thumbnail": "/bootswatch/superhero/thumbnail.png",
+  "styles": [
+    "/bootswatch/superhero/bootstrap.min.css",
+    "/lib/font-awesome/css/font-awesome.min.css"
+  ]
+}
