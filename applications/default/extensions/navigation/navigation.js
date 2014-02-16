@@ -57,8 +57,8 @@ navigation.type = function(types, callback) {
   };
 
   newTypes['link'] = {
-    title: 'Navigation',
-    description: 'Navigation structures.',
+    title: 'Navigation link',
+    description: 'Navigation link item.',
     standalone: false,
     fields: {
       title: {
