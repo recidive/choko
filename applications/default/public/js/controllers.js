@@ -87,7 +87,7 @@ function ColumnController($scope, $location, applicationState, Choko) {
 
   $scope.getTemplate = function() {
     return $scope.template || 'templates/column.html';
-  }
+  };
 }
 //ColumnController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
