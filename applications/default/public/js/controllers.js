@@ -95,8 +95,19 @@ function RegionController($scope, $location, applicationState, Choko) {
 }
 //RegionController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
-function NavigationController($scope, $location, applicationState, Choko) {
+function NavigationController($scope, $location, $window, applicationState, Choko) {
   $scope.panel.classes.unshift('nav');
+
+  $scope.isAbsolute = function(url) {
+    return /^(?:[a-z]+:)?\/\//i.test(url);
+  };
+
+  $scope.goTo = function(url, $event) {
+    $location.path(url);
+    if ($event) {
+      $event.preventDefault();
+    }
+  };
 
   $scope.isActive = function(route) {
     //var regexp = new RegExp('^' + pattern + '.*$', ["i"]);
@@ -195,17 +206,17 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
 
   // Handle 'item' type views.
   if ($scope.view.type === 'item' && $scope.view.itemType) {
-    $scope.item = {};
+    $scope.data = {};
     $scope.view.title = '';
     Choko.get({type: $scope.view.itemType, key: $scope.view.itemKey}, function(response) {
-      $scope.item = response;
+      $scope.data = response;
       $scope.view.title = response.title;
     },
     function(response) {
       // Error.
       if ($scope.page) {
         // If it's a page, show error, otherwise fail silently.
-        $scope.item = response.data;
+        $scope.data = response.data;
         $scope.view.title = response.data.title;
         $scope.view.template = '/templates/error.html';
       }
