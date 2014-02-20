@@ -3,7 +3,7 @@
   "description": "Basic Bootstrap.",
   "thumbnail": "/bootswatch/default/thumbnail.png",
   "styles": [
-    "/lib/bootstrap/css/bootstrap.min.css",
-    "/lib/font-awesome/css/font-awesome.min.css"
+    "/lib/bower_components/bootstrap/dist/css/bootstrap.min.css",
+    "/lib/bower_components/font-awesome/css/font-awesome.min.css"
   ]
 }

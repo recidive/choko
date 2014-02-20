@@ -1,0 +1,13 @@
+{
+  "name": "choko",
+  "version": "1.0.0",
+  "dependencies": {
+    "bootstrap": "~3.1.0",
+    "angular": "~1.2.13",
+    "font-awesome": "~4.0.3",
+    "jquery": "~1.10.2",
+    "angular-route": "~1.2.13",
+    "angular-resource": "~1.2.13",
+    "angular-sanitize": "~1.2.13"
+  }
+}
