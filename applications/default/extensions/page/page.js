@@ -26,20 +26,24 @@ page.type = function(types, callback) {
   newTypes['page'] = {
     title: 'Page',
     description: 'An application page.',
+    polymorphic: true,
     fields: {
       name: {
         title: 'Name',
         type: 'text',
-        required: 'true'
+        required: 'true',
+        weight: -15
       },
       path: {
         title: 'Path',
-        type: 'text'
+        type: 'text',
+        weight: -10
       },
       title: {
         title: 'Title',
         type: 'text',
-        required: 'true'
+        required: 'true',
+        weight: -5
       }
     },
     access: {
@@ -53,6 +57,60 @@ page.type = function(types, callback) {
 
   callback(null, newTypes);
 };
+
+
+/**
+ * The pageType() hook.
+ */
+page.pageType = function(pageTypes, callback) {
+  var newTypes = {};
+
+  newTypes['list'] = {
+    title: 'List page',
+    description: 'A item list page.',
+    fields: {
+      itemType: {
+        title: 'Item type',
+        type:  'text',
+        required: true
+      }
+    }
+  };
+
+  newTypes['item'] = {
+    title: 'Item page',
+    description: 'A single item page.',
+    fields: {
+      itemType: {
+        title: 'Item type',
+        type:  'text',
+        required: true
+      },
+      itemKey: {
+        title: 'Item key',
+        type:  'text',
+        required: true
+      }
+    }
+  };
+
+  newTypes['form'] = {
+    title: 'Form page',
+    description: 'A form page.',
+    fields: {
+      formName: {
+        title: 'Form',
+        type:  'reference',
+        reference: {
+          type: 'form'
+        },
+        required: true
+      }
+    }
+  };
+
+  callback(null, newTypes);
+}
 
 /**
  * The page() hook.
