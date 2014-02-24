@@ -47,17 +47,27 @@ form.form = function(forms, callback) {
   var self = this;
 
   // Create forms for every type on the system except 'type' and 'extension',
-  // the ones that have the 'form' property set to false and the ones that have
-  // no fields.
+  // the ones that have the 'form' property set to false, the ones that have
+  // no fields and the ones that are polymorphic.
   async.each(Object.keys(self.application.types), function(typeName, next) {
     var typeSettings = self.application.types[typeName].type.settings;
-    if (typeName == 'type' || typeName == 'extension' || !typeSettings.fields) {
+    if (typeName == 'type' || typeName == 'extension' || !typeSettings.fields || typeSettings.polymorphic) {
       return next();
     }
     var form = newForms['type-' + typeName] = {
       title: typeSettings.title,
-      description: 'Form for the ' + typeSettings.title + ' type.'
+      description: 'Form for the ' + typeSettings.title + ' type.',
+      typeName: typeName
     };
+
+    if (typeSettings.mainTypeName) {
+      form.mainTypeName = typeSettings.mainTypeName
+    }
+
+    if (typeSettings.shortName) {
+      form.shortName = typeSettings.shortName
+    }
+
     // Add fields.
     form.elements = [];
     async.eachSeries(Object.keys(typeSettings.fields), function(fieldName, next) {
@@ -95,7 +105,7 @@ form.form = function(forms, callback) {
           name: 'submit',
           title: 'Save',
           type: 'submit',
-          url: '/rest/' + typeName,
+          url: '/rest/' + (typeSettings.mainTypeName || typeName),
           classes: ['btn-primary'],
           weight: 15
         });

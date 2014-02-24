@@ -242,6 +242,11 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
 
     Choko.get({type: 'form', key: $scope.view.formName}, function(response) {
       $scope.form = response;
+
+      if ($scope.form.mainTypeName) {
+        $scope.data.type = $scope.form.shortName;
+      }
+
       $scope.view.template = $scope.view.template || $scope.form.template;
       $scope.view.template = $scope.view.template || 'templates/form.html';
     });
