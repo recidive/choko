@@ -102,7 +102,8 @@ panel.panelType = function(pageTypes, callback) {
       },
       redirect: {
         title: 'Redirect',
-        type: 'text'
+        type: 'text',
+        description: 'Enter a path to redirect user upon successful form submission.'
       }
     }
   };
