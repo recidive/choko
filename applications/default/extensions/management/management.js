@@ -29,6 +29,18 @@ management.page = function(pages, callback) {
   var self = this;
   var newPages = {};
 
+  // Create form pages for all page subtypes.
+  var pageTypes = this.application.type('page').subtypes;
+  for (var subtypeName in pageTypes) {
+    var subtypeSettings = pageTypes[subtypeName].type.settings;
+    newPages['manage-pages-add-' + subtypeSettings.name] = {
+      path: '/manage/pages/add-' + subtypeSettings.name,
+      title: 'Add ' + subtypeSettings.title.toLowerCase(),
+      type: 'form',
+      formName: 'type-' + subtypeSettings.name + 'Page'
+    };
+  }
+
   newPages['manage-types'] = {
     path: '/manage/types',
     title: 'Types',
@@ -74,6 +86,43 @@ management.page = function(pages, callback) {
   };
 
   callback(null, newPages);
+};
+
+/**
+ * The navigation() hook.
+ */
+management.navigation = function(navigations, callback) {
+  var newNavigations = {};
+
+  // Create navigation dropdown with links for all page types form.
+  var pageTypes = this.application.type('page').subtypes;
+  var items = [];
+  for (var subtypeName in pageTypes) {
+    var subtypeSettings = pageTypes[subtypeName].type.settings;
+    items.push({
+      title: subtypeSettings.title,
+      url: '/manage/pages/add-' + subtypeSettings.name
+    });
+  }
+  newNavigations['page-management-toolbar'] = {
+    title: 'Page management toolbar',
+    template: '/templates/btn-group.html',
+    classes: [
+      'btn-group-sm'
+    ],
+    items: [
+      {
+        type: 'dropdown',
+        title: 'Add',
+        items: items,
+        classes: [
+          'btn-primary'
+        ]
+      }
+    ]
+  };
+
+  callback(null, newNavigations);
 };
 
 /**

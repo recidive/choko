@@ -1,0 +1,21 @@
+{
+  "title": "Page management pages",
+  "description": "Page management pages context.",
+  "weight": -1,
+  "conditions": {
+    "path": [
+      "/manage/pages",
+      "/manage/pages/*"
+    ]
+  },
+  "reactions": {
+    "panel": {
+      "page-header": [
+        {
+          "name": "navigation-page-management-toolbar",
+          "weight": 0
+        }
+      ]
+    }
+  }
+}
