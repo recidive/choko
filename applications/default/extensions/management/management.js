@@ -37,7 +37,8 @@ management.page = function(pages, callback) {
       path: '/manage/pages/add-' + subtypeSettings.name,
       title: 'Add ' + subtypeSettings.title.toLowerCase(),
       type: 'form',
-      formName: 'type-' + subtypeSettings.name + 'Page'
+      formName: 'type-' + subtypeSettings.name + 'Page',
+      redirect: '/manage/pages'
     };
   }
 
