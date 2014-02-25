@@ -304,6 +304,9 @@ user.route = function(routes, callback) {
           return callback(null, ['Passwords must match.'], 400);
         }
 
+        // Don't allow to pass any user role here for security reasons.
+        data.roles = [];
+
         // Create new user resource and save it.
         var newAccount = new User(data);
         newAccount.validateAndSave(function(error, newAccount, errors) {
@@ -316,7 +319,16 @@ user.route = function(routes, callback) {
             return callback(null, errors, 400);
           }
 
-          callback(null, newAccount, 201);
+          // Log user in.
+          request.login(newAccount, function(error) {
+            if (error) {
+              return callback(error);
+            }
+            // Add 'authenticated' role to user to avoid errors.
+            newAccount.roles.push('authenticated');
+            callback(null, newAccount, 201);
+          });
+
         });
 
       });

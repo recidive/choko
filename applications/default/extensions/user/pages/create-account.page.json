@@ -5,6 +5,7 @@
   "access": "create-account",
   "type": "form",
   "formName": "create-account",
+  "redirect": "/",
   "class": [
     "col-md-6",
     "col-md-offset-3",
