@@ -78,7 +78,8 @@ form.form = function(forms, callback) {
       }
       var element = {
         name: fieldName,
-        title: fieldSettings.title,
+        title: fieldSettings.title || null,
+        description: fieldSettings.description || null,
         // Default type to field type. This can be overriden with element
         // property.
         type: fieldSettings.type,
