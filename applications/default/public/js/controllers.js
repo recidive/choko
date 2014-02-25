@@ -227,12 +227,14 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
   if ($scope.view.type === 'form' && $scope.view.formName) {
     $scope.data = {};
 
-    $scope.submit = function(url) {
+    $scope.submit = function(url, redirect) {
       $http.post(url, $scope.data)
         .success(function(data, status, headers, config) {
           $scope.data = data;
           delete $scope.errors;
-          $location.path('/');
+          if (redirect) {
+            $location.path(redirect);
+          }
         })
         .error(function(data, status, headers, config) {
           $scope.status = status;
@@ -246,6 +248,11 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
       if ($scope.form.mainTypeName) {
         $scope.data.type = $scope.form.shortName;
       }
+
+      // First we look for view (page/panel) redirect, then for form redirect.
+      // The submit button will first look for a property of its own and
+      // fallback to this.
+      $scope.form.redirect = $scope.view.redirect || $scope.form.redirect || null;
 
       $scope.view.template = $scope.view.template || $scope.form.template;
       $scope.view.template = $scope.view.template || 'templates/form.html';
