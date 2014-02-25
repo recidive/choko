@@ -8,6 +8,11 @@ function ApplicationController($scope, $location, $http, applicationState, Choko
 
     $http.get(path)
     .success(function(data, status, headers, config) {
+      if (data.data.redirect) {
+        // Server returned a redirect.
+        return $location.path(data.data.redirect);
+      }
+
       // Rebuild the layout only when context changes.
       if ($scope.contexts instanceof Array && $scope.contexts.toString() == data.data.contexts.toString()) {
         // Update only panels in content region, and page information.
