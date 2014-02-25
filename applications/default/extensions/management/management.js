@@ -41,6 +41,18 @@ management.page = function(pages, callback) {
     };
   }
 
+  // Create form panels for all panels subtypes.
+  var panelTypes = this.application.type('panel').subtypes;
+  for (var subtypeName in panelTypes) {
+    var subtypeSettings = panelTypes[subtypeName].type.settings;
+    newPages['manage-panels-add-' + subtypeSettings.name] = {
+      path: '/manage/panels/add-' + subtypeSettings.name,
+      title: 'Add ' + subtypeSettings.title.toLowerCase(),
+      type: 'form',
+      formName: 'type-' + subtypeSettings.name + 'Panel'
+    };
+  }
+
   newPages['manage-types'] = {
     path: '/manage/types',
     title: 'Types',
@@ -106,6 +118,35 @@ management.navigation = function(navigations, callback) {
   }
   newNavigations['page-management-toolbar'] = {
     title: 'Page management toolbar',
+    template: '/templates/btn-group.html',
+    classes: [
+      'btn-group-sm'
+    ],
+    items: [
+      {
+        type: 'dropdown',
+        title: 'Add',
+        items: items,
+        classes: [
+          'btn-primary'
+        ]
+      }
+    ]
+  };
+
+
+  // Create navigation dropdown with links for all panel types form.
+  var panelTypes = this.application.type('panel').subtypes;
+  var items = [];
+  for (var subtypeName in panelTypes) {
+    var subtypeSettings = panelTypes[subtypeName].type.settings;
+    items.push({
+      title: subtypeSettings.title,
+      url: '/manage/panels/add-' + subtypeSettings.name
+    });
+  }
+  newNavigations['panel-management-toolbar'] = {
+    title: 'Panel management toolbar',
     template: '/templates/btn-group.html',
     classes: [
       'btn-group-sm'
