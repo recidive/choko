@@ -3,5 +3,6 @@
   "title": "Add role",
   "access": "manage-users",
   "type": "form",
-  "formName": "type-role"
+  "formName": "type-role",
+  "redirect": "/manage/users/roles"
 }

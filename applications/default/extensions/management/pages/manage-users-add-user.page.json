@@ -3,5 +3,6 @@
   "title": "Add user",
   "access": "manage-users",
   "type": "form",
-  "formName": "type-user"
+  "formName": "type-user",
+  "redirect": "/manage/users"
 }
