@@ -50,7 +50,8 @@ management.page = function(pages, callback) {
       path: '/manage/panels/add-' + subtypeSettings.name,
       title: 'Add ' + subtypeSettings.title.toLowerCase(),
       type: 'form',
-      formName: 'type-' + subtypeSettings.name + 'Panel'
+      formName: 'type-' + subtypeSettings.name + 'Panel',
+      redirect: '/manage/panels'
     };
   }
 

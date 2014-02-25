@@ -99,6 +99,10 @@ panel.panelType = function(pageTypes, callback) {
           type: 'form'
         },
         required: true
+      },
+      redirect: {
+        title: 'Redirect',
+        type: 'text'
       }
     }
   };
