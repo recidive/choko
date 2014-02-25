@@ -21,11 +21,25 @@ panel.permission = function(permissions, callback) {
  */
 panel.type = function(types, callback) {
   var newTypes = {};
-  var self = this;
 
   newTypes['panel'] = {
     title: 'Panel',
     description: 'A piece of content to be displayed on a layout region.',
+    polymorphic: true,
+    fields: {
+      name: {
+        title: 'Name',
+        type: 'text',
+        required: 'true',
+        weight: -15
+      },
+      title: {
+        title: 'Title',
+        type: 'text',
+        required: 'true',
+        weight: -5
+      }
+    },
     access: {
       'list': 'manage-panels',
       'load': 'manage-panels',
@@ -37,6 +51,60 @@ panel.type = function(types, callback) {
 
   callback(null, newTypes);
 };
+
+
+/**
+ * The panelType() hook.
+ */
+panel.panelType = function(pageTypes, callback) {
+  var newTypes = {};
+
+  newTypes['list'] = {
+    title: 'List panel',
+    description: 'A item list panel.',
+    fields: {
+      itemType: {
+        title: 'Item type',
+        type:  'text',
+        required: true
+      }
+    }
+  };
+
+  newTypes['item'] = {
+    title: 'Item panel',
+    description: 'A single item panel.',
+    fields: {
+      itemType: {
+        title: 'Item type',
+        type:  'text',
+        required: true
+      },
+      itemKey: {
+        title: 'Item key',
+        type:  'text',
+        required: true
+      }
+    }
+  };
+
+  newTypes['form'] = {
+    title: 'Form panel',
+    description: 'A form panel.',
+    fields: {
+      formName: {
+        title: 'Form',
+        type:  'reference',
+        reference: {
+          type: 'form'
+        },
+        required: true
+      }
+    }
+  };
+
+  callback(null, newTypes);
+}
 
 /**
  * The reaction() hook.
