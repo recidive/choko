@@ -3,5 +3,6 @@
   "title": "Add navigation",
   "access": "manage-navigations",
   "type": "form",
-  "formName": "type-navigation"
+  "formName": "type-navigation",
+  "redirect": "/manage/navigations"
 }
