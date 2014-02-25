@@ -371,7 +371,9 @@ user.route = function(routes, callback) {
     callback: function(request, response, callback) {
       // Log user out.
       request.logout();
-      callback(null, true);
+      callback(null, {
+        redirect: '/'
+      });
     }
   };
 
