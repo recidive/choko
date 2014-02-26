@@ -1,4 +1,4 @@
 {
-    "directory": "applications/default/public/lib/bower_components",
+    "directory": "applications/default/public/lib",
     "json": "bower.json"
 }

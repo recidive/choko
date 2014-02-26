@@ -1,4 +1,4 @@
 # Ignore installed modules code.
 node_modules
-applications/default/public/lib/bower_components
+applications/default/public/lib
 
