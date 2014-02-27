@@ -2,7 +2,11 @@
   "name": "choko",
   "version": "0.0.1",
   "description": "High performance and high level web application framework.",
-  "keywords": ["framework", "web", "choko"],
+  "keywords": [
+    "framework",
+    "web",
+    "choko"
+  ],
   "repository": "git://github.com/recidive/choko.git",
   "dependencies": {
     "prana": "0.0.x",
@@ -17,8 +21,14 @@
     "validator": "2.0.x",
     "mkdirp": "0.3.x"
   },
+  "devDependencies": {
+    "bower": "~1.2.8"
+  },
   "bin": {
     "choko": "bin/choko"
+  },
+  "scripts": {
+    "postinstall": "node_modules/.bin/bower install"
   },
   "preferGlobal": true
 }
