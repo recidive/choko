@@ -1,3 +1,4 @@
 # Ignore installed modules code.
 node_modules
+applications/default/public/lib
 
