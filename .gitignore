@@ -1,3 +1,6 @@
 # Ignore installed modules code.
 node_modules
 
+# Ignore client side-side library code.
+applications/default/public/lib
+
