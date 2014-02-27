@@ -4,6 +4,6 @@
   "thumbnail": "/bootswatch/superhero/thumbnail.png",
   "styles": [
     "/bootswatch/superhero/bootstrap.min.css",
-    "/lib/bower_components/font-awesome/css/font-awesome.min.css"
+    "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }
