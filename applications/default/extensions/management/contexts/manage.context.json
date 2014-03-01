@@ -9,7 +9,7 @@
     ]
   },
   "reactions": {
-    "theme": "default",
+    "theme": "lumen",
     "layout": "two-columns-3-9",
     "panel": {
       "sidebar": [
