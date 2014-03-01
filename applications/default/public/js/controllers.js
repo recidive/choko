@@ -282,3 +282,17 @@ function ButtonController($scope, $location, applicationState, Choko) {
   };
 }
 //ButtonController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+
+function WYSIWYGController($scope, $location, applicationState, Choko) {
+  $scope.options = {
+    height: $scope.element.height || 300,
+    toolbar: [
+      ['style', ['style']],
+      ['style', ['bold', 'italic', 'underline', 'clear']],
+      ['para', ['ul', 'ol', 'paragraph']],
+      ['insert', ['picture', 'link']],
+      ['table', ['table']]
+    ]
+  };
+}
+//WYSIWYGController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
