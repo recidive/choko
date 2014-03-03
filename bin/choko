@@ -8,7 +8,7 @@ var program = require('commander');
 var Server = require('../lib/server');
 
 program
-  .version('0.0.1')
+  .version('0.0.2')
   .usage('[options] [dir]')
   .option('-p, --port <number>', 'start server at specified port', parseInt, 3000)
   .parse(process.argv);

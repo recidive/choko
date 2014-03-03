@@ -1,6 +1,6 @@
 {
   "name": "choko",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "High performance and high level web application framework.",
   "keywords": ["framework", "web", "choko"],
   "repository": "git://github.com/recidive/choko.git",
