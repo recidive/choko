@@ -3,5 +3,6 @@
   "title": "Install Choko",
   "description": "Create your first Choko application.",
   "type": "form",
-  "formName": "install"
+  "formName": "install",
+  "redirect": "/"
 }
