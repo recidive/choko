@@ -112,15 +112,16 @@ panel.panelType = function(pageTypes, callback) {
 }
 
 /**
- * The reaction() hook.
+ * The contextReactionType() hook.
  */
-panel.reaction = function(reactions, callback) {
+panel.contextReactionType = function(reactionTypes, callback) {
   var self = this;
-  var newReactions = {};
+  var newReactionTypes = {};
 
-  newReactions['panel'] = {
+  newReactionTypes['panel'] = {
     title: 'Show a panel',
     description: 'Show a panel on some layout region.',
+    standalone: false,
     arguments: {
       panels: {
         title: 'Panels',
@@ -167,5 +168,5 @@ panel.reaction = function(reactions, callback) {
     }
   };
 
-  callback(null, newReactions);
+  callback(null, newReactionTypes);
 };

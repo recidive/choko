@@ -8,26 +8,11 @@ var context = module.exports;
  * The init() hook.
  */
 context.init = function(application, callback) {
-  // Load all pages and routes.
+  // Load all contexts.
   var Context = this.application.type('context');
-  var Condition = this.application.type('condition');
-  var Reaction = this.application.type('reaction');
-
-  // Load all conditions and reactions in parallel.
-  async.parallel([
-    function(next) {
-      Condition.list({}, next);
-    },
-    function(next) {
-      Reaction.list({}, next);
-    }
-  ],
-  function(err, results) {
-    // Load all contexts.
-    Context.list({}, function(err, contexts) {
-      application.application.use(contextMiddleware(application));
-      callback();
-    });
+  Context.list({}, function(err, contexts) {
+    application.application.use(contextMiddleware(application));
+    callback();
   });
 };
 
@@ -55,18 +40,33 @@ context.type = function(types, callback) {
     title: 'Context',
     description: 'Contexts are set of conditions that results in reactions.',
     fields: {
+      name: {
+        title: 'Name',
+        type: 'text',
+      },
+      title: {
+        title: 'Title',
+        type: 'text',
+      },
       conditions: {
         title: 'Conditions',
-        type: 'condition',
-        settings: {
-          optionsCallback: function(callback) {
-            callback();
-          }
+        type: 'reference',
+        reference: {
+          type: 'contextCondition',
+          multiple: true,
+          inline: true,
+          object: true
         }
       },
       reactions: {
         title: 'Reactions',
-        type: 'reaction'
+        type: 'reference',
+        reference: {
+          type: 'contextReaction',
+          multiple: true,
+          inline: true,
+          object: true
+        }
       }
     },
     access: {
@@ -78,15 +78,15 @@ context.type = function(types, callback) {
     },
     methods: {
       execute: function(request, response, callback) {
-        var Condition = this.application.type('condition');
-        // Call callback on the first condition that pass.
+        var self = this;
+
+        // Call callback bellow on the first conditionType that pass.
         // @todo: Eventually we may want to add an operator and also allow OR
         // and ANDs.
         this.conditions = this.conditions || {};
-        var self = this;
-        async.detect(Object.keys(this.conditions), function(conditionName, next) {
-          Condition.load(conditionName, function(err, condition) {
-            condition.check(request, self.conditions[conditionName], function(match) {
+        async.detect(Object.keys(this.conditions), function(conditionTypeName, next) {
+          self.application.load('contextConditionType', conditionTypeName, function(err, conditionType) {
+            conditionType.check(request, self.conditions[conditionTypeName], function(match) {
               next(match);
             });
           });
@@ -94,11 +94,10 @@ context.type = function(types, callback) {
           if (!result) {
             return callback(false);
           }
-          var Reaction = self.application.type('reaction');
           self.reactions = self.reactions || {};
-          async.each(Object.keys(self.reactions), function(reactionName, next) {
-            Reaction.load(reactionName, function(err, reaction) {
-              reaction.react(request, response, self.reactions[reactionName], function(err) {
+          async.each(Object.keys(self.reactions), function(reactionTypeName, next) {
+            self.application.load('contextReactionType', reactionTypeName, function(err, reactionType) {
+              reactionType.react(request, response, self.reactions[reactionTypeName], function(err) {
                 next(err);
               });
             });
@@ -110,14 +109,32 @@ context.type = function(types, callback) {
     }
   };
 
-  newTypes['condition'] = {
-    title: 'Condition',
-    description: 'Conditions that form contexts.'
+  newTypes['contextCondition'] = {
+    title: 'Context condition',
+    description: 'Conditions that form contexts.',
+    standalone: false,
+    polymorphic: true,
+    access: {
+      'list': 'manage-contexts',
+      'load': 'manage-contexts',
+      'add': 'manage-contexts',
+      'edit': 'manage-contexts',
+      'delete': 'manage-contexts'
+    }
   };
 
-  newTypes['reaction'] = {
-    title: 'Reaction',
-    description: 'Reactions a context can result on.'
+  newTypes['contextReaction'] = {
+    title: 'Context reaction',
+    description: 'Reactions a context can result on.',
+    standalone: false,
+    polymorphic: true,
+    access: {
+      'list': 'manage-contexts',
+      'load': 'manage-contexts',
+      'add': 'manage-contexts',
+      'edit': 'manage-contexts',
+      'delete': 'manage-contexts'
+    }
   };
 
   callback(null, newTypes);
@@ -160,21 +177,23 @@ context.context = function(contexts, callback) {
 };
 
 /**
- * The condition() hook.
+ * The contextConditionType() hook.
  */
-context.condition = function(conditions, callback) {
-  var newConditions = {};
+context.contextConditionType = function(conditionTypes, callback) {
+  var newConditionTypes = {};
 
-  newConditions['siteWide'] = {
+  newConditionTypes['siteWide'] = {
     title: 'Site wide',
-    arguments: {
+    standalone: false,
+    fields: {
+      // @todo: this may not need an operator or no field at all.
       operator: {
         title: 'Operator',
-        type: 'String'
+        type: 'text'
       },
       value: {
         title: 'Value',
-        type: 'String'
+        type: 'boolean'
       }
     },
     check: function(request, value, callback) {
@@ -182,16 +201,17 @@ context.condition = function(conditions, callback) {
     }
   };
 
-  newConditions['path'] = {
+  newConditionTypes['path'] = {
     title: 'Path',
-    arguments: {
+    standalone: false,
+    fields: {
       operator: {
         title: 'Operator',
-        type: 'String'
+        type: 'text'
       },
       value: {
         title: 'Value',
-        type: 'String'
+        type: 'text'
       }
     },
     check: function(request, urls, callback) {
@@ -205,23 +225,24 @@ context.condition = function(conditions, callback) {
     }
   };
 
-  callback(null, newConditions);
+  callback(null, newConditionTypes);
 };
 
 /**
- * The reaction() hook.
+ * The contextReactionType() hook.
  */
-context.reaction = function(reactions, callback) {
-  var newReactions = {};
+context.contextReactionType = function(reactionTypes, callback) {
+  var newReactionTypes = {};
 
-  newReactions['add-css'] = {
+  newReactionTypes['addCSS'] = {
     title: 'Add CSS',
     description: 'Add a CSS file.',
-    arguments: {
-      'styles': {
+    standalone: false,
+    fields: {
+      styles: {
         title: 'Styles',
         description: 'Styles to add.',
-        type: ['Object']
+        type: 'text'
       }
     },
     react: function(request, response, styles, callback) {
@@ -230,5 +251,22 @@ context.reaction = function(reactions, callback) {
     }
   };
 
-  callback(null, newReactions);
+  newReactionTypes['addJS'] = {
+    title: 'Add JavaScript',
+    description: 'Add a JavaScript file.',
+    standalone: false,
+    fields: {
+      scripts: {
+        title: 'Scripts',
+        description: 'Scripts to add.',
+        type: 'text'
+      }
+    },
+    react: function(request, response, scripts, callback) {
+      response.payload.scripts = response.payload.scripts ? response.payload.scripts.merge(scripts) : scripts;
+      callback();
+    }
+  };
+
+  callback(null, newReactionTypes);
 };

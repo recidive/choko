@@ -26,20 +26,24 @@ theme.type = function(types, callback) {
 };
 
 /**
- * The reaction() hook.
+ * The contextReactionType() hook.
  */
-theme.reaction = function(reactions, callback) {
-  var newReactions = {};
+theme.contextReactionType = function(reactionTypes, callback) {
+  var newReactionTypes = {};
   var application = this.application;
 
-  newReactions['theme'] = {
+  newReactionTypes['theme'] = {
     title: 'Set theme',
     description: 'Chage application look & feel.',
-    arguments: {
+    standalone: false,
+    fields: {
       theme: {
         title: 'Theme',
         description: 'Theme to set to.',
-        type: 'String'
+        type: 'reference',
+        reference: {
+          type: 'theme'
+        }
       }
     },
     react: function(request, response, value, callback) {
@@ -65,5 +69,5 @@ theme.reaction = function(reactions, callback) {
     }
   };
 
-  callback(null, newReactions);
+  callback(null, newReactionTypes);
 };
