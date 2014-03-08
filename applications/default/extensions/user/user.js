@@ -438,14 +438,15 @@ user.panel = function(panels, callback) {
 };
 
 /**
- * The condition() hook.
+ * The contextConditionType() hook.
  */
-user.condition = function(conditions, callback) {
-  var newConditions = {};
+user.contextConditionType = function(conditionTypes, callback) {
+  var newConditionTypes = {};
   var application = this.application;
 
-  newConditions['anonymous'] = {
+  newConditionTypes['anonymous'] = {
     title: 'Anonymous user',
+    standalone: false,
     arguments: {
       operator: {
         title: 'Operator',
@@ -460,8 +461,9 @@ user.condition = function(conditions, callback) {
       callback(!request.user == value);
     }
   };
-  newConditions['access'] = {
+  newConditionTypes['access'] = {
     title: 'Access',
+    standalone: false,
     arguments: {
       operator: {
         title: 'Operator',
@@ -479,7 +481,7 @@ user.condition = function(conditions, callback) {
     }
   };
 
-  callback(null, newConditions);
+  callback(null, newConditionTypes);
 };
 
 /**

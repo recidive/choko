@@ -36,15 +36,16 @@ layout.type = function(types, callback) {
 };
 
 /**
- * The reaction() hook.
+ * The contextReactionType() hook.
  */
-layout.reaction = function(reactions, callback) {
+layout.contextReactionType = function(reactionTypes, callback) {
   var self = this;
-  var newReactions = {};
+  var newReactionTypes = {};
 
-  newReactions['layout'] = {
+  newReactionTypes['layout'] = {
     title: 'Set layout',
     description: 'Set the layout.',
+    standalone: false,
     arguments: {
       layout: {
         title: 'Layout',
@@ -67,5 +68,5 @@ layout.reaction = function(reactions, callback) {
     }
   };
 
-  callback(null, newReactions);
+  callback(null, newReactionTypes);
 };
