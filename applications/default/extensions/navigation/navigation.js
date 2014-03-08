@@ -41,7 +41,7 @@ navigation.type = function(types, callback) {
         title: 'Items',
         type: 'reference',
         reference: {
-          type: 'link',
+          type: 'navigationItem',
           multiple: true,
           inline: true
         }
@@ -56,18 +56,75 @@ navigation.type = function(types, callback) {
     }
   };
 
-  newTypes['link'] = {
-    title: 'Navigation link',
-    description: 'Navigation link item.',
+  newTypes['navigationItem'] = {
+    title: 'Navigation item',
+    description: 'Navigation item.',
+    polymorphic: true,
     standalone: false,
     fields: {
       title: {
         title: 'Title',
         type: 'text'
-      },
+      }
+    }
+  };
+
+  callback(null, newTypes);
+};
+
+/**
+ * The navigationItemType() hook.
+ */
+navigation.navigationItemType = function(itemTypes, callback) {
+  var newTypes = {};
+
+  newTypes['link'] = {
+    title: 'Link item',
+    description: 'Navigation link item.',
+    standalone: false,
+    fields: {
       url: {
         title: 'URL',
         type: 'text'
+      }
+    }
+  };
+
+  newTypes['action'] = {
+    title: 'Action item',
+    description: 'Navigation action item.',
+    standalone: false,
+    fields: {
+      action: {
+        title: 'Action',
+        type: 'text'
+      }
+    }
+  };
+
+  newTypes['divider'] = {
+    title: 'Divider item',
+    description: 'Navigation divider item.',
+    standalone: false
+  };
+
+  newTypes['dropdown'] = {
+    title: 'Dropdown item',
+    description: 'Navigation dropdown item.',
+    standalone: false,
+    fields: {
+      url: {
+        title: 'URL',
+        type: 'text'
+      },
+      items: {
+        title: 'Items',
+        type: 'reference',
+        reference: {
+          type: 'navigationItem',
+          multiple: true,
+          inline: true
+        }
       }
     }
   };
