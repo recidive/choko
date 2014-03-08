@@ -182,20 +182,47 @@ function InlineReferenceElementController($scope, $location, applicationState, C
     }
   }
 
-  Choko.get({type: 'form', key: 'type-' + $scope.element.reference.type}, function(response) {
-    var subform = $scope.element.subform = response;
+  $scope.setSubForm = function(type, sub) {
+    Choko.get({type: 'form', key: 'type-' + type}, function(response) {
+      var subform = $scope.element.subform = response;
 
-    if (multiple) {
-      subform.elements.push({
-        name: 'add',
-        title: 'Add',
-        type: 'button',
-        click: 'addItem',
-        classes: ['btn-default'],
-        weight: 15
-      });
+      if (multiple) {
+        subform.elements.push({
+          name: 'add',
+          title: 'Add',
+          type: 'button',
+          click: 'addItem',
+          classes: ['btn-default'],
+          weight: 15
+        });
+      }
+      if (sub) {
+        $scope.data.type = type;
+        subform.elements.push({
+          name: 'add',
+          title: 'Cancel',
+          type: 'button',
+          click: 'cancel',
+          classes: ['btn-default'],
+          weight: 20
+        });
+      }
+    });
+  };
+
+  if ($scope.element.reference.subtypes) {
+    if ($scope.element.reference.subtypes.length == 1) {
+      $scope.setSubForm($scope.element.reference.subtypes[0]);
     }
-  });
+
+    $scope.cancel = function() {
+      delete $scope.element.subform;
+    };
+  }
+  else {
+    $scope.setSubForm($scope.element.reference.type);
+  }
+
 }
 //InlineReferenceElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 

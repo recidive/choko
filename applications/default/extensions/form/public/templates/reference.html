@@ -25,6 +25,16 @@
       </div>
     </div>
     <legend>{{element.title}}</legend>
+
+    <div ng-if="element.reference.subtypes" class="btn-group btn-group-sm">
+      <button ng-if="!element.subform" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        Add <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li ng-repeat="type in element.reference.subtypes"><a ng-click="setSubForm(type.name, true)">{{type.title}}</a></li>
+      </ul>
+    </div>
+
     <div ng-include="'/templates/subform.html'"></div>
   </fieldset>
 </div>

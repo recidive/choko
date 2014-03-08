@@ -89,6 +89,19 @@ form.form = function(forms, callback) {
 
       if (fieldSettings.type == 'reference') {
         element.reference = fieldSettings.reference;
+
+        // Check if referenced type is polymorphic, if so, we need to send the
+        // referenced types.
+        var referencedType = self.application.type(fieldSettings.reference.type);
+        if (referencedType && referencedType.type.settings.polymorphic) {
+          element.reference.subtypes = Object.keys(referencedType.subtypes).map(function(subtype) {
+            return {
+              name: subtype + utils.capitalizeFirstLetter(fieldSettings.reference.type),
+              shortname: subtype,
+              title: referencedType.subtypes[subtype].type.settings.title
+            };
+          });
+        }
       }
 
       if (fieldSettings.element) {
