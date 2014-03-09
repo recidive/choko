@@ -8,6 +8,21 @@ angular.module('choko.directives', [])
       elm.text(version);
     };
   }])
+  .directive('ckReplace', function($http, $compile) {
+    return {
+      restrict: 'E',
+      scope: true,
+      compile: function(element, attrs) {
+        return function(scope, element, attrs) {
+          scope.element.template = scope.element.template || 'templates/' + scope.element.type + '.html';
+          $http({method: 'GET', url: scope.element.template, cache: true}).then(function(result) {
+            var template = angular.element($compile(result.data)(scope));
+            element.replaceWith(template);
+          });
+        };
+      }
+    };
+  })
   .directive('ckButton', function($http, $compile) {
     return {
       restrict: 'E',

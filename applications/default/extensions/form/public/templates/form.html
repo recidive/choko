@@ -4,5 +4,5 @@
       <li ng-repeat="error in errors">{{error}}</li>
     </ul>
   </div>
-  <div ng-repeat="element in form.elements | orderBy:'weight'" ng-include="element.template" ng-controller="ElementController" class="form-group"></div>
+  <ck-replace ng-repeat="element in form.elements | orderBy:'weight'" />
 </form>
