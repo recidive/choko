@@ -197,7 +197,8 @@ function InlineReferenceElementController($scope, $location, applicationState, C
         });
       }
       if (sub) {
-        $scope.data.type = type;
+        // Set subform element type to subform short name.
+        $scope.data.type = subform.shortName;
         subform.elements.push({
           name: 'add',
           title: 'Cancel',
