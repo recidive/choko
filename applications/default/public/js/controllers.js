@@ -133,6 +133,7 @@ function ReferenceElementController($scope, $location, applicationState, Choko) 
   // Use radios if less then 5 options.
   $scope.fewOptions = ($scope.element.options && Object.keys($scope.element.options).length <= 5);
 
+  // Initialize data container if needed.
   $scope.data[$scope.element.name] = $scope.data[$scope.element.name] || [];
 
   // Toggle selection for a given option by name.
@@ -171,7 +172,13 @@ function InlineReferenceElementController($scope, $location, applicationState, C
       // @todo: validate item.
       $scope.items.push($scope.data);
       $scope.data = {};
+
+      delete $scope.element.subform;
+      if (!$scope.element.reference.subtypes) {
+        $scope.setSubForm($scope.element.reference.type);
+      }
     };
+
     $scope.removeItem = function(index) {
       $scope.items.splice(index, 1);
     };
