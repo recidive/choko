@@ -208,11 +208,11 @@ function InlineReferenceElementController($scope, $location, applicationState, C
         // Set subform element type to subform short name.
         $scope.data.type = subform.shortName;
         subform.elements.push({
-          name: 'add',
+          name: 'cancel',
           title: 'Cancel',
           type: 'button',
           click: 'cancel',
-          classes: ['btn-default'],
+          classes: ['btn-link'],
           weight: 20
         });
       }
