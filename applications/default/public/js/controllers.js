@@ -207,7 +207,7 @@ function InlineReferenceElementController($scope, $location, applicationState, C
       if (multiple) {
         subform.elements.push({
           name: 'add',
-          title: 'Add',
+          title: 'Add ' + $scope.element.subform.title.toLowerCase(),
           type: 'button',
           click: 'addItem',
           classes: ['btn-default'],

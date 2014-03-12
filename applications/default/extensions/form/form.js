@@ -55,7 +55,7 @@ form.form = function(forms, callback) {
       return next();
     }
     var form = newForms['type-' + typeName] = {
-      title: typeSettings.title,
+      title: typeSettings.formTitle || typeSettings.title,
       description: 'Form for the ' + typeSettings.title + ' type.',
       typeName: typeName
     };

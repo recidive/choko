@@ -40,6 +40,6 @@
       </ul>
     </div>
 
-    <div ng-include="'/templates/subform.html'"></div>
+    <div ng-if="element.subform" ng-include="'/templates/subform.html'"></div>
   </fieldset>
 </div>
