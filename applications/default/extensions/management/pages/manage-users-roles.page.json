@@ -1,5 +1,6 @@
 {
   "path": "/manage/users/roles",
+  "description": "A role defines a group of users that have certain privileges",
   "access": "manage-users",
   "type": "list",
   "itemType": "role",
