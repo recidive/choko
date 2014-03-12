@@ -64,7 +64,8 @@ navigation.type = function(types, callback) {
     fields: {
       title: {
         title: 'Title',
-        type: 'text'
+        type: 'text',
+        weight: -15
       }
     }
   };
