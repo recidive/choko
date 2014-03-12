@@ -130,6 +130,9 @@ function ReferenceElementController($scope, $location, applicationState, Choko) 
     $scope.element.options = response;
   });
 
+  // Use radios if less then 5 options.
+  $scope.fewOptions = ($scope.element.options && Object.keys($scope.element.options).length <= 5);
+
   $scope.data[$scope.element.name] = $scope.data[$scope.element.name] || [];
 
   // Toggle selection for a given option by name.

@@ -6,12 +6,17 @@
       {{element.reference.titleField ? option[lement.reference.titleField] : option.title}}
     </label>
   </div>
-  <div ng-if="!element.reference.multiple" ng-repeat="(optionKey, option) in element.options" class="radio">
+
+  <div ng-if="!element.reference.multiple && fewOptions" ng-repeat="(optionKey, option) in element.options" class="radio">
     <label>
       <input ng-model="data[element.name]" type="radio" name="element.name" value="{{optionKey}}">
       {{element.reference.titleField ? option[element.reference.titleField] : option.title}}
     </label>
   </div>
+
+  <select ng-if="!element.reference.multiple && !fewOptions" ng-model="data[element.name]" class="form-control">
+    <option ng-repeat="(optionKey, option) in element.options" value="{{optionKey}}">{{element.reference.titleField ? option[element.reference.titleField] : option.title}}</option>
+  </select>
 </div>
 
 <div ng-if="element.reference.inline" ng-controller="InlineReferenceElementController" class="controls well">
