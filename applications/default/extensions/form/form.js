@@ -97,7 +97,7 @@ form.form = function(forms, callback) {
           element.reference.subtypes = Object.keys(referencedType.subtypes).map(function(subtype) {
             return {
               name: subtype + utils.capitalizeFirstLetter(fieldSettings.reference.type),
-              shortname: subtype,
+              shortName: subtype,
               title: referencedType.subtypes[subtype].type.settings.title
             };
           });
