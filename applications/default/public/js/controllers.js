@@ -128,10 +128,10 @@ function ItemController($scope, $location, applicationState, Choko) {
 function ReferenceElementController($scope, $location, applicationState, Choko) {
   Choko.get({type: $scope.element.reference.type}, function(response) {
     $scope.element.options = response;
-  });
 
-  // Use radios if less then 5 options.
-  $scope.fewOptions = ($scope.element.options && Object.keys($scope.element.options).length <= 5);
+    // Use radios if less then 5 options.
+    $scope.fewOptions = ($scope.element.options && Object.keys($scope.element.options).length <= 5);
+  });
 
   // Initialize data container if needed.
   $scope.data[$scope.element.name] = $scope.data[$scope.element.name] || [];
