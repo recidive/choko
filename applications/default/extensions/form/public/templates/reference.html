@@ -40,6 +40,10 @@
       </ul>
     </div>
 
+    <button ng-if="!element.reference.subtypes && !element.subform" ng-click="setSubForm(element.reference.type)" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+      <span class="fa fa-plus"></span>
+    </button>
+
     <div ng-if="element.subform" ng-include="'/templates/subform.html'"></div>
   </fieldset>
 </div>

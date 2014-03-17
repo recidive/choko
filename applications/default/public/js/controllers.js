@@ -213,10 +213,6 @@ function InlineReferenceElementController($scope, $location, applicationState, C
           classes: ['btn-default'],
           weight: 15
         });
-      }
-      if (sub) {
-        // Set subform element type to subform short name.
-        $scope.data.type = subform.shortName;
         subform.elements.push({
           name: 'cancel',
           title: 'Cancel',
@@ -226,11 +222,16 @@ function InlineReferenceElementController($scope, $location, applicationState, C
           weight: 20
         });
       }
+
+      if (sub) {
+        // Set subform element type to subform short name.
+        $scope.data.type = subform.shortName;
+      }
     });
   };
 
-  if ($scope.element.reference.subtypes) {
-    if ($scope.element.reference.subtypes.length == 1) {
+  if (multiple) {
+    if ($scope.element.reference.subtypes && $scope.element.reference.subtypes.length == 1) {
       $scope.setSubForm($scope.element.reference.subtypes[0]);
     }
 
