@@ -159,6 +159,7 @@ function InlineReferenceElementController($scope, $location, applicationState, C
   $scope.errors = [];
 
   if (multiple) {
+    // Initialize items container.
     if ($scope.data[$scope.element.name]) {
       $scope.items = $scope.data[$scope.element.name];
     }
@@ -166,13 +167,16 @@ function InlineReferenceElementController($scope, $location, applicationState, C
       $scope.items = $scope.data[$scope.element.name] = [];
     }
 
+    // Initilize local data container.
     $scope.data = {};
 
     $scope.addItem = function() {
       // @todo: validate item.
+      // Add item and cleanup data container and items.
       $scope.items.push($scope.data);
       $scope.data = {};
 
+      // Reset form to original state.
       delete $scope.element.subform;
       if (!$scope.element.reference.subtypes) {
         $scope.setSubForm($scope.element.reference.type);
