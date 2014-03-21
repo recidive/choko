@@ -87,6 +87,11 @@ form.form = function(forms, callback) {
         weight: fieldSettings.weight || 0
       };
 
+      // Add field options for select and other types if any.
+      if (fieldSettings.options) {
+        element.options = fieldSettings.options;
+      }
+
       if (fieldSettings.type == 'reference') {
         element.reference = fieldSettings.reference;
 
