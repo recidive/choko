@@ -37,7 +37,7 @@ field.field = function(fields, callback) {
     title: 'Number',
     element: 'number',
     validate: function(settings, item, next) {
-      next(null, validator.isNumeric(item[settings.name]) || 'Invalid number.');
+      next(null, validator.isNumeric(item[settings.name].toString()) || 'Invalid number.');
     }
   };
   newFields['email'] = {
@@ -46,7 +46,7 @@ field.field = function(fields, callback) {
     validate: function(settings, item, next) {
       // Email validator oddly returns the email itself, so need to convert to
       // boolean.
-      next(null, new Boolean(validator.isEmail(item[settings.name])) || 'Invalid email.');
+      next(null, new Boolean(validator.isEmail(item[settings.name].toString())) || 'Invalid email.');
     }
   };
   newFields['password'] = {
@@ -54,14 +54,14 @@ field.field = function(fields, callback) {
     element: 'password',
     validate: function(settings, item, next) {
       var minLength = settings.minLength || 6;
-      next(null, validator.len(item[settings.name], settings.minLength || 6) || 'Password must have at least ' + minLength + ' characters.');
+      next(null, validator.len(item[settings.name].toString(), settings.minLength || 6) || 'Password must have at least ' + minLength + ' characters.');
     }
   };
   newFields['url'] = {
     title: 'URL',
     element: 'url',
     validate: function(settings, item, next) {
-      next(null, validator.isUrl(item[settings.name]) || 'Invalid URL.');
+      next(null, validator.isUrl(item[settings.name].toString()) || 'Invalid URL.');
     }
   };
   newFields['submit'] = {
