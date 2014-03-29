@@ -23,12 +23,95 @@ layout.type = function(types, callback) {
   newTypes['layout'] = {
     title: 'Layout',
     description: 'Layout defines page structure.',
+    fields: {
+      name: {
+        title: 'Name',
+        type: 'text',
+        required: 'true'
+      },
+      title: {
+        title: 'Title',
+        type: 'text',
+        required: 'true'
+      },
+      rows: {
+        title: 'Rows',
+        type: 'reference',
+        reference: {
+          type: 'row',
+          multiple: true,
+          inline: true
+        }
+      }
+    },
     access: {
       'list': true,
       'load': true,
       'add': 'manage-layouts',
       'edit': 'manage-layouts',
       'delete': 'manage-layouts'
+    }
+  };
+
+  newTypes['row'] = {
+    title: 'Row',
+    description: 'A layout row.',
+    standalone: false,
+    fields: {
+      name: {
+        title: 'Name',
+        type: 'text',
+        required: 'true'
+      },
+      title: {
+        title: 'Title',
+        type: 'text',
+        required: 'true'
+      },
+      columns: {
+        title: 'Columns',
+        type: 'reference',
+        reference: {
+          type: 'column',
+          multiple: true,
+          inline: true
+        }
+      },
+      region: {
+        title: 'Region',
+        type: 'boolean'
+      }
+    }
+  };
+
+  newTypes['column'] = {
+    title: 'Column',
+    description: 'A layout column.',
+    standalone: false,
+    fields: {
+      name: {
+        title: 'Name',
+        type: 'text',
+        required: 'true'
+      },
+      title: {
+        title: 'Title',
+        type: 'text',
+        required: 'true'
+      },
+      rows: {
+        title: 'Rows',
+        type: 'reference',
+        reference: {
+          type: 'row',
+          multiple: true,
+          inline: true
+        }
+      },
+      region: {
+        title: 'Region',
+        type: 'boolean'
+      }
     }
   };
 
