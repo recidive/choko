@@ -111,6 +111,23 @@ panel.panelType = function(pageTypes, callback) {
   callback(null, newTypes);
 }
 
+
+/**
+ * The panel() hook.
+ */
+panel.panel = function(panels, callback) {
+  var newPanels = {}
+
+  newPanels['brand'] = {
+    title: 'Brand',
+    description: 'Application name or logo.',
+    bare: true,
+    content: this.application.settings.application.name
+  }
+
+  callback(null, newPanels);
+};
+
 /**
  * The contextReactionType() hook.
  */
