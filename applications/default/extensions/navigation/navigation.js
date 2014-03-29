@@ -80,7 +80,7 @@ navigation.navigationItemType = function(itemTypes, callback) {
   var newTypes = {};
 
   newTypes['link'] = {
-    title: 'Link item',
+    title: 'Link',
     description: 'Navigation link item.',
     standalone: false,
     fields: {
@@ -92,7 +92,7 @@ navigation.navigationItemType = function(itemTypes, callback) {
   };
 
   newTypes['action'] = {
-    title: 'Action item',
+    title: 'Action',
     description: 'Navigation action item.',
     standalone: false,
     fields: {
@@ -104,13 +104,13 @@ navigation.navigationItemType = function(itemTypes, callback) {
   };
 
   newTypes['divider'] = {
-    title: 'Divider item',
+    title: 'Divider',
     description: 'Navigation divider item.',
     standalone: false
   };
 
   newTypes['dropdown'] = {
-    title: 'Dropdown item',
+    title: 'Dropdown',
     description: 'Navigation dropdown item.',
     standalone: false,
     fields: {
