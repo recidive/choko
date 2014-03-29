@@ -187,19 +187,8 @@ context.contextConditionType = function(conditionTypes, callback) {
   newConditionTypes['siteWide'] = {
     title: 'Site wide',
     standalone: false,
-    fields: {
-      // @todo: this may not need an operator or no field at all.
-      operator: {
-        title: 'Operator',
-        type: 'text'
-      },
-      value: {
-        title: 'Value',
-        type: 'boolean'
-      }
-    },
     check: function(request, value, callback) {
-      callback(value);
+      callback(true);
     }
   };
 
