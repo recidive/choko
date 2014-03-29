@@ -84,6 +84,8 @@ rest.route = function(routes, callback) {
         if (request.method == 'POST' || request.method == 'PATCH') {
           return typeModel.load(request.params[type.name], function(err, item) {
             if (item) {
+              // Delete MongoDB ID if any.
+              delete item._id;
               utils.extend(item, request.body);
               request.body = item;
             }

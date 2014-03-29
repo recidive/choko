@@ -283,7 +283,18 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
   if ($scope.view.type === 'form' && $scope.view.formName) {
     $scope.data = {};
 
+    if ($scope.view.itemType && $scope.view.itemKey) {
+      Choko.get({type: $scope.view.itemType, key: $scope.view.itemKey}, function(response) {
+        $scope.data = response;
+      });
+    }
+
     $scope.submit = function(url, redirect) {
+      // Add itemKey to the URL if any.
+      if ($scope.view.itemKey) {
+        url += '/' + $scope.view.itemKey;
+      }
+
       $http.post(url, $scope.data)
         .success(function(data, status, headers, config) {
           $scope.data = data;

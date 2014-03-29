@@ -180,7 +180,7 @@ page.route = function(routes, callback) {
           // Add the params found on the request if any.
           utils.extend(page.params, request.params);
 
-          if (page.type === 'item' && page.itemType && !page.itemKey) {
+          if ((page.type === 'item' || page.type === 'form') && page.itemType && !page.itemKey) {
             // Try to get key from request params.
             var keyProperty = self.application.type(page.itemType).type.settings.keyProperty;
             if (keyProperty in page.params) {
