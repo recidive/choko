@@ -49,6 +49,50 @@ panel.type = function(types, callback) {
     }
   };
 
+  newTypes['panelReaction'] = {
+    title: 'Panel reaction',
+    formTitle: 'Region',
+    description: 'Panel reaction item used on panel context reaction.',
+    standalone: false,
+    fields: {
+      region: {
+        title: 'Region',
+        description: 'Region to add the panel.',
+        type: 'text'
+      },
+      panels: {
+        title: 'Panels',
+        description: 'Panels to show.',
+        type: 'reference',
+        reference: {
+          type: 'panelReactionPanel',
+          multiple: true,
+          inline: true
+        }
+      }
+    }
+  };
+
+  newTypes['panelReactionPanel'] = {
+    title: 'Panel reaction panel',
+    formTitle: 'Panel',
+    description: 'Panel reaction item panel used on panel context reaction.',
+    standalone: false,
+    fields: {
+      panel: {
+        title: 'Panel',
+        type: 'reference',
+        reference: {
+          type: 'panel'
+        }
+      },
+      weight: {
+        title: 'Weight',
+        type: 'text'
+      }
+    }
+  };
+
   callback(null, newTypes);
 };
 
