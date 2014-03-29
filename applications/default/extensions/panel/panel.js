@@ -56,7 +56,7 @@ panel.type = function(types, callback) {
 /**
  * The panelType() hook.
  */
-panel.panelType = function(pageTypes, callback) {
+panel.panelType = function(panelTypes, callback) {
   var newTypes = {};
 
   newTypes['list'] = {
