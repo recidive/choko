@@ -46,11 +46,14 @@ layout.contextReactionType = function(reactionTypes, callback) {
     title: 'Set layout',
     description: 'Set the layout.',
     standalone: false,
-    arguments: {
+    fields: {
       layout: {
         title: 'Layout',
         description: 'Layout to set to.',
-        type: 'String'
+        type: 'reference',
+        reference: {
+          type: 'layout'
+        }
       }
     },
     react: function(request, response, value, callback) {

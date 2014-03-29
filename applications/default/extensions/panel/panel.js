@@ -136,14 +136,20 @@ panel.contextReactionType = function(reactionTypes, callback) {
   var newReactionTypes = {};
 
   newReactionTypes['panel'] = {
-    title: 'Show a panel',
-    description: 'Show a panel on some layout region.',
+    title: 'Show panels',
+    description: 'Show panels on one or more layout regions.',
     standalone: false,
-    arguments: {
+    fields: {
       panels: {
         title: 'Panels',
         description: 'Panels to show.',
-        type: 'Object'
+        type: 'reference',
+        reference: {
+          type: 'panelReaction',
+          multiple: true,
+          inline: true,
+          index: 'region'
+        }
       }
     },
     react: function(request, response, regionPanels, callback) {

@@ -447,14 +447,10 @@ user.contextConditionType = function(conditionTypes, callback) {
   newConditionTypes['anonymous'] = {
     title: 'Anonymous user',
     standalone: false,
-    arguments: {
-      operator: {
-        title: 'Operator',
-        type: 'String'
-      },
-      value: {
-        title: 'Value',
-        type: 'String'
+    fields: {
+      anonimous: {
+        title: 'Anonimous',
+        type: 'boolean'
       }
     },
     check: function(request, value, callback) {
@@ -464,14 +460,14 @@ user.contextConditionType = function(conditionTypes, callback) {
   newConditionTypes['access'] = {
     title: 'Access',
     standalone: false,
-    arguments: {
-      operator: {
-        title: 'Operator',
-        type: 'String'
-      },
-      value: {
-        title: 'Value',
-        type: 'String'
+    fields: {
+      access: {
+        title: 'Permission',
+        type: 'reference',
+        reference: {
+          type: 'permission',
+          multiple: 'true'
+        }
       }
     },
     check: function(request, permission, callback) {
