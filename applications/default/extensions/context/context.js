@@ -111,6 +111,7 @@ context.type = function(types, callback) {
 
   newTypes['contextCondition'] = {
     title: 'Context condition',
+    formTitle: 'Condition',
     description: 'Conditions that form contexts.',
     standalone: false,
     polymorphic: true,
@@ -125,6 +126,7 @@ context.type = function(types, callback) {
 
   newTypes['contextReaction'] = {
     title: 'Context reaction',
+    formTitle: 'Reaction',
     description: 'Reactions a context can result on.',
     standalone: false,
     polymorphic: true,
