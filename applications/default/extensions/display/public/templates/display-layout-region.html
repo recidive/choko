@@ -1,0 +1,5 @@
+<div class="{{name}}">
+  <div class="region-name">{{name}}</div>
+  <!-- Fields -->
+  <div ng-repeat="field in display.instances[view.itemType][name] | orderBy:'weight'">{{item[field.fieldName]}}</div>
+</div>

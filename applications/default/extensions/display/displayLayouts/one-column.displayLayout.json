@@ -1,0 +1,12 @@
+{
+  "title": "One column",
+  "description": "A basic single column layout.",
+  "rows": [
+    {
+      "name": "content",
+      "title": "Content",
+      "region": true,
+      "weight": 0
+    }
+  ]
+}

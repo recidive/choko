@@ -258,6 +258,20 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
     Choko.get({type: $scope.view.itemType}, function(response) {
       $scope.items = response;
     });
+
+    if (!$scope.view.template && $scope.view.listStyle) {
+      $scope.view.template = '/templates/' + $scope.view.listStyle + '.html';
+    }
+
+    if (!$scope.view.itemTemplate && $scope.view.itemDisplay) {
+      Choko.get({type: 'display', key: $scope.view.itemDisplay}, function(display) {
+        $scope.display = display;
+        Choko.get({type: 'displayLayout', key: display.layout}, function(layout) {
+          $scope.layout = layout;
+          $scope.view.itemTemplate = '/templates/display-layout.html';
+        });
+      });
+    }
   }
 
   // Handle 'item' type views.
