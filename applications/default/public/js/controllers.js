@@ -125,6 +125,15 @@ function ItemController($scope, $location, applicationState, Choko) {
 }
 //ItemController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
+function DisplayRegionController($scope, $location, applicationState, Choko) {
+}
+//DisplayRegionController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+
+function DisplayFieldController($scope, $location, applicationState, Choko) {
+  $scope.field.template = $scope.field.template || '/templates/' + $scope.field.format + '.html';
+}
+//DisplayFieldController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+
 function ReferenceElementController($scope, $location, applicationState, Choko) {
   Choko.get({type: $scope.element.reference.type}, function(response) {
     $scope.element.options = response;
