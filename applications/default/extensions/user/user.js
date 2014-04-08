@@ -448,8 +448,8 @@ user.contextConditionType = function(conditionTypes, callback) {
     title: 'Anonymous user',
     standalone: false,
     fields: {
-      anonimous: {
-        title: 'Anonimous',
+      anonymous: {
+        title: 'Anonymous',
         type: 'boolean'
       }
     },
