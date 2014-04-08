@@ -29,7 +29,7 @@ display.type = function(types, callback) {
     },
     access: {
       'list': 'manage-displays',
-      'load': 'manage-displays',
+      'load': true,
       'add': 'manage-displays',
       'edit': 'manage-displays',
       'delete': 'manage-displays'
