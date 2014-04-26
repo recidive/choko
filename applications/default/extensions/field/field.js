@@ -31,7 +31,16 @@ field.field = function(fields, callback) {
 
   newFields['text'] = {
     title: 'Text',
-    element: 'text'
+    element: 'text',
+    validate: function(settings, item, next) {
+      // Default minLenght to 1.
+      settings.minLength = settings.minLength || 1;
+
+      // Default maxLenght to 256.
+      settings.maxLength = settings.maxLength || 256;
+
+      next(null, !validator.notEmpty(item[settings.name]) || validator.len(item[settings.name].toString(), settings.minLength, settings.maxLength) || 'Value must have from ' + settings.minLength + ' to ' + settings.maxLength + ' characters.');
+    }
   };
   newFields['number'] = {
     title: 'Number',
