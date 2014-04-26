@@ -25,8 +25,7 @@
     <div ng-if="items.length > 0" class="list-group">
       <div ng-repeat="(key, item) in items" ng-controller="ItemController" class="list-group-item">
         <button ng-click="removeItem(key)" type="button" class="close" aria-hidden="true">&times;</button>
-        <h4 class="list-group-item-heading">{{item.title}}</h4>
-        <p class="list-group-item-text">{{item.description}}</p>
+        <h4 class="list-group-item-heading">{{element.reference.titleField ? item[element.reference.titleField] : item.title}}</h4>
       </div>
     </div>
     <legend>{{element.title}}</legend>
