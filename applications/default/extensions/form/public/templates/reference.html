@@ -9,7 +9,7 @@
 
   <div ng-if="!element.reference.multiple && fewOptions" ng-repeat="(optionKey, option) in element.options" class="radio">
     <label>
-      <input ng-model="data[element.name]" type="radio" name="element.name" value="{{optionKey}}">
+      <input ng-model="data[element.name]" type="radio" name="{{element.name}}" value="{{optionKey}}">
       {{element.reference.titleField ? option[element.reference.titleField] : option.title}}
     </label>
   </div>
