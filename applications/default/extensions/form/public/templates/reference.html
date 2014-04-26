@@ -15,7 +15,7 @@
   </div>
 
   <select ng-if="!element.reference.multiple && !fewOptions" ng-model="data[element.name]" class="form-control">
-    <option ng-repeat="(optionKey, option) in element.options" value="{{optionKey}}">{{element.reference.titleField ? option[element.reference.titleField] : option.title}}</option>
+    <option ng-repeat="(optionKey, option) in element.options" ng-bind-html="element.reference.titleField ? option[element.reference.titleField] : option.title" value="{{optionKey}}"></option>
   </select>
 </div>
 
