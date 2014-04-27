@@ -3,15 +3,31 @@
  */
 var Server = require('./lib/server');
 
-var server = new Server('./applications');
-server.start(getPort());
+var args = getArguments();
 
-// Get port from command line argument "-p" or fallback to 3000.
-function getPort() {
+var server = new Server(args.path);
+server.start(args.port);
+
+// Get port and applications folder path from command line arguments. Use port
+// from "-p" or fallback to 3000. Default folder is ./applicaions.
+function getArguments() {
   var port = 3000;
+  var path = './applications';
   var args = process.argv.slice(2);
-  if (args.length && args.shift() === '-p') {
-    port = args.shift() || port;
+
+  while (args.length) {
+    var arg = args.shift();
+    switch (arg) {
+      case '-p':
+        port = args.shift();
+        break;
+      default:
+        path = arg;
+    }
   }
-  return port;
+
+  return {
+    port: port,
+    path: path
+  };
 }
