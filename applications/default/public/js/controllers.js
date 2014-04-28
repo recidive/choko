@@ -227,8 +227,10 @@ function InlineReferenceElementController($scope, $location, applicationState, C
 
       // We are editing a item, store data.
       if (data) {
-        $scope.data = data;
         $scope.editing = true;
+
+        // Make a copy of original data for restoring on cancel.
+        $scope.data = angular.copy(data);
       }
       else {
         $scope.editing = false;
