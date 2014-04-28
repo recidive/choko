@@ -228,6 +228,10 @@ function InlineReferenceElementController($scope, $location, applicationState, C
       // We are editing a item, store data.
       if (data) {
         $scope.data = data;
+        $scope.editing = true;
+      }
+      else {
+        $scope.editing = false;
       }
 
       if (multiple) {

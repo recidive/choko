@@ -1,5 +1,6 @@
 <div class="subform">
-  <h4>Add {{element.subform.title | lowercase}}</h4>
+  <h4 ng-if="!editing">Add {{element.subform.title | lowercase}}</h4>
+  <h4 ng-if="editing">Edit {{element.subform.title | lowercase}}</h4>
   <div ng-if="errors" class="alert alert-danger">
     <ul>
       <li ng-repeat="error in errors">{{error}}</li>
