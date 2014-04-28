@@ -277,7 +277,23 @@ function InlineReferenceElementController($scope, $location, applicationState, C
 function InlineReferenceElementItemController($scope, $filter, applicationState, Choko) {
 
   $scope.editItem = function() {
-    $scope.setSubForm($scope.element.reference.type, !!$scope.element.reference.subtypes, $scope.item, $scope.key);
+    $scope.setSubForm($scope.typeName(), !!$scope.element.reference.subtypes, $scope.item, $scope.key);
+  };
+
+  $scope.typeName = function() {
+    var typeName = $scope.element.reference.type;
+
+    // If it has subtypes, i.e. it's a polymorphic type, get the actual type
+    // being added to load the correct form.
+    if ($scope.element.reference.subtypes) {
+      $scope.element.reference.subtypes.forEach(function(subtype) {
+        if (subtype.shortName == $scope.item.type) {
+          typeName = subtype.name;
+        }
+      });
+    }
+
+    return typeName;
   };
 
 }
