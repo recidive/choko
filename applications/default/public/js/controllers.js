@@ -217,14 +217,6 @@ function InlineReferenceElementController($scope, $location, applicationState, C
     Choko.get({type: 'form', key: 'type-' + type}, function(response) {
       var subform = $scope.element.subform = response;
 
-      // If subform has no elements, add a item right way with only type as
-      // property.
-      if (!subform.elements.length) {
-        $scope.data.type = subform.shortName;
-        $scope.saveItem();
-        return;
-      }
-
       // We are editing a item, store data.
       if (data) {
         $scope.editing = true;
