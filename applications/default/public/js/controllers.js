@@ -192,9 +192,6 @@ function InlineReferenceElementController($scope, $location, applicationState, C
 
       // Reset form to original state.
       delete $scope.element.subform;
-      if (!$scope.element.reference.subtypes) {
-        $scope.setSubForm($scope.element.reference.type);
-      }
     };
 
     $scope.removeItem = function(index) {
