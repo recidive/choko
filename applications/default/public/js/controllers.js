@@ -179,10 +179,15 @@ function InlineReferenceElementController($scope, $location, applicationState, C
     // Initilize local data container.
     $scope.data = {};
 
-    $scope.addItem = function() {
+    $scope.saveItem = function(key) {
       // @todo: validate item.
       // Add item and cleanup data container and items.
-      $scope.items.push($scope.data);
+      if (key != undefined) {
+        $scope.items[key] = $scope.data;
+      }
+      else {
+        $scope.items.push($scope.data);
+      }
       $scope.data = {};
 
       // Reset form to original state.
@@ -205,7 +210,13 @@ function InlineReferenceElementController($scope, $location, applicationState, C
     }
   }
 
-  $scope.setSubForm = function(type, sub) {
+  $scope.setSubForm = function(type, sub, data, key) {
+    // Start by destroying the subform and its data.
+    // @todo: eventually we may want to add a confirmation, if form is "dirty".
+    delete $scope.element.subform;
+    $scope.data = {};
+
+    // Get the new subform from the REST server.
     Choko.get({type: 'form', key: 'type-' + type}, function(response) {
       var subform = $scope.element.subform = response;
 
@@ -213,8 +224,13 @@ function InlineReferenceElementController($scope, $location, applicationState, C
       // property.
       if (!subform.elements.length) {
         $scope.data.type = subform.shortName;
-        $scope.addItem();
+        $scope.saveItem();
         return;
+      }
+
+      // We are editing a item, store data.
+      if (data) {
+        $scope.data = data;
       }
 
       if (multiple) {
@@ -222,7 +238,8 @@ function InlineReferenceElementController($scope, $location, applicationState, C
           name: 'add',
           title: 'Add ' + $scope.element.subform.title.toLowerCase(),
           type: 'button',
-          click: 'addItem',
+          click: 'saveItem',
+          arguments: [key],
           classes: ['btn-default'],
           weight: 15
         });
@@ -362,8 +379,8 @@ function SubElementController($scope, $location, applicationState, Choko) {
 //SubElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
 function ButtonController($scope, $location, applicationState, Choko) {
-  $scope.call = function(func) {
-    $scope[func]();
+  $scope.call = function(func, args) {
+    $scope[func].apply(this, args);
   };
 }
 //ButtonController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
