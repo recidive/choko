@@ -23,9 +23,9 @@
   <fieldset>
     <p ng-if="items.length == 0">No items added yet.</p>
     <div ng-if="items.length > 0" class="list-group">
-      <div ng-repeat="(key, item) in items" ng-controller="ItemController" class="list-group-item">
+      <div ng-repeat="(key, item) in items" ng-controller="InlineReferenceElementItemController" class="list-group-item">
         <button ng-click="removeItem(key)" type="button" class="close" aria-hidden="true">&times;</button>
-        <h4 class="list-group-item-heading"><a ng-click="setSubForm(element.reference.type, !!element.reference.subtypes, item, key)">{{element.reference.titleField ? item[element.reference.titleField] : item.title}}</a>        
+        <h4 class="list-group-item-heading"><a ng-click="editItem()">{{element.reference.titleField ? item[element.reference.titleField] : item.title}}</a>
       </div>
     </div>
     <legend>{{element.title}}</legend>

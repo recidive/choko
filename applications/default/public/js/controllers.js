@@ -276,6 +276,15 @@ function InlineReferenceElementController($scope, $location, applicationState, C
 }
 //InlineReferenceElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
+function InlineReferenceElementItemController($scope, $filter, applicationState, Choko) {
+
+  $scope.editItem = function() {
+    $scope.setSubForm($scope.element.reference.type, !!$scope.element.reference.subtypes, $scope.item, $scope.key);
+  };
+
+}
+//InlineReferenceElementItemController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+
 function ViewController($scope, $location, $http, applicationState, Choko) {
   // Handle 'list' type views.
   if ($scope.view.type === 'list' && $scope.view.itemType) {
