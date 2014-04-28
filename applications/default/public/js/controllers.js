@@ -264,6 +264,7 @@ function InlineReferenceElementController($scope, $location, applicationState, C
 
     $scope.cancel = function() {
       delete $scope.element.subform;
+      $scope.data = {};
     };
   }
   else {
