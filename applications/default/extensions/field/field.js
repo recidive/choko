@@ -49,6 +49,13 @@ field.field = function(fields, callback) {
       next(null, validator.isNumeric(item[settings.name].toString()) || 'Invalid number.');
     }
   };
+  newFields['date'] = {
+    title: 'Date',
+    element: 'date',
+    validate: function(settings, item, next) {
+      next(null, validator.isDate(item[settings.name].toString()) || 'Invalid date.');
+    }
+  };
   newFields['email'] = {
     title: 'Email',
     element: 'email',
