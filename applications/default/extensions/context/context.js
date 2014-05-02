@@ -38,7 +38,7 @@ context.type = function(types, callback) {
 
   newTypes['context'] = {
     title: 'Context',
-    description: 'Contexts are set of conditions that results in reactions.',
+    description: 'Contexts are sets of conditions that result in reactions.',
     fields: {
       name: {
         title: 'Name',
