@@ -56,7 +56,7 @@ rest.route = function(routes, callback) {
           // @todo: filter out dangerous stuff from query before passing it to
           // list() method?
           var query = request.query;
-          application.invoke('query', typeName, query, request, function() {
+          application.invoke('query', type, query, request, function() {
             return typeModel.list(query, callback);
           });
         }
