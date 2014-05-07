@@ -53,7 +53,12 @@ rest.route = function(routes, callback) {
       access: true,
       callback: function(request, response, callback) {
         if (request.method == 'GET') {
-          return typeModel.list(request.query, callback);
+          // @todo: filter out dangerous stuff from query before passing it to
+          // list() method?
+          var query = request.query;
+          application.invoke('query', query, request, function() {
+            return typeModel.list(query, callback);
+          });
         }
         if (request.method == 'POST') {
           return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
