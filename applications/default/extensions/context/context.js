@@ -55,7 +55,8 @@ context.type = function(types, callback) {
           type: 'contextCondition',
           multiple: true,
           inline: true,
-          object: true
+          object: true,
+          titleField: 'type'
         }
       },
       reactions: {
@@ -65,7 +66,7 @@ context.type = function(types, callback) {
           type: 'contextReaction',
           multiple: true,
           inline: true,
-          object: true
+          titleField: 'type'
         }
       }
     },
