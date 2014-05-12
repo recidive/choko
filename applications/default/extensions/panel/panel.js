@@ -67,7 +67,8 @@ panel.type = function(types, callback) {
         reference: {
           type: 'panelReactionPanel',
           multiple: true,
-          inline: true
+          inline: true,
+          titleField: 'panel'
         }
       }
     }
@@ -192,6 +193,7 @@ panel.contextReactionType = function(reactionTypes, callback) {
           type: 'panelReaction',
           multiple: true,
           inline: true,
+          titleField: 'region',
           index: 'region'
         }
       }
