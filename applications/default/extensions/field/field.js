@@ -1,5 +1,6 @@
 var async = require('async');
 var validator = require('validator/lib/validators');
+var uuid = require('node-uuid');
 
 var field = module.exports = {};
 
@@ -30,6 +31,17 @@ field.type = function(types, callback) {
 field.field = function(fields, callback) {
   var newFields = {};
 
+  newFields['id'] = {
+    title: 'Identifier',
+    description: 'A Universally unique identifier.',
+    preSave: function(settings, item, next) {
+      if (!(settings.name in item)) {
+        // Generate an UUID v4.
+        item[settings.name] = uuid.v4();
+      }
+      next();
+    }
+  };
   newFields['text'] = {
     title: 'Text',
     element: 'text',
