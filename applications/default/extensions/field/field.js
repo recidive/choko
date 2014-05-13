@@ -87,3 +87,51 @@ field.field = function(fields, callback) {
 
   callback(null, newFields);
 };
+
+/**
+ * The preSave() hook.
+ */
+field.preSave = function(type, data, callback) {
+  var application = this.application;
+
+  if (type.settings.fields) {
+    // Validate type fields.
+    async.each(Object.keys(type.settings.fields), function(fieldName, next) {
+      var fieldSettings = type.settings.fields[fieldName];
+
+      // Add fieldName to fieldSettings.
+      fieldSettings.name = fieldName;
+
+      var Field = application.type('field');
+      Field.load(fieldSettings.type, function(error, field) {
+        if (error) {
+          // Application error.
+          return next(error);
+        }
+        if (!field || !field.preSave) {
+          // Field is of an unrecognized type or there's not a preSave()
+          // callback.
+          return next();
+        }
+
+        field.preSave(fieldSettings, data, function(error, result) {
+          if (error) {
+            // Application error.
+            return next(error);
+          }
+          next();
+        });
+      });
+    },
+    function(error) {
+      if (error) {
+        // Application error.
+        return callback(error);
+      }
+      callback();
+    });
+  }
+  else {
+    callback();
+  }
+};
