@@ -1,3 +1,4 @@
+var async = require('async');
 var validator = require('validator/lib/validators');
 
 var field = module.exports = {};
