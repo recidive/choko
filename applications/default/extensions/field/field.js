@@ -1,6 +1,7 @@
 var async = require('async');
 var validator = require('validator/lib/validators');
 var uuid = require('node-uuid');
+var utils = require('prana').utils;
 
 var field = module.exports = {};
 
@@ -102,49 +103,65 @@ field.field = function(fields, callback) {
 };
 
 /**
- * The preSave() hook.
+ * Generate a hook implementation for each pre/post operations that calls a
+ * callback on the field type with the same name.
  */
-field.preSave = function(type, data, callback) {
-  var application = this.application;
+field.fieldCallback = function(hook) {
+  return function(type, data, callback) {
+    var application = this.application;
 
-  if (type.settings.fields) {
-    // Validate type fields.
-    async.each(Object.keys(type.settings.fields), function(fieldName, next) {
-      var fieldSettings = type.settings.fields[fieldName];
+    if (type.settings.fields) {
+      // Validate type fields.
+      async.each(Object.keys(type.settings.fields), function(fieldName, next) {
+        var fieldSettings = type.settings.fields[fieldName];
 
-      // Add fieldName to fieldSettings.
-      fieldSettings.name = fieldName;
+        // Add fieldName to fieldSettings.
+        fieldSettings.name = fieldName;
 
-      var Field = application.type('field');
-      Field.load(fieldSettings.type, function(error, field) {
-        if (error) {
-          // Application error.
-          return next(error);
-        }
-        if (!field || !field.preSave) {
-          // Field is of an unrecognized type or there's not a preSave()
-          // callback.
-          return next();
-        }
-
-        field.preSave(fieldSettings, data, function(error, result) {
+        var Field = application.type('field');
+        Field.load(fieldSettings.type, function(error, field) {
           if (error) {
             // Application error.
             return next(error);
           }
-          next();
+          if (!field || !(hook in field)) {
+            // Field is of an unrecognized type or there's not a preSave()
+            // callback.
+            return next();
+          }
+
+          field[hook](fieldSettings, data, function(error, result) {
+            if (error) {
+              // Application error.
+              return next(error);
+            }
+
+            next();
+          });
         });
+      },
+      function(error) {
+        if (error) {
+          // Application error.
+          return callback(error);
+        }
+        callback();
       });
-    },
-    function(error) {
-      if (error) {
-        // Application error.
-        return callback(error);
-      }
+    }
+    else {
       callback();
-    });
-  }
-  else {
-    callback();
-  }
+    }
+  };
 };
+
+/**
+ * Create hook implementations for all type operations to call field hooks.
+ */
+['load', 'list', 'save', 'delete'].forEach(function(operation) {
+  var operationCapitalized = utils.capitalizeFirstLetter(operation);
+
+  // Add pre operation hooks that call callbacks on fields.
+  ['pre', 'post'].forEach(function(kind) {
+    field[kind + operationCapitalized] = field.fieldCallback('pre' + operationCapitalized);
+  });
+});
