@@ -394,6 +394,32 @@ function ElementController($scope, $location, applicationState, Choko) {
 }
 //ElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
+function FileElementController($scope, $location, $upload, applicationState, Choko) {
+  $scope.element.template = $scope.element.template || 'templates/' + $scope.element.type + '.html';
+  $scope.progress = 0;
+
+  // Initialize files container.
+  // @todo support multiple files.
+  $scope.data[$scope.element.name] = $scope.data[$scope.element.name] || null;
+
+  $scope.onFileSelect = function($files) {
+    for (var i = 0; i < $files.length; i++) {
+      var file = $files[i];
+      $scope.upload = $upload.upload({
+        url: 'file',
+        file: file
+      })
+      .progress(function(evt) {
+        $scope.progress = parseInt(100.0 * evt.loaded / evt.total);
+      })
+      .success(function(data, status, headers, config) {
+        $scope.data[$scope.element.name] = data.data.id;
+      });
+    }
+  };
+}
+//FileElementController.$inject = ['$scope', '$location', '$upload', 'applicationState', 'Choko'];
+
 function SubElementController($scope, $location, applicationState, Choko) {
   $scope.subElement.template = $scope.subElement.template || 'templates/' + $scope.subElement.type + '.html';
 }
