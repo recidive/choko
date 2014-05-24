@@ -23,8 +23,9 @@ var RouteController = module.exports = function(application, settings) {
 
   var self = this;
   var app = this.application.application;
+  var method = settings.method || 'all';
 
-  app.all(self.settings.path, function(request, response) {
+  app[method](self.settings.path, function(request, response) {
     self.handle(request, response);
   });
 };
