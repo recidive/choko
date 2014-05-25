@@ -4,8 +4,8 @@
 
 'use strict';
 
-/* Services */
-angular.module('choko.services', [])
+// Append services to main choko module.
+angular.module('choko')
 
   /**
    * Choko main REST factory.

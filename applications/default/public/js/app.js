@@ -11,7 +11,6 @@ var dependencies = [
   'ngSanitize',
   'summernote',
   'angularFileUpload',
-  'choko.services',
   'choko.filters'
 ];
 
