@@ -22,7 +22,7 @@ angular.module('choko')
    * @param  {object} $http
    * @param  {object} $compile
    */
-  .directive('ckReplace', function($http, $compile) {
+  .directive('ckReplace', ['$http', '$compile', function($http, $compile) {
     return {
       restrict: 'E',
       scope: true,
@@ -38,7 +38,7 @@ angular.module('choko')
         };
       }
     };
-  })
+  }])
 
   /**
    * Handles button or button groups for navigation bars.
@@ -47,7 +47,7 @@ angular.module('choko')
    * @param  {object} $http
    * @param  {object} $compile
    */
-  .directive('ckButton', function($http, $compile) {
+  .directive('ckButton', ['$http', '$compile', function($http, $compile) {
     return {
       restrict: 'E',
       scope: true,
@@ -66,7 +66,7 @@ angular.module('choko')
         };
       }
     };
-  });
+  }]);
 
 /**
  * Helper function to retrive a template for a element, compile it and
