@@ -1,5 +1,5 @@
 /**
- * @file Choko directives.
+ * @file Choko core directives.
  */
 
 'use strict';
@@ -22,7 +22,7 @@ angular.module('choko')
    * @param  {object} $http
    * @param  {object} $compile
    */
-  .directive('ckReplace', function($http, $compile, $injector) {
+  .directive('ckReplace', function($http, $compile) {
     return {
       restrict: 'E',
       scope: true,
@@ -41,12 +41,13 @@ angular.module('choko')
   })
 
   /**
-   * [description]
-   * @param  {[type]} $http
-   * @param  {[type]} $compile
-   * @return {[type]}
+   * Handles button or button groups for navigation bars.
+   * @todo
+   *         be moved to this extension's directory.
+   * @param  {object} $http
+   * @param  {object} $compile
    */
-  .directive('ckButton', function($http, $compile, $injector) {
+  .directive('ckButton', function($http, $compile) {
     return {
       restrict: 'E',
       scope: true,
@@ -56,7 +57,7 @@ angular.module('choko')
           // Add bootstrap button class.
           scope.item.classes = scope.item.classes || ['btn-default'];
 
-          // @TODO: we should probably allow for custom templates, as we do in
+          // @todo: we should probably allow for custom templates, as we do in
           // cdReplace directive above.
           var template = scope.item.items ? '/templates/btn-group-dropdown.html' : '/templates/btn-group-button.html';
           

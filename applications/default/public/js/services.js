@@ -1,3 +1,7 @@
+/**
+ * @file Choko core services.
+ */
+
 'use strict';
 
 /* Services */
