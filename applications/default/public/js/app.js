@@ -10,8 +10,7 @@ var dependencies = [
   'ngResource',
   'ngSanitize',
   'summernote',
-  'angularFileUpload',
-  'choko.filters'
+  'angularFileUpload'
 ];
 
 // Declare main choko module.

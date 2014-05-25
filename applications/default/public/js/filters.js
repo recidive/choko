@@ -4,7 +4,7 @@
 
 'use strict';
 
-angular.module('choko.filters', [])
+angular.module('choko')
   .filter('interpolate', ['version', function(version) {
     return function(text) {
       return String(text).replace(/\%VERSION\%/mg, version);
