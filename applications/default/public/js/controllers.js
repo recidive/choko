@@ -1,3 +1,7 @@
+/**
+ * @file Choko core controllers.
+ */
+
 'use strict';
 
 function ApplicationController($scope, $location, $http, applicationState, Choko) {

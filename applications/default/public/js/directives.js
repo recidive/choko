@@ -6,7 +6,7 @@
 
 // Append directives to main choko module.
 angular.module('choko')
-  
+
   /**
    * Directive to return the application's version.
    * @param  {string} version
