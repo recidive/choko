@@ -1,6 +1,8 @@
-'use strict';
+/**
+ * @file Choko core filters.
+ */
 
-/* Filters */
+'use strict';
 
 angular.module('choko.filters', [])
   .filter('interpolate', ['version', function(version) {
