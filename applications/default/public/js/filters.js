@@ -5,11 +5,6 @@
 'use strict';
 
 angular.module('choko')
-  .filter('interpolate', ['version', function(version) {
-    return function(text) {
-      return String(text).replace(/\%VERSION\%/mg, version);
-    }
-  }])
 
   /**
    * Returns the keys of a given acceptable value/object.
