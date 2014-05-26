@@ -26,7 +26,7 @@ var RouteController = module.exports = function(application, settings) {
   var method = settings.method || 'all';
   var middleware = settings.middleware || function (request, response, next) {
     next();
-  }
+  };
 
   app[method](self.settings.path, middleware, function(request, response) {
     self.handle(request, response);
