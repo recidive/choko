@@ -8,7 +8,7 @@ angular.module('choko')
 
   // Filter to get an array of keys for an object.
   .filter('keys', function() {
-    
+
     /**
      * Returns the keys of a given acceptable value/object.
      * @param {object|array|function} input
@@ -20,3 +20,4 @@ angular.module('choko')
 
     return objectKeysFilter;
   });
+        
