@@ -7,11 +7,7 @@
 // Append services to main choko module.
 angular.module('choko')
 
-  /**
-   * Choko main REST factory.
-   * @param  {object} $resource
-   * @return {object} A RESTful resource.
-   */
+  // Choko main REST factory.
   .factory('Choko', ['$resource', function($resource) {
 
     var url = '/rest/:type/:key';
@@ -30,8 +26,8 @@ angular.module('choko')
         transformResponse: function (data) {
           return angular.fromJson(data).data;
         },
-        // Data is an object containing a property called data, which contains
-        // the actual retrieved data.
+        // Server will always return an object containing at least a 'data'
+        // property to hold the actual data and a status property.
         isArray: false
       }
     }
@@ -39,10 +35,8 @@ angular.module('choko')
     return $resource(url, defaultParams, actions);
   }])
 
-  /**
-   * Application state wrapper, to be shared across controllers.
-   * P.s.: States are actual scopes.
-   */
+  // Application state wrapper, to be shared across controllers.
+  // P.s.: States are actual scope objects.
   .factory('applicationState', function() {
     var state = {};
     return {

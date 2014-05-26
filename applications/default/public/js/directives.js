@@ -7,21 +7,14 @@
 // Append directives to main choko module.
 angular.module('choko')
 
-  /**
-   * Directive to return the application's version.
-   * @param  {string} version
-   */
+  // Directive to return the application's version.
   .directive('appVersion', ['version', function(version) {
     return function(scope, elm, attrs) {
       elm.text(version);
     };
   }])
 
-  /**
-   * Replaces any tag with overridable templates from the server.
-   * @param  {object} $http
-   * @param  {object} $compile
-   */
+  // Directive to replaces any tag with overridable templates from the server.
   .directive('ckReplace', ['$http', '$compile', function($http, $compile) {
     return {
       restrict: 'E',
@@ -40,13 +33,9 @@ angular.module('choko')
     };
   }])
 
-  /**
-   * Handles button or button groups for navigation bars.
-   * @todo
-   *         be moved to this extension's directory.
-   * @param  {object} $http
-   * @param  {object} $compile
-   */
+  // Handles button or button groups for navigation bars.
+  // @todo This directive is specifically used by the navigation extension.
+  //       Therefore it should be moved to this extension's directory.
   .directive('ckButton', ['$http', '$compile', function($http, $compile) {
     return {
       restrict: 'E',
@@ -71,6 +60,7 @@ angular.module('choko')
 /**
  * Helper function to retrive a template for a element, compile it and
  * replace the element with it's newly compiled one.
+ * @todo Create a new directive to acomplish this behavior.
  * @param  {object} scope
  * @param  {object} element
  * @param  {string} templateUrl

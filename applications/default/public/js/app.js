@@ -21,10 +21,7 @@ angular.module('choko', dependencies)
   // value but other metadata that might be used thoughout the application.
   .value('version', '0.0.4')
 
-  /**
-   * Configures the location provider.
-   * @param  {object} $locationProvider
-   */
+  // Location/routing configuration.
   .config(['$locationProvider', function($locationProvider) {
 
     // Use HTML5 mode to remove "#" symbols from angular-routed pages.
