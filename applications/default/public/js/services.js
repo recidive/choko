@@ -18,11 +18,6 @@ angular.module('choko')
     var actions = {
       'get': {
         method: 'GET',
-        /**
-         * Modifies and parses the returned data.
-         * @param  {object} data
-         * @return {object|object[]} data.data
-         */
         transformResponse: function (data) {
           return angular.fromJson(data).data;
         },
