@@ -15,7 +15,7 @@ angular.module('choko')
      * @return {array}
      */
     function objectKeysFilter(input) {
-      return Boolean(['object', 'function'].indexOf(typeof input) + 1) ? Object.keys(input) : [];
+      return ~['object', 'function'].indexOf(typeof input) ? Object.keys(input) : [];
     }
 
     return objectKeysFilter;
