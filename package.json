@@ -2,7 +2,11 @@
   "name": "choko",
   "version": "0.0.4",
   "description": "High performance and high level web application framework.",
-  "keywords": ["framework", "web", "choko"],
+  "keywords": [
+    "framework",
+    "web",
+    "choko"
+  ],
   "repository": "git://github.com/recidive/choko.git",
   "dependencies": {
     "prana": "0.0.x",
@@ -16,7 +20,8 @@
     "passport-local": "0.1.x",
     "validator": "2.0.x",
     "mkdirp": "0.3.x",
-    "node-uuid": "1.4.x"
+    "node-uuid": "1.4.x",
+    "lodash": "2.x.x"
   },
   "bin": {
     "choko": "bin/choko"
