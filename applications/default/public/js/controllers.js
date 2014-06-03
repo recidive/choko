@@ -105,7 +105,7 @@ function RegionController($scope, $location, applicationState, Choko) {
 //RegionController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
 function NavigationController($scope, $location, $window, applicationState, Choko) {
-  $scope.panel.classes.unshift('nav');
+  ($scope.panel.classes = $scope.panel.classes || []).unshift('nav');
 
   $scope.isAbsolute = function(url) {
     return /^(?:[a-z]+:)?\/\//i.test(url);
