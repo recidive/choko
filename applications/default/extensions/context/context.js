@@ -228,6 +228,62 @@ context.contextConditionType = function(conditionTypes, callback) {
     }
   };
 
+  newConditionTypes['and'] = {
+    title: 'And',
+    standalone: false,
+    fields: {
+      value: {
+        title: 'Conditions',
+        type: 'reference',
+        reference: {
+          type: 'contextCondition',
+          multiple: true,
+          inline: true
+        }
+      }
+    },
+    check: function(request, conditions, callback) {
+      var conditionTypeNames = Object.keys(conditions);
+      async.filter(conditionNames, function(conditionTypeName, next) {
+        application.load('contextConditionType', conditionTypeName, function(err, conditionType) {
+          conditionType.check(request, conditions[conditionTypeName], function(match) {
+            next(match);
+          });
+        });
+      }, function(result) {
+        // Check if all conditions passed.
+        callback(result.length == conditionTypeNames.length);
+      });
+    }
+  };
+
+  newConditionTypes['or'] = {
+    title: 'Or',
+    standalone: false,
+    fields: {
+      value: {
+        title: 'Conditions',
+        type: 'reference',
+        reference: {
+          type: 'contextCondition',
+          multiple: true,
+          inline: true
+        }
+      }
+    },
+    check: function(request, conditions, callback) {
+      async.detect(Object.keys(conditions), function(conditionTypeName, next) {
+        application.load('contextConditionType', conditionTypeName, function(err, conditionType) {
+          conditionType.check(request, conditions[conditionTypeName], function(match) {
+            next(match);
+          });
+        });
+      }, function(result) {
+        callback(result !== undefined);
+      });
+    }
+  };
+
   callback(null, newConditionTypes);
 };
 
