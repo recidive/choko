@@ -195,6 +195,7 @@ context.context = function(contexts, callback) {
  */
 context.contextConditionType = function(conditionTypes, callback) {
   var newConditionTypes = {};
+  var application = this.application;
 
   newConditionTypes['siteWide'] = {
     title: 'Site wide',
