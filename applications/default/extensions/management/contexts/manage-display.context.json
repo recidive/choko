@@ -1,0 +1,21 @@
+{
+  "title": "Display management pages",
+  "description": "Display management pages context.",
+  "weight": -1,
+  "conditions": {
+    "path": [
+      "/manage/displays",
+      "/manage/displays/*"
+    ]
+  },
+  "reactions": {
+    "panel": {
+      "page-header": [
+        {
+          "name": "navigation-display-management-toolbar",
+          "weight": 0
+        }
+      ]
+    }
+  }
+}

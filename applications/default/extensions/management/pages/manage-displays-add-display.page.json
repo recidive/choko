@@ -1,0 +1,8 @@
+{
+  "path": "/manage/displays/add-display",
+  "title": "Add display",
+  "access": "manage-displays",
+  "type": "form",
+  "formName": "type-display",
+  "redirect": "/manage/displays"
+}

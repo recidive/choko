@@ -1,0 +1,16 @@
+{
+  "title": "Display management toolbar",
+  "template": "/templates/btn-group.html",
+  "classes": [
+    "btn-group-sm"
+  ],
+  "items": [
+    {
+      "title": "Add display",
+      "url": "/manage/displays/add-display",
+      "classes": [
+        "btn-primary"
+      ]
+    }
+  ]
+}
