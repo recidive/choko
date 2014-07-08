@@ -32,6 +32,10 @@
       "url": "/manage/layouts"
     },
     {
+      "title": "Displays",
+      "url": "/manage/displays"
+    },
+    {
       "title": "Navigations",
       "url": "/manage/navigations"
     },
