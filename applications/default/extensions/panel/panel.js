@@ -167,6 +167,7 @@ panel.panel = function(panels, callback) {
     title: 'Brand',
     description: 'Application name or logo.',
     bare: true,
+    html: false,
     content: this.application.settings.application.name
   }
 
