@@ -1,0 +1,16 @@
+{
+  "title": "Layout management toolbar",
+  "template": "/templates/btn-group.html",
+  "classes": [
+    "btn-group-sm"
+  ],
+  "items": [
+    {
+      "title": "Add layout",
+      "url": "/manage/layouts/add-layout",
+      "classes": [
+        "btn-primary"
+      ]
+    }
+  ]
+}
