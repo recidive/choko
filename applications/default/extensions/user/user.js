@@ -135,6 +135,20 @@ user.type = function(types, callback) {
       'edit': 'manage-users',
       'delete': 'manage-users'
     },
+    displays: {
+      'list-item': {
+        'content': [{
+          fieldName: 'username',
+          format: 'title',
+          weight: 0
+        },
+        {
+          fieldName: 'email',
+          format: 'paragraph',
+          weight: 5
+        }]
+      }
+    },
     statics: {
       login: function(data, callback) {
         var User = this;
