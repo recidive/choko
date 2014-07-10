@@ -298,6 +298,12 @@ function InlineReferenceElementItemController($scope, $filter, applicationState,
 //InlineReferenceElementItemController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
 function ViewController($scope, $location, $http, applicationState, Choko) {
+  
+  // Parse parameters when needed.
+  if (typeof $scope.view.itemKey !== 'undefined') {
+    $scope.view.itemKey = Params.parse($scope.view.itemKey, $scope);
+  }
+
   // Handle 'list' type views.
   if ($scope.view.type === 'list' && $scope.view.itemType) {
     $scope.items = {};
