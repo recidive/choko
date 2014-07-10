@@ -1,6 +1,6 @@
 'use strict';
 
-function ApplicationController($scope, $location, $http, applicationState, Choko) {
+function ApplicationController($scope, $location, $http, applicationState) {
   $scope.state = {};
 
   $scope.changeState = function() {
@@ -47,13 +47,17 @@ function ApplicationController($scope, $location, $http, applicationState, Choko
     $scope.changeState();
   });
 }
-//ApplicationController.$inject = ['$scope', '$location', '$http', 'applicationState', 'Choko'];
+//ApplicationController.$inject = ['$scope', '$location', '$http', 'applicationState'];
 
-function PanelController($scope, $location, $http, applicationState, Choko) {
+function PanelController($scope, $controller) {
   if ($scope.panel.type && $scope.panel.type !== 'default') {
     // Set view to the panel itself and call ViewController.
     $scope.view = $scope.panel;
-    ViewController($scope, $location, $http, applicationState, Choko);
+
+    // Inherit controller.
+    $controller('ViewController', {
+      $scope: $scope
+    });
   }
 
   if ($scope.panel.bare) {
@@ -63,9 +67,9 @@ function PanelController($scope, $location, $http, applicationState, Choko) {
     $scope.template = 'templates/panel.html';
   }
 }
-//PanelController.$inject = ['$scope', '$location', '$http', 'applicationState', 'Choko'];
+//PanelController.$inject = ['$scope', '$controller'];
 
-function PageController($scope, $location, $http, applicationState, Choko) {
+function PageController($scope, $controller) {
   if (!$scope.page.type || $scope.page.type === 'default') {
     $scope.items = $scope.page.items || {};
     $scope.title = $scope.page.title;
@@ -73,34 +77,38 @@ function PageController($scope, $location, $http, applicationState, Choko) {
   else {
     // Set view to the panel itself and call ViewController.
     $scope.view = $scope.page;
-    ViewController($scope, $location, $http, applicationState, Choko);
+
+    // Inherit controller.
+    $controller('ViewController', {
+      $scope: $scope
+    });
   }
 }
-//PageController.$inject = ['$scope', '$location', '$http', 'applicationState', 'Choko'];
+//PageController.$inject = ['$scope', '$controller'];
 
-function RowController($scope, $location, applicationState, Choko) {
+function RowController($scope) {
   $scope.name = $scope.row.name;
 
   $scope.getTemplate = function() {
     return $scope.template || 'templates/row.html';
   }
 }
-//RowController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//RowController.$inject = ['$scope'];
 
-function ColumnController($scope, $location, applicationState, Choko) {
+function ColumnController($scope) {
   $scope.name = $scope.column.name;
 
   $scope.getTemplate = function() {
     return $scope.template || 'templates/column.html';
   };
 }
-//ColumnController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//ColumnController.$inject = ['$scope'];
 
-function RegionController($scope, $location, applicationState, Choko) {
+function RegionController() {
 }
-//RegionController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//RegionController.$inject = [];
 
-function NavigationController($scope, $location, $window, applicationState, Choko) {
+function NavigationController($scope, $location) {
   $scope.panel.classes.unshift('nav');
 
   $scope.isAbsolute = function(url) {
@@ -119,22 +127,22 @@ function NavigationController($scope, $location, $window, applicationState, Chok
     return route === $location.path();
   };
 }
-//NavigationController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//NavigationController.$inject = ['$scope', '$location'];
 
-function ItemController($scope, $location, applicationState, Choko) {
+function ItemController() {
 }
-//ItemController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//ItemController.$inject = [];
 
-function DisplayRegionController($scope, $location, applicationState, Choko) {
+function DisplayRegionController() {
 }
-//DisplayRegionController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//DisplayRegionController.$inject = [];
 
-function DisplayFieldController($scope, $location, applicationState, Choko) {
+function DisplayFieldController($scope) {
   $scope.field.template = $scope.field.template || '/templates/' + $scope.field.format + '.html';
 }
-//DisplayFieldController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//DisplayFieldController.$inject = ['$scope'];
 
-function ReferenceElementController($scope, $location, applicationState, Choko) {
+function ReferenceElementController($scope) {
   Choko.get({type: $scope.element.reference.type}, function(response) {
     $scope.element.options = response;
 
@@ -159,9 +167,9 @@ function ReferenceElementController($scope, $location, applicationState, Choko) 
     }
   };
 }
-//ReferenceElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//ReferenceElementController.$inject = ['$scope'];
 
-function InlineReferenceElementController($scope, $location, applicationState, Choko) {
+function InlineReferenceElementController($scope, Choko) {
   var multiple = $scope.element.reference.multiple;
 
   // Subform errors are handled separately.
@@ -270,9 +278,9 @@ function InlineReferenceElementController($scope, $location, applicationState, C
   }
 
 }
-//InlineReferenceElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//InlineReferenceElementController.$inject = ['$scope', 'Choko'];
 
-function InlineReferenceElementItemController($scope, $filter, applicationState, Choko) {
+function InlineReferenceElementItemController($scope) {
 
   $scope.editItem = function() {
     $scope.setSubForm($scope.typeName(), !!$scope.element.reference.subtypes, $scope.item, $scope.key);
@@ -295,9 +303,9 @@ function InlineReferenceElementItemController($scope, $filter, applicationState,
   };
 
 }
-//InlineReferenceElementItemController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//InlineReferenceElementItemController.$inject = ['$scope'];
 
-function ViewController($scope, $location, $http, applicationState, Choko) {
+function ViewController($scope, $location, $http, Choko) {
   // Handle 'list' type views.
   if ($scope.view.type === 'list' && $scope.view.itemType) {
     $scope.items = {};
@@ -387,14 +395,14 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
     });
   }
 }
-//ViewController.$inject = ['$scope', '$location', '$http', 'applicationState', 'Choko'];
+//ViewController.$inject = ['$scope', '$location', '$http', 'Choko'];
 
-function ElementController($scope, $location, applicationState, Choko) {
+function ElementController($scope) {
   $scope.element.template = $scope.element.template || 'templates/' + $scope.element.type + '.html';
 }
-//ElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//ElementController.$inject = ['$scope'];
 
-function FileElementController($scope, $location, $upload, applicationState, Choko) {
+function FileElementController($scope, $upload) {
   $scope.element.template = $scope.element.template || 'templates/' + $scope.element.type + '.html';
   $scope.progress = 0;
 
@@ -418,21 +426,21 @@ function FileElementController($scope, $location, $upload, applicationState, Cho
     }
   };
 }
-//FileElementController.$inject = ['$scope', '$location', '$upload', 'applicationState', 'Choko'];
+//FileElementController.$inject = ['$scope', '$upload'];
 
-function SubElementController($scope, $location, applicationState, Choko) {
+function SubElementController($scope) {
   $scope.subElement.template = $scope.subElement.template || 'templates/' + $scope.subElement.type + '.html';
 }
-//SubElementController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//SubElementController.$inject = ['$scope'];
 
-function ButtonController($scope, $location, applicationState, Choko) {
+function ButtonController($scope) {
   $scope.call = function(func, args) {
     $scope[func].apply(this, args);
   };
 }
-//ButtonController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//ButtonController.$inject = ['$scope'];
 
-function WYSIWYGController($scope, $location, applicationState, Choko) {
+function WYSIWYGController($scope) {
   $scope.options = {
     height: $scope.element.height || 300,
     toolbar: [
@@ -444,4 +452,4 @@ function WYSIWYGController($scope, $location, applicationState, Choko) {
     ]
   };
 }
-//WYSIWYGController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+//WYSIWYGController.$inject = ['$scope'];
