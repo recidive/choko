@@ -56,11 +56,12 @@ function PanelController($scope, $location, $http, applicationState, Choko) {
     ViewController($scope, $location, $http, applicationState, Choko);
   }
 
-  if ($scope.panel.html === false) {
-    $scope.template = $scope.panel.template || 'templates/panel-content-no-html.html';
-  }
-  else if ($scope.panel.bare) {
-    $scope.template = $scope.panel.template || 'templates/panel-content.html';
+  if ($scope.panel.bare) {
+    if ($scope.panel.html === false) {
+      $scope.template = $scope.panel.template || 'templates/panel-content-no-html.html';
+    } else {
+      $scope.template = $scope.panel.template || 'templates/panel-content.html';
+    }
   }
   else {
     $scope.template = 'templates/panel.html';
