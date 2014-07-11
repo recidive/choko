@@ -304,6 +304,11 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
     $scope.view.itemKey = Params.parse($scope.view.itemKey, $scope);
   }
 
+  // Parse other params.
+  Object.keys($scope.view.params || {}).forEach(function (param) {
+    $scope.view.params[param] = Params.parse($scope.view.params[param], $scope);
+  });
+
   // Handle 'list' type views.
   if ($scope.view.type === 'list' && $scope.view.itemType) {
     $scope.items = {};
