@@ -264,11 +264,13 @@ panel.responseAlter = function (data, callback) {
       // Consider empty by default.
       region.empty = true;
 
+      // Check if region has content.
       if (region.region == true) {
         region.empty = !Boolean(panels[region.name] && panels[region.name].length);
       }
+
       // Iterate recursively
-      else if (region[childType] && region[childType].length) {
+      if (region[childType] && region[childType].length) {
         region[childType].forEach(function (childRegion) {
           var childEmpty = findContent(childRegion, childType == 'rows' ? 'columns' : 'rows');
           region.empty = !region.empty ? region.empty : childEmpty;
