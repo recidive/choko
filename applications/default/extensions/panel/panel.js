@@ -199,19 +199,24 @@ panel.contextReactionType = function(reactionTypes, callback) {
       }
     },
     react: function(request, response, regionPanels, callback) {
+
+      // Get panel type.
+      var Panel = self.application.type('panel'); 
+
       // Initialize panels container if not initialized yet.
       response.payload.panels = response.payload.panels || {};
 
       // Add all panels to response payload.
       async.each(Object.keys(regionPanels), function(regionName, next) {
+
         // Initialize panels container if not initialized yet.
         response.payload.panels[regionName] = response.payload.panels[regionName] || [];
         var panels = regionPanels[regionName];
+
         // A context can set several panels for a region.
         async.each(panels, function(regionPanel, next) {
-          // Load the panel.
-          var Panel = self.application.type('panel');
 
+          // Load the panel.
           Panel.load(regionPanel.name, function(err, panel) {
             if (err) {
               return callback(err);
@@ -238,4 +243,44 @@ panel.contextReactionType = function(reactionTypes, callback) {
   };
 
   callback(null, newReactionTypes);
+};
+
+/**
+ * The responseAlter() hook.
+ */
+panel.responseAlter = function (data, callback) {
+
+  var payload = data.payload || {};
+  var layout = payload.data && payload.data.layout; 
+  var panels = payload.data && payload.data.panels;
+
+  if (layout && panels) {
+
+    /**
+     * Recursively verifies if a row/column is empty.
+     */
+    function findContent(region, childType) {
+
+      // Consider empty by default.
+      region.empty = true;
+
+      if (region.region == true) {
+        region.empty = !Boolean(panels[region.name] && panels[region.name].length);
+      }
+      // Iterate recursively
+      else if (region[childType] && region[childType].length) {
+        region[childType].forEach(function (childRegion) {
+          var childEmpty = findContent(childRegion, childType == 'rows' ? 'columns' : 'rows');
+          region.empty = !region.empty ? region.empty : childEmpty;
+        });
+      }
+
+      return region.empty;
+    }
+
+    // As a layout contains rows, it behaves much like a column itself.
+    findContent(layout, 'rows');
+  }
+
+  callback();
 };
