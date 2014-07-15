@@ -125,7 +125,7 @@ RouteController.respond = function(request, response, content, code) {
 
   // Run responseAlter() hook on all extensions.
   this.application.invoke('responseAlter', payload, request, response, function() {
-    response.send(payload.status.code, responseData.payload);
+    response.send(payload.status.code, payload);
   });
 };
 
