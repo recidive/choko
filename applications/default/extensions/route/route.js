@@ -25,7 +25,7 @@ route.init = function(application, callback) {
 
       // The last middleware is the one that catches 404 errors.
       self.application.application.use(function(req, res, next){
-        RouteController.notFound(req, res);
+        RouteController.notFound.call(self, req, res);
       });
 
       callback();
