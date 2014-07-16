@@ -110,9 +110,8 @@ RouteController.prototype.access = function(request, response, callback) {
  * @param {Number} [code] HTTP status code.
  */
 RouteController.respond = function(request, response, content, code) {
-
-  // Set defaults.
-  code = typeof code != 'undefined' ? code : 200;
+  // Default to 200 (success).
+  var code = code || 200;
   var payload = {
     status: {
       code: code
