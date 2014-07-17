@@ -123,9 +123,8 @@ RouteController.prototype.access = function(request, response, callback) {
  * @param {Number} [code] HTTP status code.
  */
 RouteController.respond = function(request, response, content, code) {
-
-  // Set defaults.
-  code = typeof code != 'undefined' ? code : 200;
+  // Default to 200 (success).
+  var code = code || 200;
   var payload = {
     status: {
       code: code
@@ -136,8 +135,8 @@ RouteController.respond = function(request, response, content, code) {
     payload.data = content;
   }
 
-  // Run responseAlter() hook on all extensions.
-  this.application.invoke('responseAlter', payload, request, response, function() {
+  // Run response() hook on all extensions.
+  this.application.invoke('response', payload, request, response, function() {
     response.send(payload.status.code, payload);
   });
 };
