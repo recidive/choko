@@ -260,9 +260,9 @@ panel.responseAlter = function (payload, request, response, callback) {
      */
     function findContent(region, childType) {
 
-      // Consider empty by default, unless when region it told to always be
-      // visible.
-      region.empty = region.alwaysVisible || true;
+      // Consider empty by default, unless when region is told to always be
+      // rendered.
+      region.empty = region.alwaysRender || true;
 
       // Check if region has content.
       if (region.empty && region.region == true) {
