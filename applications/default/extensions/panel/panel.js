@@ -246,9 +246,9 @@ panel.contextReactionType = function(reactionTypes, callback) {
 };
 
 /**
- * The responseAlter() hook.
+ * The response() hook.
  */
-panel.responseAlter = function (payload, request, response, callback) {
+panel.response = function (payload, request, response, callback) {
 
   var layout = payload.data && payload.data.layout; 
   var panels = payload.data && payload.data.panels;
