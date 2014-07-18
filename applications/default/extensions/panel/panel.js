@@ -262,7 +262,7 @@ panel.responseAlter = function (payload, request, response, callback) {
 
       // Consider empty by default, unless when region is told to always be
       // rendered.
-      region.empty = region.alwaysRender || true;
+      region.empty = region.alwaysRender ? false : true;
 
       // Check if region has content.
       if (region.empty && region.region == true) {
