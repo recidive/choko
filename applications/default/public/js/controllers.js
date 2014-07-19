@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('choko.controllers', [])
-  
-  .controller('ApplicationController', ['$scope', '$location', '$http', 'applicationState',
-    function ($scope, $location, $http, applicationState) {
-      $scope.state = {};
 
-      $scope.changeState = function() {
+  .controller('ApplicationController', ['$rootScope', '$location', '$http', 'applicationState',
+    function ($rootScope, $location, $http, applicationState) {
+      $rootScope.state = {};
+
+      $rootScope.changeState = function() {
         var path = (!$location.path() || $location.path() == '/') ? '/home' : $location.path();
 
         $http.get(path)
@@ -17,37 +17,37 @@ angular.module('choko.controllers', [])
           }
 
           // Rebuild the layout only when context changes.
-          if ($scope.contexts instanceof Array && $scope.contexts.toString() == data.data.contexts.toString()) {
+          if ($rootScope.contexts instanceof Array && $rootScope.contexts.toString() == data.data.contexts.toString()) {
             // Update only panels in content region, and page information.
             // @todo: get the region the page-content panel is attached to
             // dinamically currently this is hadcoded to 'content' and will not work
             // if the page-content panel is attacehd to a different region.
-            $scope.panels['content'] = data.data.panels['content'];
-            $scope.page = data.data.page;
+            $rootScope.panels['content'] = data.data.panels['content'];
+            $rootScope.page = data.data.page;
           }
           else {
             // Merge data from the server.
-            angular.extend($scope, data.data);
+            angular.extend($rootScope, data.data);
 
             // Store scope as application state.
-            applicationState.set($scope);
+            applicationState.set($rootScope);
           }
         })
         .error(function(data, status, headers, config) {
           // Merge data from the server.
-          angular.extend($scope.page, data.data);
+          angular.extend($rootScope.page, data.data);
 
-          $scope.page.template = '/templates/error.html';
+          $rootScope.page.template = '/templates/error.html';
 
           // Store scope as application state.
-          applicationState.set($scope);
+          applicationState.set($rootScope);
         });
       }
 
-      $scope.$watch(function() {
+      $rootScope.$watch(function() {
         return $location.path();
       }, function(){
-        $scope.changeState();
+        $rootScope.changeState();
       });
     }])
 
