@@ -313,7 +313,12 @@ function ViewController($scope, $location, $http, applicationState, Choko) {
   if ($scope.view.type === 'list' && $scope.view.itemType) {
     $scope.items = {};
 
-    Choko.get({type: $scope.view.itemType}, function(response) {
+    var params = {type: $scope.view.itemType};
+    Object.keys($scope.view.params || {}).forEach(function (param) {
+      params[param] = $scope.view.params[param];
+    });
+
+    Choko.get(params, function(response) {
       $scope.items = response;
     });
 
