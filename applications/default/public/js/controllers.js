@@ -185,6 +185,9 @@ angular.module('choko')
         if ($scope.view.template) {
           Choko.get(query, function(response) {
             $scope.items = response;
+            $scope.items.$empty = Object.keys($scope.items).filter(function(key) {
+              return key.indexOf('$') !== 0;
+            }).length ? false : true;
           });
         }
 
