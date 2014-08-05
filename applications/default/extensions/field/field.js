@@ -162,6 +162,7 @@ field.fieldCallback = function(hook) {
 
   // Add pre operation hooks that call callbacks on fields.
   ['pre', 'post'].forEach(function(kind) {
-    field[kind + operationCapitalized] = field.fieldCallback('pre' + operationCapitalized);
+    var hook = kind + operationCapitalized;
+    field[hook] = field.fieldCallback(hook);
   });
 });
