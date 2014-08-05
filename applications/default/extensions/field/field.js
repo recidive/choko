@@ -79,14 +79,6 @@ field.field = function(fields, callback) {
       next(null, new Boolean(validator.isEmail(item[settings.name].toString())) || 'Invalid email.');
     }
   };
-  newFields['password'] = {
-    title: 'Password',
-    element: 'password',
-    validate: function(settings, item, next) {
-      var minLength = settings.minLength || 6;
-      next(null, validator.len(item[settings.name].toString(), settings.minLength || 6) || 'Password must have at least ' + minLength + ' characters.');
-    }
-  };
   newFields['url'] = {
     title: 'URL',
     element: 'url',
@@ -94,9 +86,17 @@ field.field = function(fields, callback) {
       next(null, validator.isUrl(item[settings.name].toString()) || 'Invalid URL.');
     }
   };
-  newFields['submit'] = {
-    title: 'Submit',
-    element: 'submit'
+  newFields['telephone'] = {
+    title: 'Telephone',
+    element: 'tel'
+  };
+  newFields['password'] = {
+    title: 'Password',
+    element: 'password',
+    validate: function(settings, item, next) {
+      var minLength = settings.minLength || 6;
+      next(null, validator.len(item[settings.name].toString(), settings.minLength || 6) || 'Password must have at least ' + minLength + ' characters.');
+    }
   };
 
   callback(null, newFields);
