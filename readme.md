@@ -39,7 +39,7 @@
 ## Directory structure
 
 ```
-applications   -> Where all applications live.
+applications   -> Where core applications live.
   default      -> Default application, all other applications extend this.
     extensions -> Default application extensions.
     public     -> Default application public files.
