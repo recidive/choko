@@ -1,3 +1,3 @@
 <div ng-repeat="item in items" ng-controller="ItemController" ng-include="view.itemTemplate || 'item.html'" href="#" class="item"></div>
 
-<div ng-if="items.$empty" ng-include="view.emptyTemplate || 'templates/empty.html'" class="no-items"></div>
+<div ng-if="items.$empty" ng-include="view.emptyTemplate || 'templates/empty.html'" class="empty"></div>
