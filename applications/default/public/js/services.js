@@ -1,29 +1,38 @@
+/**
+ * @file Choko core services.
+ */
+
 'use strict';
 
-/* Services */
-angular.module('choko.services', [])
-  // Single value service for Choko version.
-  .value('version', '0.0.1')
+// Append services to main choko module.
+angular.module('choko')
 
-  .factory('Choko', function($resource) {
-    return $resource('/rest/:type/:key', {
+  // Choko main REST factory.
+  .factory('Choko', ['$resource', function($resource) {
+
+    var url = '/rest/:type/:key';
+    var defaultParams = {
       type: '@type',
       key: '@key'
-    },
-    {
+    };
+    var actions = {
       'get': {
         method: 'GET',
         transformResponse: function (data) {
           return angular.fromJson(data).data;
         },
-        // Data is an Object, not an Array.
+        // Server will always return an object containing at least a 'data'
+        // property to hold the actual data and a status property.
         isArray: false
       }
-    });
-  })
+    }
 
-  // Shared server with application state.
-  .factory('applicationState', function($rootScope) {
+    return $resource(url, defaultParams, actions);
+  }])
+
+  // Application state wrapper, to be shared across controllers.
+  // P.s.: States are actual scope objects.
+  .factory('applicationState', function() {
     var state = {};
     return {
       get: function() {
@@ -31,6 +40,6 @@ angular.module('choko.services', [])
       },
       set: function(newState) {
         return state = newState;
-      },
+      }
     };
   });
