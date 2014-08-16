@@ -52,6 +52,6 @@ repository folder.
 
 ## Coding style
 
-We try to conform to [Felix's Node.js Style Guide](http://nodeguide.com/style.html)
+We try to conform to [Felix's Node.js Style Guide](https://github.com/felixge/node-style-guide)
 for all of our JavaScript code. For coding documentation we use [JSDoc](http://usejsdoc.org/)
 style.
