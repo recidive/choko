@@ -4,7 +4,10 @@ var request = require('supertest');
 // Util variables.
 var testingUrl = 'http://localhost:3200';
 
+// User related utility functions.
 var userHelper = {
+
+  // Generate sample user data used in tests.
   sample: function (confirmation) {
     var user = {
       username: 'user',
@@ -19,6 +22,8 @@ var userHelper = {
 
     return user;
   },
+
+  // Generate credentials used in tests.
   credentials: function () {
     return {
       username: 'user',
