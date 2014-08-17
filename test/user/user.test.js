@@ -73,7 +73,6 @@ describe('User extension', function(done) {
   });
   
   it('should create an account', function(done) {
-    console.log(userHelper.sample(true))
     request(testingUrl)
       .post('/create-account-submit')
       .send(userHelper.sample(true))
