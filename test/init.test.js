@@ -17,20 +17,20 @@ before(function(done) {
 
 beforeEach(function(done) {
   var db = this.getServer().getApplication('localhost').storage('database').database;
-  
+
   db.collections(function(err, collections) {
     var droppers = collections.map(function (collection) {
       return function (next) {
         db.dropCollection(collection.collectionName, next);
       };
     });
-    
+
     async.parallel(droppers, function () {
       done();
     });
   });
 });
 
-after(function(done) {  
+after(function(done) {
   server.stop(done);
 });
