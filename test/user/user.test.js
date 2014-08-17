@@ -34,14 +34,14 @@ var userHelper = {
 
 describe('User extension', function(done) {
 
-  it('should not authenticate a user with a wrong username or password', function(done) {
+  it('should not authenticate an user with wrong credentials', function(done) {
     request(testingUrl)
       .post('/sign-in-submit')
       .send(userHelper.sample())
       .expect(401, done);
   });
 
-  it('should authenticate a user', function(done) {
+  it('should authenticate an user with correct credentials', function(done) {
     var application = this.getServer().getApplication('localhost');
     var User = application.type('user');
 
@@ -57,7 +57,7 @@ describe('User extension', function(done) {
     });
   });
 
-  it('should not create an account with a less then (?) char passwords', function(done) {
+  it('should not create an account with a password less then 6 characters long', function(done) {
     var application = this.getServer().getApplication('localhost');
     var User = application.type('user');
 
@@ -77,14 +77,14 @@ describe('User extension', function(done) {
     });
   });
 
-  it('should create an account', function(done) {
+  it('should create an user account', function(done) {
     request(testingUrl)
       .post('/create-account-submit')
       .send(userHelper.sample(true))
       .expect(201, done);
   });
 
-  it('should create a user and perform login via REST', function(done) {
+  it('should create an user account and log in', function(done) {
     request(testingUrl)
       .post('/create-account-submit')
       .send(userHelper.sample(true))
