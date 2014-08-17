@@ -1,5 +1,6 @@
 var assert = require('assert');
 var request = require('supertest');
+var agent = request.agent();
 
 // Util variables.
 var testingUrl = 'http://localhost:3200';
@@ -95,4 +96,43 @@ describe('User extension', function(done) {
           .expect(200, done);
       });
   });
+
+  it('should create an user account via POST, log in then log out', function(done) {
+    // Create account.
+    request(testingUrl)
+      .post('/create-account-submit')
+      .send(userHelper.sample(true))
+      .expect(201, function () {
+
+        // Sign in.
+        request(testingUrl)
+          .post('/sign-in-submit')
+          .send(userHelper.credentials())
+          .end(function (err, res) {
+            if (err) {
+              throw err;
+            }
+
+            // Save cookies from response.
+            agent.saveCookies(res);
+
+            var req = request(testingUrl)
+              .get('/sign-out');
+
+            // Apply Cookies to request.
+            agent.attachCookies(req);
+
+            req.expect(200, function() {
+
+              // Test user can access the log in page.
+              request(testingUrl)
+                .get('/sign-in')
+                .expect(200, done);
+
+            });
+
+          });
+      });
+  });
+
 });
