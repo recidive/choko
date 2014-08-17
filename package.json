@@ -23,6 +23,10 @@
     "node-uuid": "1.4.x",
     "lodash": "2.x.x"
   },
+  "devDependencies": {
+    "mocha": "*",
+    "supertest": "0.13.x"
+  },
   "bin": {
     "choko": "bin/choko"
   },
