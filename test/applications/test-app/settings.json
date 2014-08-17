@@ -1,0 +1,8 @@
+{
+  "database": "mongodb://localhost/test-application",
+  "sessionSecret": "no-secrets",
+  "application": {
+    "name": "Test application"
+  },
+  "extensions": {}
+}
