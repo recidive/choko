@@ -50,7 +50,6 @@ rest.route = function(routes, callback) {
 
     // List or add items.
     newRoutes['/rest' + type.path] = {
-      access: true,
       callback: function(request, response, callback) {
         if (request.method == 'GET') {
           // @todo: filter out dangerous stuff from query before passing it to
@@ -78,7 +77,6 @@ rest.route = function(routes, callback) {
 
     // Get, update or delete an item.
     newRoutes['/rest' + type.path + '/:' + type.name] = {
-      access: true,
       callback: function(request, response, callback) {
         if (request.method == 'GET') {
           return typeModel.load(request.params[type.name], callback);
