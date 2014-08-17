@@ -57,7 +57,7 @@ describe('User extension', function(done) {
     });
   });
 
-  it('should not create an account with a password less then 6 characters long', function(done) {
+  it('should not create an account via API with a password less then 6 characters long', function(done) {
     var application = this.getServer().getApplication('localhost');
     var User = application.type('user');
 
@@ -77,14 +77,14 @@ describe('User extension', function(done) {
     });
   });
 
-  it('should create an user account', function(done) {
+  it('should create an user account via POST', function(done) {
     request(testingUrl)
       .post('/create-account-submit')
       .send(userHelper.sample(true))
       .expect(201, done);
   });
 
-  it('should create an user account and log in', function(done) {
+  it('should create an user account via POST and log in', function(done) {
     request(testingUrl)
       .post('/create-account-submit')
       .send(userHelper.sample(true))
