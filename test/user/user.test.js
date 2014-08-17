@@ -40,14 +40,35 @@ describe('User extension', function(done) {
     var application = this.getServer().getApplication('localhost');
     var User = application.type('user');
     
-    new User(userHelper.sample()).save(function(error, newAccount) {
+    new User(userHelper.sample()).validateAndSave(function(error, newAccount) {
       if (error) {
-        assert.fail('error saving');
+        return assert.fail('error saving');
       }
+      
       request(testingUrl)
         .post('/sign-in-submit')
         .send(userHelper.credentials())
         .expect(200, done);
+    });
+  });
+  
+  it('should not create an account with a less then (?) char passwords', function(done) {
+    var application = this.getServer().getApplication('localhost');
+    var User = application.type('user');
+    
+    var user = userHelper.sample();
+    user.password = 'small';
+    
+    new User(user).validateAndSave(function(error, newAccount, errors) {
+      if (error) {
+        return assert.fail('error saving');
+      }
+      
+      if (errors && errors.length && errors[0] == 'Password must have at least 6 characters.') {
+        return done();
+      }
+      
+      assert.fail('Saved user with invalid password');
     });
   });
   
