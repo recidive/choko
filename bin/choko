@@ -8,10 +8,11 @@ var program = require('commander');
 var Server = require('../lib/server');
 
 program
+  .command('*')
   .version('0.0.4')
   .usage('[options] [dir]')
   .option('-p, --port <number>', 'start server at specified port', parseInt, 3000)
-  .parse(process.argv);
+  .action(start);
 
 // If a dirname wasn't passed, run applications in current folder.
 var dir = program.args.length ? path.normalize(program.args[0]) : path.normalize(process.cwd());
@@ -19,14 +20,21 @@ var port = program.port;
 
 var start = function(callback) {
   var server = new Server(dir);
+  
+  if (!isInstalled) {
+    return install(callback);  
+  }
 
   // Get port from -p or --port argument or fallback to 3000.
   server.start(port, callback);
+};
+
+var isInstalled = function(callback) {
+  return fs.existsSync(path.join(dir, '/applications.json'));
 }
 
-var installed = fs.existsSync(path.join(dir, '/applications.json'));
+var install = function(callback) {
 
-if (!installed) {
   var dirMode = program.args.length ? 'specified' : 'current';
   program.confirm('No applications found on ' + dirMode + ' folder, create an application repository on the ' + dirMode + ' path? ', function(ok) {
     if (!ok) {
@@ -60,7 +68,19 @@ if (!installed) {
       });
     });
   });
-}
-else {
-  start();
-}
+};
+
+
+program
+  .command('start')
+  .description('Run the Choko server.')
+  .action(start);
+  
+/*program
+  .command('test')
+  .description('Run the Choko server.')
+  .action(function ());
+  */
+
+   
+program.parse(process.argv);
