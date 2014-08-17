@@ -1,17 +1,38 @@
 var assert = require('assert');
 var request = require('supertest');
 
+// Util variables.
 var testingUrl = 'http://localhost:3200';
+
+var userHelper = {
+  sample: function (confirmation) {
+    var user = {
+      username: 'user',
+      password: 'password',
+      roles: [],
+      email: 'email@email.com'
+    };
+    
+    if (confirmation) {
+      user['password-confirm'] = 'password';
+    }
+    
+    return user;
+  },
+  credentials: function () {
+    return {
+      username: 'user',
+      password: 'password'
+    };
+  }
+};
 
 describe('User extension', function(done) {
   
   it('should not authenticate a user with a wrong username or password', function(done) {
     request(testingUrl)
       .post('/sign-in-submit')
-      .send({
-        username: 'test',
-        password: 'test'
-      })
+      .send(userHelper.sample())
       .expect(401, done);
   });
 
@@ -19,50 +40,33 @@ describe('User extension', function(done) {
     var application = this.getServer().getApplication('localhost');
     var User = application.type('user');
     
-    var data = {username: 'user', password: 'pass', roles: []};
-    
-    new User(data).save(function(error, newAccount) {
+    new User(userHelper.sample()).save(function(error, newAccount) {
       if (error) {
         assert.fail('error saving');
       }
       request(testingUrl)
         .post('/sign-in-submit')
-        .send({
-          username: 'user',
-          password: 'pass'
-        })
+        .send(userHelper.credentials())
         .expect(200, done);
     });
   });
   
   it('should create an account', function(done) {
+    console.log(userHelper.sample(true))
     request(testingUrl)
       .post('/create-account-submit')
-      .send({
-        username: 'test123',
-        password: 'pass123',
-        email: 'user@geste.com',
-        'password-confirm': 'pass123'
-      })
+      .send(userHelper.sample(true))
       .expect(201, done);
   });
   
   it('should create a user and perform login via REST', function(done) {
     request(testingUrl)
       .post('/create-account-submit')
-      .send({
-        username: 'test123',
-        password: 'pass123',
-        email: 'user@geste.com',
-        'password-confirm': 'pass123'
-      })
+      .send(userHelper.sample(true))
       .expect(201, function () {
         request(testingUrl)
           .post('/sign-in-submit')
-          .send({
-            username: 'test123',
-            password: 'pass123'
-          })
+          .send(userHelper.credentials())
           .expect(200, done);
       });
   });
