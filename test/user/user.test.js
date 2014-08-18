@@ -1,37 +1,10 @@
 var assert = require('assert');
 var request = require('supertest');
 var agent = request.agent();
+var userHelper = require('../lib/userHelper');
 
 // Util variables.
 var testingUrl = 'http://localhost:3200';
-
-// User related utility functions.
-var userHelper = {
-
-  // Generate sample user data used in tests.
-  sample: function (confirmation) {
-    var user = {
-      username: 'user',
-      password: 'password',
-      roles: [],
-      email: 'email@email.com'
-    };
-
-    if (confirmation) {
-      user['password-confirm'] = 'password';
-    }
-
-    return user;
-  },
-
-  // Generate credentials used in tests.
-  credentials: function () {
-    return {
-      username: 'user',
-      password: 'password'
-    };
-  }
-};
 
 describe('User extension', function(done) {
 
