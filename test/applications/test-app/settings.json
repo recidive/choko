@@ -4,5 +4,7 @@
   "application": {
     "name": "Test application"
   },
-  "extensions": {}
+  "extensions": {
+    "test-extension": {}
+  }
 }
