@@ -134,11 +134,4 @@ program
     start.apply(this, args);
   });
 
-var port = program.port;
-/*program
-  .command('test')
-  .description('Run the Choko server.')
-  .action(function());
-  */
-
 program.parse(process.argv);
