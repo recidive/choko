@@ -1,4 +1,5 @@
 var async = require('async');
+var passport = require('passport');
 var utils = require('prana').utils;
 
 var rest = module.exports;
@@ -23,6 +24,27 @@ rest.route = function(routes, callback) {
       // Validation passed.
       callback(null, item);
     };
+  };
+
+  var basicAuth = function(request, response, callback) {
+    passport.authenticate('basic', function(error, account) {
+      if (error) {
+        return callback(error);
+      }
+
+      if (!account) {
+        return callback(null, ['Invalid username or password.'], 401);
+      }
+
+      // Log user in.
+      request.login(account, function(error) {
+        if (error) {
+          return callback(error);
+        }
+        callback(null, account);
+      });
+
+    })(request, response, callback);
   };
 
   var self = this;
@@ -65,13 +87,19 @@ rest.route = function(routes, callback) {
         callback();
       },
       access: function(request, response, callback) {
-        if (request.method == 'GET') {
-          return application.access(request, access.list, callback);
-        }
-        if (request.method == 'POST') {
-          return application.access(request, access.add, callback);
-        }
-        callback();
+        basicAuth(request, response, function(error, account) {
+          if (!account) {
+            return callback(null, false);
+          }
+
+          if (request.method == 'GET') {
+            return application.access(request, access.list, callback);
+          }
+          if (request.method == 'POST') {
+            return application.access(request, access.add, callback);
+          }
+          callback();
+        });
       }
     };
 
@@ -101,16 +129,22 @@ rest.route = function(routes, callback) {
         callback();
       },
       access: function(request, response, callback) {
-        if (request.method == 'GET') {
-          return application.access(request, access.load, callback);
-        }
-        if (request.method == 'PUT' || request.method == 'POST' || request.method == 'PATCH') {
-          return application.access(request, access.edit, callback);
-        }
-        if (request.method == 'DELETE') {
-          return application.access(request, access.delete, callback);
-        }
-        callback();
+        basicAuth(request, response, function(error, account) {
+          if (!account) {
+            return callback(null, false);
+          }
+
+          if (request.method == 'GET') {
+            return application.access(request, access.load, callback);
+          }
+          if (request.method == 'PUT' || request.method == 'POST' || request.method == 'PATCH') {
+            return application.access(request, access.edit, callback);
+          }
+          if (request.method == 'DELETE') {
+            return application.access(request, access.delete, callback);
+          }
+          callback();
+        });
       }
     };
     next();
