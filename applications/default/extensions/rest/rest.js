@@ -26,6 +26,7 @@ rest.route = function(routes, callback) {
     };
   };
 
+  // Helper function for performing HTTP Basic authentication.
   var basicAuth = function(request, response, callback) {
     passport.authenticate('basic', function(error, account) {
       if (error) {
@@ -70,6 +71,26 @@ rest.route = function(routes, callback) {
     };
     utils.extend(access, type.settings.access);
 
+    // Helper function that receives a HTTP method/Model method mapper and run
+    // the appropriate access checks.
+    var accessHelper = function(methodMapper, request, response, callback) {
+      var modelMethod = methodMapper[request.method];
+      if (access[modelMethod] === true) {
+        return callback(null, true);
+      }
+
+      // Run basic auth authentication.
+      basicAuth(request, response, function(error, account) {
+        if (!account) {
+          return callback(null, false);
+        }
+        if (request.method in methodMapper) {
+          return application.access(request, access[modelMethod], callback);
+        }
+        callback();
+      });
+    };
+
     // List or add items.
     newRoutes['/rest' + type.path] = {
       callback: function(request, response, callback) {
@@ -87,19 +108,11 @@ rest.route = function(routes, callback) {
         callback();
       },
       access: function(request, response, callback) {
-        basicAuth(request, response, function(error, account) {
-          if (!account) {
-            return callback(null, false);
-          }
-
-          if (request.method == 'GET') {
-            return application.access(request, access.list, callback);
-          }
-          if (request.method == 'POST') {
-            return application.access(request, access.add, callback);
-          }
-          callback();
-        });
+        var methodMapper = {
+          'GET': 'list',
+          'POST': 'add'
+        };
+        accessHelper(methodMapper, request, response, callback);
       }
     };
 
@@ -129,22 +142,14 @@ rest.route = function(routes, callback) {
         callback();
       },
       access: function(request, response, callback) {
-        basicAuth(request, response, function(error, account) {
-          if (!account) {
-            return callback(null, false);
-          }
-
-          if (request.method == 'GET') {
-            return application.access(request, access.load, callback);
-          }
-          if (request.method == 'PUT' || request.method == 'POST' || request.method == 'PATCH') {
-            return application.access(request, access.edit, callback);
-          }
-          if (request.method == 'DELETE') {
-            return application.access(request, access.delete, callback);
-          }
-          callback();
-        });
+        var methodMapper = {
+          'GET': 'load',
+          'PUT': 'edit',
+          'POST': 'edit',
+          'PATCH': 'edit',
+          'PUT': 'delete'
+        };
+        accessHelper(methodMapper, request, response, callback);
       }
     };
     next();
