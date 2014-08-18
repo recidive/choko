@@ -9,14 +9,7 @@ var Server = require('../lib/server');
 var mkdirp = require('mkdirp');
 var _ = require('lodash');
 
-// 1. definiu path:
-// 1.1. Verifica se já está instalado e se for roda no path.
-// 1.2. Senão, pergunta se pode instalar.
-// 2. Não definiu path, tenta ./applications ou ./
-// 2.1. Senão tenta instalar com o dir "applications"
-// 3. 
-
-var appsPathDefault = 'applicationss';
+var appsPathDefault = 'applications';
 
 /**
  * Returns the normalized path where all the apps reside.
