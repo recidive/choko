@@ -6,39 +6,82 @@ var path = require('path');
 var util = require('util');
 var program = require('commander');
 var Server = require('../lib/server');
+var mkdirp = require('mkdirp');
+var _ = require('lodash');
 
-program
-  .command('*')
-  .version('0.0.4')
-  .usage('[options] [dir]')
-  .option('-p, --port <number>', 'start server at specified port', parseInt, 3000)
-  .action(start);
+// 1. definiu path:
+// 1.1. Verifica se já está instalado e se for roda no path.
+// 1.2. Senão, pergunta se pode instalar.
+// 2. Não definiu path, tenta ./applications ou ./
+// 2.1. Senão tenta instalar com o dir "applications"
+// 3. 
 
-// If a dirname wasn't passed, run applications in current folder.
-var dir = program.args.length ? path.normalize(program.args[0]) : path.normalize(process.cwd());
-var port = program.port;
+var appsPathDefault = 'applicationss';
 
-var start = function(callback) {
-  var server = new Server(dir);
+/**
+ * Returns the normalized path where all the apps reside.
+ */
+var appsPath = function (destination) {
+  // Default destination.
+  destination = _.isString(destination) ? destination : appsPathDefault;
   
-  if (!isInstalled) {
-    return install(callback);  
-  }
-
-  // Get port from -p or --port argument or fallback to 3000.
-  server.start(port, callback);
-};
-
-var isInstalled = function(callback) {
-  return fs.existsSync(path.join(dir, '/applications.json'));
+  return path.normalize(destination);
 }
 
-var install = function(callback) {
+/**
+ * Append in a path the applications.json file.
+ */
+var appsSettingsPath = function (dir) {
+  return path.join(dir, 'applications.json');
+}
 
-  var dirMode = program.args.length ? 'specified' : 'current';
-  program.confirm('No applications found on ' + dirMode + ' folder, create an application repository on the ' + dirMode + ' path? ', function(ok) {
+/**
+ * Define if Choko is installed.
+ */
+var isInstalled = function(dir) {
+  // Running from the "applications" directory.
+  if (dir == null && fs.existsSync(appsSettingsPath(appsPath()))) {
+    return true;
+  }
+
+  // Specified directory.
+  return fs.existsSync(appsSettingsPath(dir));
+}
+
+var start = function(destination, prg, callback) {
+
+  var dir = appsPath(destination);
+
+  if (!isInstalled(dir)) {
+    return install(dir, prg);
+  }
+
+  var server = new Server(dir);
+
+  server.start(prg.port, function () {
+    if (_.isFunction(callback)) {
+      callback(dir);
+    }
+  });
+};
+
+var install = function(destination, prg, callback) {
+
+  var dir = appsPath(destination);
+
+  if (isInstalled(dir)) return process.stdin.destroy();
+
+  // No destination is defined, so "applications" dir should be default.
+  var dirMode = destination == null ? appsPathDefault : 'specified';
+
+  program.confirm('No applications found on ' + dirMode + ' folder, create an application repository on the "' + dir + '" path? ', function(ok) {
     if (!ok) {
       return process.stdin.destroy();
+    }
+
+    // Create "applications" directory if not exist.
+    if (!fs.existsSync(dir)) {
+      mkdirp.sync(dir);
     }
 
     var hostname = os.hostname();
@@ -48,7 +91,7 @@ var install = function(callback) {
       var initialApps = {};
       initialApps[domain] = domain;
 
-      fs.writeFileSync(path.join(dir, '/applications.json'), JSON.stringify(initialApps, null, '  '), {flag: 'w'});
+      fs.writeFileSync(appsSettingsPath(dir), JSON.stringify(initialApps, null, '  '), {flag: 'w'});
 
       var appDir = path.join(dir, domain);
       fs.mkdirSync(appDir);
@@ -63,24 +106,46 @@ var install = function(callback) {
       };
       fs.writeFileSync(path.join(appDir, '/settings.json'), JSON.stringify(initialSettings, null, '  '), {flag: 'w'});
 
-      start(function() {
-        util.log('Navigate to http://' + domain + ':' + port + '/#/install' + ' to create your first application.');
+      start(dir, prg, function(dir) {
+        util.log('Navigate to http://' + domain + ':' + prg.port + '/#/install' + ' to create your first application.');
       });
     });
   });
 };
 
+program
+  .command('*')
+  .version('0.0.4')
+  .usage('[options] [dir]')
+  .option('-p, --port <number>', 'start server at specified port', parseInt, 3000)
+  .action(function () {
+
+    var args = Array.prototype.slice.call(arguments);
+    if (!_.isString(args[0])) {
+      args.unshift(appsPathDefault)
+    }
+    start.apply(this, args);
+  });
+
 
 program
   .command('start')
   .description('Run the Choko server.')
-  .action(start);
-  
+  .usage('[options] [dir]')
+  .option('-p, --port <number>', 'start server at specified port', parseInt, 3000)
+  .action(function () {
+    var args = Array.prototype.slice.call(arguments);
+    if (!_.isString(args[0])) {
+      args.unshift(appsPathDefault)
+    }
+    start.apply(this, args);
+  });
+
+var port = program.port;
 /*program
   .command('test')
   .description('Run the Choko server.')
-  .action(function ());
+  .action(function());
   */
 
-   
 program.parse(process.argv);
