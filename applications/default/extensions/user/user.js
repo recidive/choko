@@ -34,7 +34,6 @@ user.init = function(application, callback) {
       var cleanedUpUser = {
         roles: []
       };
-      console.log(user);
       utils.extend(cleanedUpUser, user);
 
       // Remove sensitive data from response.
