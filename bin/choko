@@ -7,17 +7,18 @@ var util = require('util');
 var program = require('commander');
 var Server = require('../lib/server');
 var mkdirp = require('mkdirp');
-var _ = require('lodash');
+var lodash = require('lodash');
 
-var appsPathDefault = 'applications';
+var APPS_PATH_DEFAULT = 'applications';
 
 /**
  * Returns the normalized path where all the apps reside.
  */
 var appsPath = function (destination) {
   // Default destination.
-  destination = _.isString(destination) ? destination : appsPathDefault;
-  
+  if (!lodash.isString(destination)) {
+    destination = APPS_PATH_DEFAULT;
+  }
   return path.normalize(destination);
 }
 
@@ -27,6 +28,24 @@ var appsPath = function (destination) {
 var appsSettingsPath = function (dir) {
   return path.join(dir, 'applications.json');
 }
+
+/**
+ * Starts the applications in the specified destination path.
+ */
+var start = function(destination, prg, callback) {
+  var dir = appsPath(destination);
+
+  if (!isInstalled(dir)) {
+    return install(dir, prg);
+  }
+
+  var server = new Server(dir);
+  server.start(prg.port, function () {
+    if (lodash.isFunction(callback)) {
+      callback(dir);
+    }
+  });
+};
 
 /**
  * Define if Choko is installed.
@@ -41,31 +60,21 @@ var isInstalled = function(dir) {
   return fs.existsSync(appsSettingsPath(dir));
 }
 
-var start = function(destination, prg, callback) {
-
+/**
+ * Prepare a structure of directories and files, to run the installer.
+ */
+var install = function(destination, prg, callback) {
   var dir = appsPath(destination);
 
-  if (!isInstalled(dir)) {
-    return install(dir, prg);
+  if (isInstalled(dir)) {
+    return process.stdin.destroy();
   }
 
-  var server = new Server(dir);
-
-  server.start(prg.port, function () {
-    if (_.isFunction(callback)) {
-      callback(dir);
-    }
-  });
-};
-
-var install = function(destination, prg, callback) {
-
-  var dir = appsPath(destination);
-
-  if (isInstalled(dir)) return process.stdin.destroy();
-
   // No destination is defined, so "applications" dir should be default.
-  var dirMode = destination == null ? appsPathDefault : 'specified';
+  var dirMode = APPS_PATH_DEFAULT;
+  if (destination != null) {
+    dirMode = 'specified';
+  }
 
   program.confirm('No applications found on ' + dirMode + ' folder, create an application repository on the "' + dir + '" path? ', function(ok) {
     if (!ok) {
@@ -112,10 +121,9 @@ program
   .usage('[options] [dir]')
   .option('-p, --port <number>', 'start server at specified port', parseInt, 3000)
   .action(function () {
-
     var args = Array.prototype.slice.call(arguments);
-    if (!_.isString(args[0])) {
-      args.unshift(appsPathDefault)
+    if (!lodash.isString(args[0])) {
+      args.unshift(APPS_PATH_DEFAULT);
     }
     start.apply(this, args);
   });
@@ -128,8 +136,8 @@ program
   .option('-p, --port <number>', 'start server at specified port', parseInt, 3000)
   .action(function () {
     var args = Array.prototype.slice.call(arguments);
-    if (!_.isString(args[0])) {
-      args.unshift(appsPathDefault)
+    if (!lodash.isString(args[0])) {
+      args.unshift(APPS_PATH_DEFAULT);
     }
     start.apply(this, args);
   });
