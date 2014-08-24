@@ -135,7 +135,15 @@ function DisplayFieldController($scope, $location, applicationState, Choko) {
 //DisplayFieldController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
 function ReferenceElementController($scope, $location, applicationState, Choko) {
-  Choko.get({type: $scope.element.reference.type}, function(response) {
+  var query = {
+    type: $scope.element.reference.type
+  };
+
+  if ($scope.element.reference.query) {
+    angular.extend(query, $scope.element.reference.query);
+  }
+
+  Choko.get(query, function(response) {
     $scope.element.options = response;
 
     // Use radios if less then 5 options.
