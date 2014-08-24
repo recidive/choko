@@ -300,9 +300,17 @@ function InlineReferenceElementItemController($scope, $filter, applicationState,
 function ViewController($scope, $location, $http, applicationState, Choko) {
   // Handle 'list' type views.
   if ($scope.view.type === 'list' && $scope.view.itemType) {
+    var query = {
+      type: $scope.view.itemType
+    };
+
+    if ($scope.view.query) {
+      angular.extend(query, $scope.view.query);
+    }
+
     $scope.items = {};
 
-    Choko.get({type: $scope.view.itemType}, function(response) {
+    Choko.get(query, function(response) {
       $scope.items = response;
     });
 
