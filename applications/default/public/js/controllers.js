@@ -134,6 +134,54 @@ function DisplayFieldController($scope, $location, applicationState, Choko) {
 }
 //DisplayFieldController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
 
+
+function FormController($scope, $location, applicationState, Choko) {
+  var formName = $scope.form.name = $scope.form.name.replace('-', '_');
+
+  $scope.formScope = {};
+
+  $scope.init = function(form) {
+    console.log(formName);
+    console.log(form);
+    console.log(form[formName]);
+    //$scope.formScope = form;
+  };
+
+  /*
+  $scope.formScope = $scope[$scope.form.name];
+
+  $scope.form.name = $scope.form.name.replace('-', '_');
+
+  console.log('FORM SCOPE');
+  console.log($scope.form.name);
+  console.log($scope.formScope);
+  //console.log($scope['sign_in']);
+
+
+  $scope.formScope = {};
+
+  $scope.$watch($scope.form.name, function() {
+    $scope.formScope = $scope[$scope.form.name];
+  });
+
+
+  $scope.setFormScope = function(form) {
+    console.log(form);
+    $scope.formScope = $scope[form];
+    console.log($scope.formScope);
+  };
+
+  $scope.formValid = function() {
+    !$scope.formScope.$invalid;
+  };
+  */
+
+  //console.log($scope.form);
+  //console.log($scope.form.name);
+  //console.log($scope[$scope.form.name]);
+}
+//FormController.$inject = ['$scope', '$location', 'applicationState', 'Choko'];
+
 function ReferenceElementController($scope, $location, applicationState, Choko) {
   Choko.get({type: $scope.element.reference.type}, function(response) {
     $scope.element.options = response;
