@@ -1,5 +1,4 @@
 var async = require('async');
-var expressUtils = require('express/lib/utils');
 var pathToRegexp = require('path-to-regexp');
 var contextMiddleware = require('./lib/contextMiddleware');
 
