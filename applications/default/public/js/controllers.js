@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('choko.controllers', [])
-  
+
   .controller('ApplicationController', ['$scope', '$location', '$http', 'applicationState',
     function ($scope, $location, $http, applicationState) {
       $scope.state = {};
@@ -151,8 +151,8 @@ angular.module('choko.controllers', [])
       $scope.field.template = $scope.field.template || '/templates/' + $scope.field.format + '.html';
     }])
 
-  .controller('ReferenceElementController', ['$scope',
-    function ($scope) {
+  .controller('ReferenceElementController', ['$scope', 'Choko',
+    function ($scope, Choko) {
       var query = {
         type: $scope.element.reference.type
       };
