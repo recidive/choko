@@ -136,7 +136,7 @@ RouteController.respond = function(request, response, content, code) {
     payload.data = content;
   }
 
-  response.send(code, payload);
+  response.status(code).send(payload);
 };
 
 /**
