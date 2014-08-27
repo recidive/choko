@@ -21,24 +21,23 @@ var RouteController = module.exports = function(application, settings) {
   this.application = application;
   this.settings = settings;
 
-  var self = this;
-  var app = this.application.application;
-  var method = settings.method || 'all';
-
   // Prepare route register params.
-  var params = [self.settings.path];
+  var params = [this.settings.path];
 
   // Prepare the middleware, if available.
-  if ('middleware' in settings) {
-    params.push(settings.middleware);
+  if ('middleware' in this.settings) {
+    params.push(this.settings.middleware);
   }
 
   // Prepare the route handler.
+  var self = this;
   params.push(function(request, response) {
     self.handle(request, response);
   });
 
   // Register on express.
+  var app = this.application.application;
+  var method = this.settings.method || 'all';
   app[method].apply(app, params);
 };
 
