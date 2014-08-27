@@ -1,11 +1,8 @@
 'use strict';
 
 // Declare app level module which depends on services, directives and filters.
-<<<<<<< HEAD
-angular.module('choko', ['ngRoute', 'ngResource', 'ngSanitize', 'summernote', 'angularFileUpload', 'choko.services', 'choko.directives', 'choko.filters', 'choko.controllers'])
-=======
-angular.module('choko', ['ngRoute', 'ngResource', 'ngSanitize', 'summernote', 'restangular', 'angularFileUpload', 'choko.services', 'choko.directives', 'choko.filters'])
->>>>>>> Added restangular
+
+angular.module('choko', ['ngRoute', 'ngResource', 'ngSanitize', 'summernote', 'restangular', 'angularFileUpload', 'choko.services', 'choko.directives', 'choko.filters', 'choko.controllers'])
 .config(['$locationProvider', function($locationProvider) {
   //$locationProvider.html5Mode(true);
 }])
