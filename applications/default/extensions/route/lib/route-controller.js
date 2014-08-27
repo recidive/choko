@@ -52,36 +52,32 @@ RouteController.prototype.handle = function(request, response) {
   var self = this;
   var settings = this.settings;
 
-  this.access(request, response, function(err, allow) {
-    if (err) {
-      RouteController.error(request, response, err);
+  this.access(request, response, function(error, allow) {
+    if (error) {
+      return RouteController.error(request, response, error);
     }
 
-    if (allow) {
-      // A route can have either a content or callback property.
-      if (settings.content) {
-        RouteController.respond(request, response, settings.content);
-      }
-      else if (settings.callback) {
-        settings.callback(request, response, function(err, content, code) {
-          if (err) {
-            RouteController.error(request, response, err);
-          }
-
-          if (content) {
-            RouteController.respond(request, response, content, code);
-          }
-          else {
-            // If there's no content, return 404 error.
-            RouteController.notFound(request, response);
-          }
-        });
-      }
-    }
-    else {
+    if (allow !== true) {
       // Access denied.
-      RouteController.forbidden(request, response);
+      return RouteController.forbidden(request, response);
     }
+
+    if (settings.content) {
+      return RouteController.respond(request, response, settings.content);
+    }
+
+    if (settings.callback) {
+      return settings.callback(request, response, function(error, content, code) {
+        if (error) {
+          return RouteController.error(request, response, error);
+        }
+
+        RouteController.respond(request, response, content, code);
+      });
+    }
+
+    // If there's no content nor a callback, return 404 error.
+    RouteController.notFound(request, response);
   });
 };
 
