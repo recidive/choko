@@ -11,6 +11,6 @@
     "summernote": "0.5.x",
     "angular-summernote": "0.2.x",
     "ng-file-upload": "1.6.x",
-    "restangular": "~1.4.0"
+    "restangular": "1.4.x"
   }
 }

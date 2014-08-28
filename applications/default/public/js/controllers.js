@@ -326,7 +326,7 @@ angular.module('choko.controllers', [])
       // Prevente creation of service if no itemType set.
       if ($scope.view.itemType) {
         // Create a new Service for Itemtype.
-        var ItemTypeREST = Restangular.service($scope.view.itemType);
+        var itemTypeREST = Restangular.service($scope.view.itemType);
       }
 
       // Handle 'list' type views.
@@ -339,7 +339,7 @@ angular.module('choko.controllers', [])
 
         $scope.items = {};
 
-        ItemTypeREST.getList(query).then(function(response) {
+        itemTypeREST.getList(query).then(function(response) {
           $scope.items = response;
         });
 
@@ -363,7 +363,7 @@ angular.module('choko.controllers', [])
         $scope.data = {};
         $scope.view.title = '';
 
-        ItemTypeREST.one($scope.view.itemKey).get().then(function(response) {
+        itemTypeREST.one($scope.view.itemKey).get().then(function(response) {
           $scope.data = response;
           $scope.view.title = response.title;
         }, function(response) {
@@ -383,7 +383,7 @@ angular.module('choko.controllers', [])
         var typeForm = 'post';
 
         if ($scope.view.itemType && $scope.view.itemKey) {
-          ItemTypeREST.one($scope.view.itemKey).then(function(response) {
+          itemTypeREST.one($scope.view.itemKey).then(function(response) {
             $scope.data = response;
             typeForm = 'put'
           });
@@ -391,15 +391,16 @@ angular.module('choko.controllers', [])
 
         $scope.submit = function(url, redirect) {
 
-          var FormREST = null;
+          var formREST = null;
 
-          if(!ItemTypeREST){
-            FormREST = Restangular.oneUrl('url', url).post('', $scope.data);
-          } else {
-            FormREST = typeForm == 'post'? ItemTypeREST.post($scope.data) : ItemTypeREST.put($scope.data);
+          if(!itemTypeREST) {
+            formREST = Restangular.oneUrl('url', url).post('', $scope.data);
+          }
+          else {
+            formREST = typeForm == 'post'? itemTypeREST.post($scope.data) : itemTypeREST.put($scope.data);
           }
 
-          FormREST.then(function(response) {
+          formREST.then(function(response) {
             $scope.data = response;
             delete $scope.errors;
             if (redirect) {
