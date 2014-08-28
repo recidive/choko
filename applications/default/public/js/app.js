@@ -9,7 +9,10 @@ angular.module('choko', ['ngRoute', 'ngResource', 'ngSanitize', 'summernote', 'r
 .config(['RestangularProvider', function(RestangularProvider) {
   RestangularProvider.setBaseUrl('/rest');
 
-  RestangularProvider.setDefaultHttpFields({cache: true});
+  // @todo: We need improve the caching functionality.
+  // The items list not change after add an ítem, because
+  // he get the items list from the caché.
+  RestangularProvider.setDefaultHttpFields({cache: false});
 
   // Add a response intereceptor
   RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
