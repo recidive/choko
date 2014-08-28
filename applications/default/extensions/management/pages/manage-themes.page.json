@@ -6,5 +6,5 @@
   "access": "manage-themes",
   "type": "list",
   "itemType": "theme",
-  "template": "templates/list-group.html"
+  "template": "/templates/list-group.html"
 }

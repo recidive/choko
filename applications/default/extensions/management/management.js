@@ -74,7 +74,7 @@ management.page = function(pages, callback) {
       response.payload.page.items = result;
       callback();
     },
-    template: 'templates/list-group.html'
+    template: '/templates/list-group.html'
   };
 
   newPages['manage-extensions'] = {
@@ -96,7 +96,7 @@ management.page = function(pages, callback) {
       response.payload.page.items = result;
       callback();
     },
-    template: 'templates/list-group.html'
+    template: '/templates/list-group.html'
   };
 
   callback(null, newPages);

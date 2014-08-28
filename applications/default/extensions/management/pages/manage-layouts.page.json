@@ -6,5 +6,5 @@
   "access": "manage-layouts",
   "type": "list",
   "itemType": "layout",
-  "template": "templates/list-group.html"
+  "template": "/templates/list-group.html"
 }

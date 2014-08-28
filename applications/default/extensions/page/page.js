@@ -141,7 +141,7 @@ page.panel = function(panels, callback) {
   newPanels['page-content'] = {
     title: 'Page content',
     description: 'Main page content.',
-    template: 'templates/page-content.html',
+    template: '/templates/page-content.html',
     bare: true
   };
 

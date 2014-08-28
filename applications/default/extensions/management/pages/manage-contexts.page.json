@@ -6,5 +6,5 @@
   "access": "manage-contexts",
   "type": "list",
   "itemType": "context",
-  "template": "templates/list-group.html"
+  "template": "/templates/list-group.html"
 }

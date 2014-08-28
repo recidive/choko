@@ -64,10 +64,10 @@ angular.module('choko.controllers', [])
       }
 
       if ($scope.panel.bare) {
-        $scope.template = $scope.panel.template || 'templates/panel-content.html';
+        $scope.template = $scope.panel.template || '/templates/panel-content.html';
       }
       else {
-        $scope.template = 'templates/panel.html';
+        $scope.template = '/templates/panel.html';
       }
     }])
 
@@ -93,7 +93,7 @@ angular.module('choko.controllers', [])
       $scope.name = $scope.row.name;
 
       $scope.getTemplate = function() {
-        return $scope.template || 'templates/row.html';
+        return $scope.template || '/templates/row.html';
       }
     }])
 
@@ -102,7 +102,7 @@ angular.module('choko.controllers', [])
       $scope.name = $scope.column.name;
 
       $scope.getTemplate = function() {
-        return $scope.template || 'templates/column.html';
+        return $scope.template || '/templates/column.html';
       };
     }])
 
@@ -416,19 +416,19 @@ angular.module('choko.controllers', [])
           $scope.form.redirect = $scope.view.redirect || $scope.form.redirect || null;
 
           $scope.view.template = $scope.view.template || $scope.form.template;
-          $scope.view.template = $scope.view.template || 'templates/form.html';
+          $scope.view.template = $scope.view.template || '/templates/form.html';
         });
       }
     }])
 
   .controller('ElementController', ['$scope',
     function ($scope) {
-      $scope.element.template = $scope.element.template || 'templates/' + $scope.element.type + '.html';
+      $scope.element.template = $scope.element.template || '/templates/' + $scope.element.type + '.html';
     }])
 
   .controller('FileElementController', ['$scope', '$upload',
     function ($scope, $upload) {
-      $scope.element.template = $scope.element.template || 'templates/' + $scope.element.type + '.html';
+      $scope.element.template = $scope.element.template || '/templates/' + $scope.element.type + '.html';
       $scope.progress = 0;
 
       // Initialize files container.
@@ -454,7 +454,7 @@ angular.module('choko.controllers', [])
 
   .controller('SubElementController', ['$scope',
     function ($scope) {
-      $scope.subElement.template = $scope.subElement.template || 'templates/' + $scope.subElement.type + '.html';
+      $scope.subElement.template = $scope.subElement.template || '/templates/' + $scope.subElement.type + '.html';
     }])
 
   .controller('ButtonController', ['$scope',

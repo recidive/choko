@@ -8,9 +8,9 @@
   <!-- Le styles -->
   <link ng-repeat="style in styles.styles" rel="stylesheet" ng-href="{{style}}">
   <link ng-repeat="style in theme.styles" rel="stylesheet" ng-href="{{style}}">
-  <link rel="stylesheet" href="lib/summernote/dist/summernote.css">
+  <link rel="stylesheet" href="/lib/summernote/dist/summernote.css">
 
-  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="/css/app.css">
 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -18,14 +18,14 @@
   <![endif]-->
 
   <!-- Le fav and touch icons -->
-  <link rel="shortcut icon" href="images/favicon.ico">
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  <link rel="shortcut icon" href="/images/favicon.ico">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-touch-icon-114x114.png">
 </head>
 <body>
 
-  <div ng-include="'templates/layout.html'" ng-class="contexts"></div>
+  <div ng-include="'/templates/layout.html'" ng-class="contexts"></div>
 
   <div class="app-version">Choko v<span app-version></span></div>
 
@@ -33,23 +33,23 @@
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
 
-  <script src="lib/jquery/dist/jquery.min.js"></script>
-  <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="lib/summernote/dist/summernote.min.js"></script>
+  <script src="/lib/jquery/dist/jquery.min.js"></script>
+  <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="/lib/summernote/dist/summernote.min.js"></script>
 
-  <script src="lib/ng-file-upload/angular-file-upload-shim.min.js"></script> 
-  <script src="lib/angular/angular.min.js"></script>
-  <script src="lib/angular-route/angular-route.min.js"></script>
-  <script src="lib/angular-resource/angular-resource.min.js"></script>
-  <script src="lib/angular-sanitize/angular-sanitize.min.js"></script>
-  <script src="lib/angular-summernote/dist/angular-summernote.min.js"></script>
-  <script src="lib/ng-file-upload/angular-file-upload.min.js"></script> 
+  <script src="/lib/ng-file-upload/angular-file-upload-shim.min.js"></script>
+  <script src="/lib/angular/angular.min.js"></script>
+  <script src="/lib/angular-route/angular-route.min.js"></script>
+  <script src="/lib/angular-resource/angular-resource.min.js"></script>
+  <script src="/lib/angular-sanitize/angular-sanitize.min.js"></script>
+  <script src="/lib/angular-summernote/dist/angular-summernote.min.js"></script>
+  <script src="/lib/ng-file-upload/angular-file-upload.min.js"></script>
 
-  <script src="js/app.js"></script>
-  <script src="js/services.js"></script>
-  <script src="js/controllers.js"></script>
-  <script src="js/directives.js"></script>
-  <script src="js/filters.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/services.js"></script>
+  <script src="/js/controllers.js"></script>
+  <script src="/js/directives.js"></script>
+  <script src="/js/filters.js"></script>
 
   <script ng-repeat="script in theme.scripts" ng-src="{{script}}"></script>
 </body>

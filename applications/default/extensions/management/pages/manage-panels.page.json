@@ -6,5 +6,5 @@
   "access": "manage-panels",
   "type": "list",
   "itemType": "panel",
-  "template": "templates/list-group.html"
+  "template": "/templates/list-group.html"
 }
