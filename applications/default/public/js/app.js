@@ -15,15 +15,15 @@ angular.module('choko', ['ngRoute', 'ngResource', 'ngSanitize', 'summernote', 'r
   RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
     var extractedData;
 
-    if (operation === "getList") {
+    if (operation === 'getList') {
       var temp = [];
 
       Object.keys(data.data).forEach(function(name){
-        temp.push(data.data[name])
+        temp.push(data.data[name]);
       });
-
       extractedData = temp;
-    } else {
+    }
+    else {
       extractedData = data.data;
     }
     return extractedData;
@@ -31,11 +31,13 @@ angular.module('choko', ['ngRoute', 'ngResource', 'ngSanitize', 'summernote', 'r
 
   RestangularProvider.setResponseExtractor(function(response) {
     var newResponse = response;
+
     if (angular.isArray(response)) {
       angular.forEach(newResponse, function(value, key) {
         newResponse[key].originalElement = angular.copy(value);
       });
-    } else {
+    }
+    else {
       newResponse.originalElement = angular.copy(response);
     }
     return newResponse;
