@@ -9,6 +9,8 @@ angular.module('choko', ['ngRoute', 'ngResource', 'ngSanitize', 'summernote', 'r
 .config(['RestangularProvider', function(RestangularProvider) {
   RestangularProvider.setBaseUrl('/rest');
 
+  RestangularProvider.setDefaultHttpFields({cache: true});
+
   // Add a response intereceptor
   RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
     var extractedData;
