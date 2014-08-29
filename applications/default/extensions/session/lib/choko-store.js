@@ -6,7 +6,7 @@
  * Module dependencies.
  */
 var util = require('util');
-var Store = require('express').session.Store;
+var Store = require('express-session').Store;
 var async = require('async');
 
 /**

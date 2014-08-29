@@ -1,0 +1,3 @@
+var testExtension = module.exports = {
+
+};

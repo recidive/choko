@@ -5,6 +5,7 @@
 var crypto = require('crypto');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var BasicStrategy = require('passport-http').BasicStrategy
 var async = require('async');
 var utils = require('prana').utils;
 
@@ -18,36 +19,39 @@ user.init = function(application, callback) {
   application.application.use(passport.initialize());
   application.application.use(passport.session());
 
+  var authCallback = function(username, password, callback) {
+    var User = application.type('user');
+    User.login({username: username, password: password}, function (error, user) {
+      if (error) {
+        return callback(error);
+      }
+      if (!user) {
+        // User and/or password is invalid.
+        return callback(null, false);
+      }
+
+      // Start from an empty container and merge in user data.
+      var cleanedUpUser = {
+        roles: []
+      };
+      utils.extend(cleanedUpUser, user);
+
+      // Remove sensitive data from response.
+      delete cleanedUpUser.salt;
+      delete cleanedUpUser.password;
+
+      // Add authenticated role.
+      cleanedUpUser.roles.push('authenticated');
+
+      return callback(null, cleanedUpUser);
+    });
+  };
+
   // Set up passport local strategy.
-  passport.use(new LocalStrategy(
-    function(username, password, callback) {
-      var User = application.type('user');
-      User.login({username: username, password: password}, function (error, user) {
-        if (error) {
-          return callback(error);
-        }
-        if (!user) {
-          // User and/or password is invalid.
-          return callback(null, false);
-        }
+  passport.use(new LocalStrategy(authCallback));
 
-        // Start from an empty container and merge in user data.
-        var cleanedUpUser = {
-          roles: []
-        };
-        utils.extend(cleanedUpUser, user);
-
-        // Remove sensitive data from response.
-        delete cleanedUpUser.salt;
-        delete cleanedUpUser.password;
-
-        // Add authenticated role.
-        cleanedUpUser.roles.push('authenticated');
-
-        return callback(null, cleanedUpUser);
-      });
-    }
-  ));
+  // Set up passport HTTP strategy.
+  passport.use(new BasicStrategy(authCallback));
 
   passport.serializeUser(function(user, callback) {
     callback(null, user);
@@ -56,7 +60,6 @@ user.init = function(application, callback) {
   passport.deserializeUser(function(user, callback) {
     callback(null, user);
   });
-
 
   // Add access check method to application object.
   var self = this;
@@ -134,6 +137,20 @@ user.type = function(types, callback) {
       'add': 'manage-users',
       'edit': 'manage-users',
       'delete': 'manage-users'
+    },
+    displays: {
+      'list-item': {
+        'content': [{
+          fieldName: 'username',
+          format: 'title',
+          weight: 0
+        },
+        {
+          fieldName: 'email',
+          format: 'paragraph',
+          weight: 5
+        }]
+      }
     },
     statics: {
       login: function(data, callback) {

@@ -36,10 +36,30 @@
 
     sudo npm update -g choko
 
+## Running from the sources
+
+  If you have some specific development needs, you might want to install and run
+  Choko from the sources. In order to do so, you can clone the repository and
+  build Choko by hand.
+
+    git clone https://github.com/recidive/choko.git
+    cd choko
+    npm install
+    bower install
+
+  Now you can start the Choko server by going to the choko main folder and
+  running it.
+
+    node server.js
+
+  You can also run it using the choko script like this:
+
+    bin/choko
+
 ## Directory structure
 
 ```
-applications   -> Where all applications live.
+applications   -> Where core applications live.
   default      -> Default application, all other applications extend this.
     extensions -> Default application extensions.
     public     -> Default application public files.
@@ -52,6 +72,6 @@ repository folder.
 
 ## Coding style
 
-We try to conform to [Felix's Node.js Style Guide](http://nodeguide.com/style.html)
+We try to conform to [Felix's Node.js Style Guide](https://github.com/felixge/node-style-guide)
 for all of our JavaScript code. For coding documentation we use [JSDoc](http://usejsdoc.org/)
 style.

@@ -20,8 +20,6 @@ route.init = function(application, callback) {
       if (err) {
         return callback(err);
       }
-      // Initialize the router middleware.
-      self.application.application.use(self.application.application.router);
 
       // The last middleware is the one that catches 404 errors.
       self.application.application.use(function(req, res, next){

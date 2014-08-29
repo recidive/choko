@@ -1,4 +1,4 @@
-var express = require('express');
+var expressSession = require('express-session');
 var ChokoStore = require('./lib/choko-store');
 var flash = require('connect-flash');
 
@@ -9,9 +9,11 @@ var session = module.exports;
  */
 session.init = function(application, callback) {
 
-  application.application.use(express.session({
+  application.application.use(expressSession({
     store: new ChokoStore(application),
-    secret: application.settings.sessionSecret
+    secret: application.settings.sessionSecret,
+    resave: true,
+    saveUninitialized: true
   }));
 
   // Enable flash messages.

@@ -1,0 +1,34 @@
+{
+  "title": "Test type",
+  "description": "Test type.",
+  "storage": "database",
+  "fields": {
+    "id": {
+      "title": "Id",
+      "type": "id",
+      "required": true
+    },
+    "name": {
+      "title": "Name",
+      "type": "text",
+      "required": true
+    }
+  },
+  "displays": {
+    "list-item": {
+      "content": [{
+        "fieldName": "name",
+        "format": "title",
+        "weight": 0
+      }]
+    }
+  },
+  "access": {
+    "list": "view-test-type",
+    "load": "view-test-type",
+    "add": "manage-test-type",
+    "edit": "manage-test-type",
+    "delete": "manage-test-type"
+  },
+  "keyProperty": "id"
+}
