@@ -320,8 +320,8 @@ angular.module('choko.controllers', [])
       };
     }])
 
-  .controller('ViewController', ['$scope', '$location', '$http', 'Choko',
-    function ($scope, $location, $http, Choko) {
+  .controller('ViewController', ['$scope', '$location', '$http', 'Choko', 'Params',
+    function ($scope, $location, $http, Choko, Params) {
 
       // Parse parameters when needed.
       if (typeof $scope.view.itemKey !== 'undefined') {
