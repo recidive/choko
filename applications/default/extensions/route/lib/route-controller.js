@@ -51,13 +51,6 @@ RouteController.prototype.handle = function(request, response) {
   var self = this;
   var settings = this.settings;
 
-<<<<<<< HEAD
-  this.access(request, response, function(error, allow) {
-    if (error) {
-      return RouteController.error(request, response, error);
-    }
-
-=======
   // Response decorator function, used to allow extensions to alter the response
   // for content responses via response() hook.
   var responseDecorator = function(payload, request, response, callback) {
@@ -70,18 +63,13 @@ RouteController.prototype.handle = function(request, response) {
       return RouteController.error(request, response, error);
     }
 
->>>>>>> master
     if (allow !== true) {
       // Access denied.
       return RouteController.forbidden(request, response);
     }
 
     if (settings.content) {
-<<<<<<< HEAD
-      return RouteController.respond(request, response, settings.content);
-=======
       return RouteController.respond(request, response, settings.content, responseDecorator);
->>>>>>> master
     }
 
     if (settings.callback) {
@@ -90,11 +78,7 @@ RouteController.prototype.handle = function(request, response) {
           return RouteController.error(request, response, error);
         }
 
-<<<<<<< HEAD
-        RouteController.respond(request, response, content, code);
-=======
         RouteController.respond(request, response, content, code, responseDecorator);
->>>>>>> master
       });
     }
 
@@ -156,15 +140,12 @@ RouteController.respond = function(request, response, content, code, decorator) 
     payload.data = content;
   }
 
-<<<<<<< HEAD
-=======
   if (decorator) {
     return decorator(payload, request, response, function() {
       response.status(payload.status.code).send(payload);
     });
   }
 
->>>>>>> master
   response.status(code).send(payload);
 };
 
