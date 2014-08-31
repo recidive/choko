@@ -329,8 +329,8 @@ angular.module('choko.controllers', [])
       }
 
       // Parse other params.
-      Object.keys($scope.view.params || {}).forEach(function (param) {
-        $scope.view.params[param] = Params.parse($scope.view.params[param], $scope);
+      Object.keys($scope.view.query || {}).forEach(function (param) {
+        $scope.view.query[param] = Params.parse($scope.view.query[param], $scope);
       });
 
       // Handle 'list' type views.
@@ -341,7 +341,6 @@ angular.module('choko.controllers', [])
 
         if ($scope.view.query) {
           angular.extend(query, $scope.view.query);
-          angular.extend(query, $scope.view.params);
         }
 
         $scope.items = {};
