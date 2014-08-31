@@ -51,18 +51,37 @@ RouteController.prototype.handle = function(request, response) {
   var self = this;
   var settings = this.settings;
 
+<<<<<<< HEAD
   this.access(request, response, function(error, allow) {
     if (error) {
       return RouteController.error(request, response, error);
     }
 
+=======
+  // Response decorator function, used to allow extensions to alter the response
+  // for content responses via response() hook.
+  var responseDecorator = function(payload, request, response, callback) {
+    // Run response() hook on all extensions.
+    self.application.invoke('response', payload, request, response, callback);
+  };
+
+  this.access(request, response, function(error, allow) {
+    if (error) {
+      return RouteController.error(request, response, error);
+    }
+
+>>>>>>> master
     if (allow !== true) {
       // Access denied.
       return RouteController.forbidden(request, response);
     }
 
     if (settings.content) {
+<<<<<<< HEAD
       return RouteController.respond(request, response, settings.content);
+=======
+      return RouteController.respond(request, response, settings.content, responseDecorator);
+>>>>>>> master
     }
 
     if (settings.callback) {
@@ -71,7 +90,11 @@ RouteController.prototype.handle = function(request, response) {
           return RouteController.error(request, response, error);
         }
 
+<<<<<<< HEAD
         RouteController.respond(request, response, content, code);
+=======
+        RouteController.respond(request, response, content, code, responseDecorator);
+>>>>>>> master
       });
     }
 
@@ -116,8 +139,10 @@ RouteController.prototype.access = function(request, response, callback) {
  * @param {Response} response Response object.
  * @param {Object|String} content Content to send.
  * @param {Number} [code] HTTP status code.
+ * @param {Function} [decorator] A function to run on the response data before
+ * sending it.
  */
-RouteController.respond = function(request, response, content, code) {
+RouteController.respond = function(request, response, content, code, decorator) {
   // Default to 200 (success).
   var code = code || 200;
 
@@ -131,6 +156,15 @@ RouteController.respond = function(request, response, content, code) {
     payload.data = content;
   }
 
+<<<<<<< HEAD
+=======
+  if (decorator) {
+    return decorator(payload, request, response, function() {
+      response.status(payload.status.code).send(payload);
+    });
+  }
+
+>>>>>>> master
   response.status(code).send(payload);
 };
 

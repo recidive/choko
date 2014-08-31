@@ -221,11 +221,7 @@ context.contextConditionType = function(conditionTypes, callback) {
     check: function(request, urls, callback) {
       // Use express regex to match URL.
       var regex = pathToRegexp(urls);
-      async.detect(urls, function(url, next) {
-        next(regex.exec(request.url));
-      }, function(result) {
-        callback(result !== undefined);
-      });
+      callback(regex.exec(request.url));
     }
   };
 
