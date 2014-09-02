@@ -118,7 +118,7 @@ rest.route = function(routes, callback) {
           'PUT': 'edit',
           'POST': 'edit',
           'PATCH': 'edit',
-          'PUT': 'delete'
+          'DELETE': 'delete'
         };
         accessHelper(methodMapper, request, response, callback);
       }
