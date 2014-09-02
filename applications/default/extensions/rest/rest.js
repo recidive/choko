@@ -26,28 +26,6 @@ rest.route = function(routes, callback) {
     };
   };
 
-  // Helper function for performing HTTP Basic authentication.
-  var basicAuth = function(request, response, callback) {
-    passport.authenticate('basic', function(error, account) {
-      if (error) {
-        return callback(error);
-      }
-
-      if (!account) {
-        return callback(null, ['Invalid username or password.'], 401);
-      }
-
-      // Log user in.
-      request.login(account, function(error) {
-        if (error) {
-          return callback(error);
-        }
-        callback(null, account);
-      });
-
-    })(request, response, callback);
-  };
-
   var self = this;
   async.each(Object.keys(this.application.types), function(typeName, next) {
     var typeModel = self.application.types[typeName];
@@ -79,20 +57,12 @@ rest.route = function(routes, callback) {
         return callback(null, true);
       }
 
-      // Run basic auth authentication.
-      basicAuth(request, response, function(error, account) {
-        if (!account) {
-          return callback(null, false);
-        }
-        if (request.method in methodMapper) {
-          return application.access(request, access[modelMethod], callback);
-        }
-        callback();
-      });
+      return application.access(request, access[modelMethod], callback);
     };
 
     // List or add items.
     newRoutes['/rest' + type.path] = {
+      middleware: passport.authenticate(['basic', 'anonymous']),
       callback: function(request, response, callback) {
         if (request.method == 'GET') {
           // @todo: filter out dangerous stuff from query before passing it to
@@ -118,6 +88,7 @@ rest.route = function(routes, callback) {
 
     // Get, update or delete an item.
     newRoutes['/rest' + type.path + '/:' + type.name] = {
+      middleware: passport.authenticate(['basic', 'anonymous']),
       callback: function(request, response, callback) {
         if (request.method == 'GET') {
           return typeModel.load(request.params[type.name], callback);

@@ -5,7 +5,8 @@
 var crypto = require('crypto');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var BasicStrategy = require('passport-http').BasicStrategy
+var BasicStrategy = require('passport-http').BasicStrategy;
+var AnonymousStrategy = require('passport-anonymous');
 var async = require('async');
 var utils = require('prana').utils;
 
@@ -52,6 +53,9 @@ user.init = function(application, callback) {
 
   // Set up passport HTTP strategy.
   passport.use(new BasicStrategy(authCallback));
+
+  // Set up passport anonymous strategy.
+  passport.use(new AnonymousStrategy());
 
   passport.serializeUser(function(user, callback) {
     callback(null, user);
