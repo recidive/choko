@@ -320,8 +320,18 @@ angular.module('choko.controllers', [])
       };
     }])
 
-  .controller('ViewController', ['$scope', '$location', '$http', 'Choko',
-    function ($scope, $location, $http, Choko) {
+  .controller('ViewController', ['$scope', '$location', '$http', 'Choko', 'Params',
+    function ($scope, $location, $http, Choko, Params) {
+
+      // Parse parameters when needed.
+      if (typeof $scope.view.itemKey !== 'undefined') {
+        $scope.view.itemKey = Params.parse($scope.view.itemKey, $scope);
+      }
+
+      // Parse other params.
+      Object.keys($scope.view.query || {}).forEach(function (param) {
+        $scope.view.query[param] = Params.parse($scope.view.query[param], $scope);
+      });
 
       // Handle 'list' type views.
       if ($scope.view.type === 'list' && $scope.view.itemType) {
