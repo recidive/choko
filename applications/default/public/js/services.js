@@ -57,6 +57,13 @@ angular.module('choko.services', [])
       }
     });
 
+    // Register user properties parser.
+    this.addParser('user', function () {
+      return function (param, $scope) {
+        return $scope.user && $scope.user[param] || null;
+      }
+    });
+
     // Factory.
     this.$get = function ($injector) {
 
