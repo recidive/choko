@@ -31,7 +31,7 @@
     "mkdirp": "0.3.x",
     "node-uuid": "1.4.x",
     "lodash": "2.x.x",
-    "connect-multiparty": "^1.2.4"
+    "connect-multiparty": "1.2.4"
   },
   "devDependencies": {
     "mocha": "*",
