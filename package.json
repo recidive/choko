@@ -30,7 +30,8 @@
     "validator": "2.0.x",
     "mkdirp": "0.3.x",
     "node-uuid": "1.4.x",
-    "lodash": "2.x.x"
+    "lodash": "2.x.x",
+    "connect-multiparty": "^1.2.4"
   },
   "devDependencies": {
     "mocha": "*",
