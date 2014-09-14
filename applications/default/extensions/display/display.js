@@ -67,7 +67,7 @@ display.display = function(displays, callback) {
   var types = this.application.types;
   // Add type display instances to display objects.
   async.each(Object.keys(types), function(typeName, next) {
-    var typeSettings = types[typeName].type.settings;
+    var typeSettings = types[typeName];
     if (typeSettings.displays) {
       for (var displayName in typeSettings.displays) {
         if (displayName in displays) {

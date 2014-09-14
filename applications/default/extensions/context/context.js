@@ -8,11 +8,43 @@ var context = module.exports;
  * The init() hook.
  */
 context.init = function(application, callback) {
-  // Load all contexts.
-  var Context = this.application.type('context');
-  Context.list({}, function(err, contexts) {
-    application.application.use(contextMiddleware(application));
-    callback();
+  async.parallel([
+    function(next) {
+      // Load all condition types.
+      application.collect('contextConditionType', function(error, conditions) {
+        if (error) {
+          return next(error);
+        }
+        application.conditions = conditions;
+        next();
+      });
+    },
+    function(next) {
+      // Load all reaction types.
+      application.collect('contextReactionType', function(error, reactions) {
+        if (error) {
+          return next(error);
+        }
+        application.reactions = reactions;
+        next();
+      });
+    }
+  ],
+  function(error) {
+    if (error) {
+      return callback(error);
+    }
+
+    // Load all contexts.
+    application.list('context', function(error, contexts) {
+      if (error) {
+        return callback(error);
+      }
+      application.contexts = contexts;
+      application.application.use(contextMiddleware(application));
+      callback();
+    });
+
   });
 };
 
@@ -35,6 +67,7 @@ context.permission = function(permissions, callback) {
  */
 context.type = function(types, callback) {
   var newTypes = {};
+  var application = this.application;
 
   newTypes['context'] = {
     title: 'Context',
@@ -82,9 +115,8 @@ context.type = function(types, callback) {
       'delete': 'manage-contexts'
     },
     methods: {
+      // @todo: move this to an extension method.
       execute: function(request, response, callback) {
-        var self = this;
-
         // Initialize conditions.
         this.conditions = this.conditions || {};
 
@@ -93,27 +125,28 @@ context.type = function(types, callback) {
         // Call callback bellow on the first conditionType that pass, if
         // matchAll is enabled all conditions must pass.
         var method = this.matchAll ? 'filter' : 'detect';
+        var context = this;
         async[method](conditionTypeNames, function(conditionTypeName, next) {
-          self.application.load('contextConditionType', conditionTypeName, function(err, conditionType) {
-            conditionType.check(request, self.conditions[conditionTypeName], function(match) {
-              next(match);
-            });
+          var conditionType = application.conditions[conditionTypeName];
+          conditionType.check(request, context.conditions[conditionTypeName], function(match) {
+            next(match);
           });
-        }, function(result) {
+        },
+        function(result) {
           // If none matches or 'matchAll' is enabled and not all conditions
           // matches, return false.
-          if (!result || (self.matchAll && result.length != conditionTypeNames.length)) {
+          if (!result || (context.matchAll && result.length != conditionTypeNames.length)) {
             return callback(false);
           }
 
-          self.reactions = self.reactions || {};
-          async.each(Object.keys(self.reactions), function(reactionTypeName, next) {
-            self.application.load('contextReactionType', reactionTypeName, function(err, reactionType) {
-              reactionType.react(request, response, self.reactions[reactionTypeName], function(err) {
-                next(err);
-              });
+          context.reactions = context.reactions || {};
+          async.each(Object.keys(context.reactions), function(reactionTypeName, next) {
+            var reactionType = application.reactions[reactionTypeName];
+            reactionType.react(request, response, context.reactions[reactionTypeName], function(err) {
+              next(err);
             });
-          }, function() {
+          },
+          function() {
             callback(true);
           });
         });

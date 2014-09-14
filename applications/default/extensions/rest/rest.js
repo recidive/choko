@@ -26,18 +26,17 @@ rest.route = function(routes, callback) {
     };
   };
 
-  var self = this;
-  async.each(Object.keys(this.application.types), function(typeName, next) {
-    var typeModel = self.application.types[typeName];
-    var type = typeModel.type;
+  async.each(Object.keys(application.types), function(typeName, next) {
+    var typeModel = application.type(typeName);
+    var type = application.types[typeName];
 
     // Default path to type name.
     if (!type.path) {
-      type.path = '/' + type.name;
+      type.path = '/' + typeName;
     }
 
     // Initialize access rules.
-    type.settings.access = type.settings.access || {};
+    type.access = type.access || {};
 
     // Add default access rules.
     var access = {
@@ -47,7 +46,7 @@ rest.route = function(routes, callback) {
       'edit': false,
       'delete': false
     };
-    utils.extend(access, type.settings.access);
+    utils.extend(access, type.access);
 
     // Helper function that receives a HTTP method/Model method mapper and run
     // the appropriate access checks.
@@ -87,17 +86,17 @@ rest.route = function(routes, callback) {
     };
 
     // Get, update or delete an item.
-    newRoutes['/rest' + type.path + '/:' + type.name] = {
+    newRoutes['/rest' + type.path + '/:' + typeName] = {
       middleware: passport.authenticate(['basic', 'anonymous']),
       callback: function(request, response, callback) {
         if (request.method == 'GET') {
-          return typeModel.load(request.params[type.name], callback);
+          return typeModel.load(request.params[typeName], callback);
         }
         if (request.method == 'PUT') {
           return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
         }
         if (request.method == 'POST' || request.method == 'PATCH') {
-          return typeModel.load(request.params[type.name], function(err, item) {
+          return typeModel.load(request.params[typeName], function(err, item) {
             if (item) {
               // Delete MongoDB ID if any.
               delete item._id;
@@ -108,7 +107,7 @@ rest.route = function(routes, callback) {
           });
         }
         if (request.method == 'DELETE') {
-          return typeModel.delete(request.params[type.name], callback);
+          return typeModel.delete(request.params[typeName], callback);
         }
         callback();
       },

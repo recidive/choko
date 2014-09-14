@@ -2,7 +2,7 @@ var async = require('async');
 
 // Context Middleware.
 module.exports = function(application) {
-  var contexts = application.data['context'];
+  var contexts = application.contexts;
 
   return function(request, response, callback) {
     // Initialize payload object.
@@ -20,7 +20,8 @@ module.exports = function(application) {
     // Sort contexts by weight.
     async.sortBy(contextKeys, function(contextKey, next) {
       next(null, contexts[contextKey].weight || 0);
-    }, function(err, sortedContextKeys) {
+    },
+    function(err, sortedContextKeys) {
       // Execute contexts in correct order.
       async.eachSeries(sortedContextKeys, function(contextName, next) {
         var context = contexts[contextName];

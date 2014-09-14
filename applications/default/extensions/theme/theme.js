@@ -13,6 +13,18 @@ theme.type = function(types, callback) {
   newTypes['theme'] = {
     title: 'Theme',
     description: 'Themes change application look & feel.',
+    fields: {
+      name: {
+        title: 'Name',
+        type: 'text',
+        required: true
+      },
+      title: {
+        title: 'Title',
+        type: 'text',
+        required: true
+      }
+    },
     access: {
       'list': 'manage-themes',
       'load': 'manage-themes',

@@ -50,7 +50,7 @@ form.form = function(forms, callback) {
   // the ones that have the 'form' property set to false, the ones that have
   // no fields and the ones that are polymorphic.
   async.each(Object.keys(self.application.types), function(typeName, next) {
-    var typeSettings = self.application.types[typeName].type.settings;
+    var typeSettings = self.application.types[typeName];
     if (typeName == 'type' || typeName == 'extension' || !typeSettings.fields || typeSettings.polymorphic) {
       return next();
     }
@@ -97,13 +97,13 @@ form.form = function(forms, callback) {
 
         // Check if referenced type is polymorphic, if so, we need to send the
         // referenced types.
-        var referencedType = self.application.type(fieldSettings.reference.type);
-        if (referencedType && referencedType.type.settings.polymorphic) {
+        var referencedType = self.application.types[fieldSettings.reference.type];
+        if (referencedType && referencedType.polymorphic) {
           element.reference.subtypes = Object.keys(referencedType.subtypes).map(function(subtype) {
             return {
               name: subtype + utils.capitalizeFirstLetter(fieldSettings.reference.type),
               shortName: subtype,
-              title: referencedType.subtypes[subtype].type.settings.title
+              title: referencedType.subtypes[subtype].title
             };
           });
         }
