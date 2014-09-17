@@ -94,6 +94,7 @@ user.permission = function(permissions, callback) {
  */
 user.type = function(types, callback) {
   var application = this.application;
+  var self = this;
   var newTypes = {};
 
   newTypes['user'] = {
@@ -155,6 +156,9 @@ user.type = function(types, callback) {
           weight: 5
         }]
       }
+    },
+    beforeCreate: function(data, callback) {
+      self.normalizeUserData(data, callback);
     },
     statics: {
       login: function(data, callback) {
@@ -268,14 +272,9 @@ user.type = function(types, callback) {
 };
 
 /**
- * The preSave() hook.
+ * The normalizeUser() hook.
  */
-user.preSave = function(type, data, callback) {
-  if (type.name != 'user') {
-    // Return early on types that are not the user type.
-    return callback(null, data);
-  }
-
+user.normalizeUserData = function(data, callback) {
   var User = this.application.type('user');
 
   // Generate a salt and hash the password.
