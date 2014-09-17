@@ -14,7 +14,7 @@ describe('REST extension', function(done) {
     var userData = userHelper.sample();
     userData['roles'].push('test-role');
 
-    new User(userData).validateAndSave(function(error, newAccount) {
+    User.validateAndSave(userData, function(error, newAccount) {
       if (error) {
         return assert.fail('error saving');
       }
@@ -33,7 +33,7 @@ describe('REST extension', function(done) {
     var userData = userHelper.sample();
     userData['roles'].push('test-role');
 
-    new User(userData).validateAndSave(function(error, newAccount) {
+    User.validateAndSave(userData, function(error, newAccount) {
       if (error) {
         return assert.fail('error saving');
       }
