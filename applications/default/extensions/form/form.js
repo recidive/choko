@@ -26,6 +26,18 @@ form.type = function(types, callback) {
   newTypes['form'] = {
     title: 'Form',
     description: 'Structures that can be rendered as forms.',
+    fields: {
+      name: {
+        title: 'Name',
+        type: 'text',
+        required: true
+      },
+      title: {
+        title: 'Title',
+        type: 'text',
+        required: true
+      }
+    },
     access: {
       // @todo: 'list' and 'load' should take into account form permissions.
       'list': true,

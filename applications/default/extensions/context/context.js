@@ -76,10 +76,12 @@ context.type = function(types, callback) {
       name: {
         title: 'Name',
         type: 'text',
+        required: true
       },
       title: {
         title: 'Title',
         type: 'text',
+        required: true
       },
       conditions: {
         title: 'Conditions',
