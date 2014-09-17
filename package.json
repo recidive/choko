@@ -9,8 +9,8 @@
   ],
   "repository": "git://github.com/recidive/choko.git",
   "dependencies": {
-    "prana": "recidive/prana#no-orm",
     "waterline": "0.10.x",
+    "prana": "recidive/prana#cache",
     "waterline-prana": "recidive/waterline-prana#master",
     "sails-mongo": "0.10.x",
     "express": "4.8.x",

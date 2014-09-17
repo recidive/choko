@@ -6,27 +6,6 @@ var utils = require('prana').utils;
 var field = module.exports = {};
 
 /**
- * The type() hook.
- */
-field.type = function(types, callback) {
-  var newTypes = {};
-
-  newTypes['field'] = {
-    title: 'Field',
-    description: 'Fields add schema to types and provide validation and output sanitizing.',
-    access: {
-      'list': true,
-      'load': true,
-      'add': false,
-      'edit': false,
-      'delete': false
-    },
-  };
-
-  callback(null, newTypes);
-};
-
-/**
  * The field() hook.
  */
 field.field = function(fields, callback) {
@@ -118,8 +97,7 @@ field.fieldCallback = function(hook) {
         // Add fieldName to fieldSettings.
         fieldSettings.name = fieldName;
 
-        var Field = application.type('field');
-        Field.load(fieldSettings.type, function(error, field) {
+        self.application.pick('field', fieldSettings.type, function(error, field) {
           if (error) {
             // Application error.
             return next(error);
