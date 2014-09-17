@@ -121,17 +121,15 @@ file.route = function(routes, callback) {
     callback: function(request, response, callback) {
       var requestFile = request.files.file; 
 
-      // Can't call that just "File" due to js internal file object.
-      var FileModel = application.type('file');
-      var file = new FileModel({
+      var File = application.type('file');
+      File.validateAndSave({
         filename: requestFile.name,
         filetype: requestFile.type,
         size: requestFile.size,
         path: requestFile.path,
         temporary: true
-      });
-
-      FileModel.validateAndSave(file, function(error, file) {
+      },
+      function(error, file) {
         if (error) {
           return callback(error);
         }
