@@ -2,6 +2,9 @@ var async = require('async');
 
 var display = module.exports;
 
+/**
+ * The type() hook.
+ */
 display.type = function(types, callback) {
   var newTypes = {};
 
@@ -12,18 +15,18 @@ display.type = function(types, callback) {
       name: {
         title: 'Name',
         type: 'text',
-        required: 'true'
+        required: true
       },
       title: {
         title: 'Title',
         type: 'text',
-        required: 'true'
+        required: true
       },
       layout: {
         title: 'Layout',
         type: 'reference',
         reference: {
-          type: 'displayLayout'
+          type: 'display-layout'
         }
       }
     },
@@ -36,19 +39,19 @@ display.type = function(types, callback) {
     }
   };
 
-  newTypes['displayLayout'] = {
+  newTypes['display-layout'] = {
     title: 'Display layout',
     description: 'A layout to be used on displays.',
     fields: {
       name: {
         title: 'Name',
         type: 'text',
-        required: 'true'
+        required: true
       },
       title: {
         title: 'Title',
         type: 'text',
-        required: 'true'
+        required: true
       }
     },
     access: {
