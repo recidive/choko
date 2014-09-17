@@ -312,7 +312,6 @@ user.route = function(routes, callback) {
       var data = request.body;
 
       var User = application.type('user');
-
       User.load(data.username, function(error, account) {
         if (error) {
           return callback(error);
@@ -328,8 +327,7 @@ user.route = function(routes, callback) {
         data.roles = [];
 
         // Create new user resource and save it.
-        var newAccount = new User(data);
-        newAccount.validateAndSave(function(error, newAccount, errors) {
+        var newAccount = User.create(data).exec(function(error, newAccount, errors) {
           if (error) {
             return callback(error);
           }
