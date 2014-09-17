@@ -27,7 +27,6 @@ rest.route = function(routes, callback) {
   };
 
   async.each(Object.keys(application.types), function(typeName, next) {
-    var typeModel = application.type(typeName);
     var type = application.types[typeName];
 
     // Default path to type name.
@@ -86,20 +85,19 @@ rest.route = function(routes, callback) {
     };
 
     // Get, update or delete an item.
-    newRoutes['/rest' + type.path + '/:' + typeName] = {
+    var paramName = utils.hyphensToCamelCase(typeName);
+    newRoutes['/rest' + type.path + '/:' + paramName] = {
       middleware: passport.authenticate(['basic', 'anonymous']),
       callback: function(request, response, callback) {
         if (request.method == 'GET') {
-          return typeModel.load(request.params[typeName], callback);
+          return typeModel.load(request.params[paramName], callback);
         }
         if (request.method == 'PUT') {
           return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
         }
         if (request.method == 'POST' || request.method == 'PATCH') {
-          return typeModel.load(request.params[typeName], function(err, item) {
+          return typeModel.load(request.params[paramName], function(err, item) {
             if (item) {
-              // Delete MongoDB ID if any.
-              delete item._id;
               utils.extend(item, request.body);
               request.body = item;
             }
@@ -107,7 +105,7 @@ rest.route = function(routes, callback) {
           });
         }
         if (request.method == 'DELETE') {
-          return typeModel.delete(request.params[typeName], callback);
+          return typeModel.delete(request.params[paramName], callback);
         }
         callback();
       },
