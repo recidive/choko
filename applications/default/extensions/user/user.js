@@ -272,7 +272,7 @@ user.type = function(types, callback) {
 };
 
 /**
- * The normalizeUser() hook.
+ * Normalize user data. Hash password
  */
 user.normalizeUserData = function(data, callback) {
   var User = this.application.type('user');
@@ -526,7 +526,9 @@ user.access = function(request, permission, callback) {
       next(!error && role && role.permissions.indexOf(permission) !== -1);
     });
   }, function(result) {
-    // @todo Add cache. Sort user roles, glue them together and use as cache id.
+    // @todo: Cache access check by role combination. Sort user roles, glue them
+    // together and use as cache id.
+
     // async.detect() returns roleName or undefined when nothing was detected,
     // so we need to convert it to boolean in some way.
     callback(null, result !== undefined);
