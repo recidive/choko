@@ -8,44 +8,8 @@ var context = module.exports;
  * The init() hook.
  */
 context.init = function(application, callback) {
-  async.parallel([
-    function(next) {
-      // Load all condition types.
-      application.collect('contextConditionType', function(error, conditions) {
-        if (error) {
-          return next(error);
-        }
-        application.conditions = conditions;
-        next();
-      });
-    },
-    function(next) {
-      // Load all reaction types.
-      application.collect('contextReactionType', function(error, reactions) {
-        if (error) {
-          return next(error);
-        }
-        application.reactions = reactions;
-        next();
-      });
-    }
-  ],
-  function(error) {
-    if (error) {
-      return callback(error);
-    }
-
-    // Load all contexts.
-    application.list('context', function(error, contexts) {
-      if (error) {
-        return callback(error);
-      }
-      application.contexts = contexts;
-      application.application.use(contextMiddleware(application));
-      callback();
-    });
-
-  });
+  application.application.use(contextMiddleware(application));
+  callback();
 };
 
 /**
@@ -129,9 +93,10 @@ context.type = function(types, callback) {
         var method = this.matchAll ? 'filter' : 'detect';
         var context = this;
         async[method](conditionTypeNames, function(conditionTypeName, next) {
-          var conditionType = application.conditions[conditionTypeName];
-          conditionType.check(request, context.conditions[conditionTypeName], function(match) {
-            next(match);
+          application.pick('contextConditionType', conditionTypeName, function(error, conditionType) {
+            conditionType.check(request, context.conditions[conditionTypeName], function(match) {
+              next(match);
+            });
           });
         },
         function(result) {
@@ -143,9 +108,10 @@ context.type = function(types, callback) {
 
           context.reactions = context.reactions || {};
           async.each(Object.keys(context.reactions), function(reactionTypeName, next) {
-            var reactionType = application.reactions[reactionTypeName];
-            reactionType.react(request, response, context.reactions[reactionTypeName], function(err) {
-              next(err);
+            application.pick('contextReactionType', reactionTypeName, function(error, reactionType) {
+              reactionType.react(request, response, context.reactions[reactionTypeName], function(error) {
+                next(error);
+              });
             });
           },
           function() {
