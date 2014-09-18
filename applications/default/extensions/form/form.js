@@ -63,9 +63,10 @@ form.form = function(forms, callback) {
   // no fields and the ones that are polymorphic.
   async.each(Object.keys(self.application.types), function(typeName, next) {
     var typeSettings = self.application.types[typeName];
-    if (typeName == 'type' || typeName == 'extension' || !typeSettings.fields || typeSettings.polymorphic) {
+    if (!typeSettings.fields || typeSettings.polymorphic) {
       return next();
     }
+
     var form = newForms['type-' + typeName] = {
       title: typeSettings.formTitle || typeSettings.title,
       description: 'Form for the ' + typeSettings.title + ' type.',

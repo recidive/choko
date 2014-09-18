@@ -30,9 +30,9 @@ management.page = function(pages, callback) {
   var newPages = {};
 
   // Create form pages for all page subtypes.
-  var pageTypes = this.application.type('page').subtypes;
+  var pageTypes = this.application.types['page'].subtypes;
   for (var subtypeName in pageTypes) {
-    var subtypeSettings = pageTypes[subtypeName].type.settings;
+    var subtypeSettings = pageTypes[subtypeName];
     newPages['manage-pages-add-' + subtypeSettings.name] = {
       path: '/manage/pages/add-' + subtypeSettings.name,
       title: 'Add ' + subtypeSettings.title.toLowerCase(),
@@ -43,9 +43,9 @@ management.page = function(pages, callback) {
   }
 
   // Create form panels for all panels subtypes.
-  var panelTypes = this.application.type('panel').subtypes;
+  var panelTypes = this.application.types['panel'].subtypes;
   for (var subtypeName in panelTypes) {
-    var subtypeSettings = panelTypes[subtypeName].type.settings;
+    var subtypeSettings = panelTypes[subtypeName];
     newPages['manage-panels-add-' + subtypeSettings.name] = {
       path: '/manage/panels/add-' + subtypeSettings.name,
       title: 'Add ' + subtypeSettings.title.toLowerCase(),
@@ -67,8 +67,8 @@ management.page = function(pages, callback) {
       for (var typeName in types) {
         var type = types[typeName];
         result[typeName] = {
-          title: type.type.settings.title,
-          description: type.type.settings.description
+          title: type.title,
+          description: type.description
         };
       }
       response.payload.page.items = result;
@@ -109,10 +109,10 @@ management.navigation = function(navigations, callback) {
   var newNavigations = {};
 
   // Create navigation dropdown with links for all page types form.
-  var pageTypes = this.application.type('page').subtypes;
+  var pageTypes = this.application.types['page'].subtypes;
   var items = [];
   for (var subtypeName in pageTypes) {
-    var subtypeSettings = pageTypes[subtypeName].type.settings;
+    var subtypeSettings = pageTypes[subtypeName];
     items.push({
       title: subtypeSettings.title,
       url: '/manage/pages/add-' + subtypeSettings.name
@@ -138,10 +138,10 @@ management.navigation = function(navigations, callback) {
 
 
   // Create navigation dropdown with links for all panel types form.
-  var panelTypes = this.application.type('panel').subtypes;
+  var panelTypes = this.application.types['panel'].subtypes;
   var items = [];
   for (var subtypeName in panelTypes) {
-    var subtypeSettings = panelTypes[subtypeName].type.settings;
+    var subtypeSettings = panelTypes[subtypeName];
     items.push({
       title: subtypeSettings.title,
       url: '/manage/panels/add-' + subtypeSettings.name
