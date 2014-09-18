@@ -28,6 +28,7 @@ rest.route = function(routes, callback) {
 
   async.each(Object.keys(application.types), function(typeName, next) {
     var type = application.types[typeName];
+    var typeModel = application.type(typeName);
 
     // Default path to type name.
     if (!type.path) {
