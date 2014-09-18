@@ -26,7 +26,7 @@ display.type = function(types, callback) {
         title: 'Layout',
         type: 'reference',
         reference: {
-          type: 'display-layout'
+          type: 'displayLayout'
         }
       }
     },
@@ -39,7 +39,7 @@ display.type = function(types, callback) {
     }
   };
 
-  newTypes['display-layout'] = {
+  newTypes['displayLayout'] = {
     title: 'Display layout',
     description: 'A layout to be used on displays.',
     fields: {
