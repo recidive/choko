@@ -12,7 +12,7 @@ module.exports = function(application) {
       response.payload.user = request.user;
     }
 
-    application.list('context', function(error, contexts) {
+    application.list('context', {}, function(error, contexts) {
       // @todo: do somethimg in case of an error getting the contexts.
       // Get context keys for sorting and using in context execution loop.
       var contextKeys = Object.keys(contexts);
