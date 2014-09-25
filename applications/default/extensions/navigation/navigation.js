@@ -21,6 +21,21 @@ navigation.permission = function(permissions, callback) {
  * The type() hook.
  */
 navigation.type = function(types, callback) {
+  var application = this.application;
+
+  var clearPanelCache = function(record, callback) {
+    // The afterDestroy() callback doesn't supply the deleted record.
+    if (typeof record === 'function') {
+      callback = record;
+      record = null;
+    }
+
+    // Clear panels cache.
+    application.clear('panel');
+
+    callback();
+  };
+
   var newTypes = {};
 
   newTypes['navigation'] = {
@@ -53,7 +68,11 @@ navigation.type = function(types, callback) {
       'add': 'manage-navigations',
       'edit': 'manage-navigations',
       'delete': 'manage-navigations'
-    }
+    },
+    // Add callbacks to invalidate panel cache on navigation operations.
+    afterCreate: clearPanelCache,
+    afterUpdate: clearPanelCache,
+    afterDestroy: clearPanelCache
   };
 
   newTypes['navigationItem'] = {
