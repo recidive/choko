@@ -243,7 +243,7 @@ context.contextConditionType = function(conditionTypes, callback) {
     check: function(request, conditions, callback) {
       var conditionTypeNames = Object.keys(conditions);
       async.filter(conditionNames, function(conditionTypeName, next) {
-        application.load('contextConditionType', conditionTypeName, function(err, conditionType) {
+        application.pick('contextConditionType', conditionTypeName, function(err, conditionType) {
           conditionType.check(request, conditions[conditionTypeName], function(match) {
             next(match);
           });
@@ -271,7 +271,7 @@ context.contextConditionType = function(conditionTypes, callback) {
     },
     check: function(request, conditions, callback) {
       async.detect(Object.keys(conditions), function(conditionTypeName, next) {
-        application.load('contextConditionType', conditionTypeName, function(err, conditionType) {
+        application.pick('contextConditionType', conditionTypeName, function(err, conditionType) {
           conditionType.check(request, conditions[conditionTypeName], function(match) {
             next(match);
           });
