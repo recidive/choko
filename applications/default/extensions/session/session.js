@@ -50,6 +50,7 @@ session.type = function(types, callback) {
         title: 'Data',
         // @todo: change to appropriate serialized/mixed field.
         type: 'text',
+        maxLenght: 2048,
         required: true
       }
     }

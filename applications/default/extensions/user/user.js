@@ -116,11 +116,13 @@ user.type = function(types, callback) {
       password: {
         title: 'Password',
         type: 'password',
+        maxLength: 1024,
         required: true
       },
       salt: {
         title: 'Salt',
         type: 'text',
+        maxLength: 512,
         internal: true
       },
       roles: {

@@ -70,6 +70,7 @@ file.field = function(fields, callback) {
 
   newFields['file'] = {
     title: 'File',
+    schema: 'string',
     element: 'file',
     validate: function(settings, item, next) {
       var fileId = item[settings.name];

@@ -14,6 +14,10 @@ field.field = function(fields, callback) {
   newFields['id'] = {
     title: 'Identifier',
     description: 'A Universally unique identifier.',
+    schema: {
+      type: 'string',
+      uuid: true
+    },
     preSave: function(settings, item, next) {
       if (!(settings.name in item)) {
         // Generate an UUID v4.
@@ -24,6 +28,20 @@ field.field = function(fields, callback) {
   };
   newFields['text'] = {
     title: 'Text',
+    schema: function(settings) {
+      var schema = {
+        type: (settings.maxLength > 256) ? 'text' : 'string'
+      };
+
+      // Add max/min properties if set.
+      ['maxLength', 'minLength'].map(function(what) {
+        if (what in settings) {
+          schema[what] = settings[what];
+        }
+      });
+
+      return schema;
+    },
     element: 'text',
     validate: function(settings, item, next) {
       // Default minLenght to 1.
@@ -37,6 +55,20 @@ field.field = function(fields, callback) {
   };
   newFields['number'] = {
     title: 'Number',
+    schema: function(settings) {
+      var schema = {
+        type: 'number'
+      };
+
+      // Add max/min properties if set.
+      ['max', 'min'].map(function(what) {
+        if (what in settings) {
+          schema[what] = settings[what];
+        }
+      });
+
+      return schema;
+    },
     element: 'number',
     validate: function(settings, item, next) {
       next(null, validator.isNumeric(item[settings.name].toString()) || 'Invalid number.');
@@ -44,13 +76,24 @@ field.field = function(fields, callback) {
   };
   newFields['date'] = {
     title: 'Date',
+    schema: 'date',
     element: 'date',
     validate: function(settings, item, next) {
       next(null, validator.isDate(item[settings.name].toString()) || 'Invalid date.');
     }
   };
+  newFields['boolean'] = {
+    title: 'Boolean',
+    description: 'True or false, yes or no, on or off.',
+    schema: 'boolean',
+    element: 'checkbox'
+  };
   newFields['email'] = {
     title: 'Email',
+    schema: {
+      type: 'string',
+      email: true
+    },
     element: 'email',
     validate: function(settings, item, next) {
       // Email validator oddly returns the email itself, so need to convert to
@@ -60,6 +103,10 @@ field.field = function(fields, callback) {
   };
   newFields['url'] = {
     title: 'URL',
+    schema: {
+      type: 'string',
+      url: true
+    },
     element: 'url',
     validate: function(settings, item, next) {
       next(null, validator.isUrl(item[settings.name].toString()) || 'Invalid URL.');
@@ -67,6 +114,9 @@ field.field = function(fields, callback) {
   };
   newFields['telephone'] = {
     title: 'Telephone',
+    schema: {
+      type: 'string'
+    },
     element: 'tel'
   };
   newFields['password'] = {
