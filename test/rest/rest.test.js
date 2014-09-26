@@ -7,6 +7,56 @@ var testingUrl = 'http://localhost:3200';
 
 describe('REST extension', function(done) {
 
+  it('should create an item via POST', function(done) {
+    var application = this.getServer().getApplication('localhost');
+    userHelper.createUser(application, ['test-role'], function(error, user, credentials) {
+      request(testingUrl)
+        .post('/rest/testType')
+        .auth(credentials.username, credentials.password)
+        .send({
+          name: 'a-test',
+          title: 'A test'
+        })
+        .expect(200, done);
+    });
+  });
+
+  it('should update an item via POST', function(done) {
+    var application = this.getServer().getApplication('localhost');
+    userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
+      // Create item.
+      request(testingUrl)
+        .post('/rest/testType')
+        .auth(credentials.username, credentials.password)
+        .send({
+          name: 'a-test',
+          title: 'A test'
+        })
+        .expect(200, function(error, response) {
+          if (error) {
+            throw error;
+          }
+          var result = response.body.data;
+
+          // Update item.
+          request(testingUrl)
+            .post('/rest/testType/' + result.id)
+            .auth(credentials.username, credentials.password)
+            .send({
+              name: 'a-test-edited',
+              title: 'A test updated'
+            })
+            .expect(200, done);
+        });
+    });
+  });
+
+  it('should return 404 error if type does not exist', function(done) {
+    request(testingUrl)
+      .get('/rest/inexistentType')
+      .expect(404, done);
+  });
+
   it('should authenticate on REST with Basic authentication', function(done) {
     var application = this.getServer().getApplication('localhost');
     var User = application.type('user');
@@ -39,9 +89,8 @@ describe('REST extension', function(done) {
       }
 
       request(testingUrl)
-        .post('/rest/testType')
+        .delete('/rest/testType')
         .auth(userData.username, userData.password)
-        .send({name: 'test'})
         .expect(403, done);
     });
   });

@@ -1,0 +1,8 @@
+{
+  "title": "Test type manager role",
+  "permissions": [
+    "view-test-type",
+    "add-test-type",
+    "manage-test-type"
+  ]
+}
