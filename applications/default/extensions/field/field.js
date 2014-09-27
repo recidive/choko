@@ -57,7 +57,7 @@ field.field = function(fields, callback) {
     title: 'Number',
     schema: function(settings) {
       var schema = {
-        type: 'number'
+        type: (settings.decimals && settings.decimals > 0) ? 'float' : 'integer'
       };
 
       // Add max/min properties if set.
