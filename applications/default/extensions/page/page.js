@@ -182,7 +182,7 @@ page.route = function(routes, callback) {
 
           if ((page.type === 'item' || page.type === 'form') && page.itemType && !page.itemKey) {
             // Try to get key from request params.
-            var keyProperty = self.application.type(page.itemType).type.settings.keyProperty;
+            var keyProperty = self.application.type(page.itemType).type.keyProperty;
             if (keyProperty in page.params) {
               page.itemKey = page.params[keyProperty];
             }
