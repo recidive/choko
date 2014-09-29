@@ -18,7 +18,7 @@ field.field = function(fields, callback) {
       type: 'string',
       uuid: true
     },
-    preSave: function(settings, item, next) {
+    beforeCreate: function(settings, item, next) {
       if (!(settings.name in item)) {
         // Generate an UUID v4.
         item[settings.name] = uuid.v4();
@@ -138,23 +138,22 @@ field.field = function(fields, callback) {
 field.fieldCallback = function(hook) {
   return function(type, data, callback) {
     var application = this.application;
-
-    if (type.settings.fields) {
+    var type = application.types[type]
+    if (type.fields) {
       // Validate type fields.
-      async.each(Object.keys(type.settings.fields), function(fieldName, next) {
-        var fieldSettings = type.settings.fields[fieldName];
+      async.each(Object.keys(type.fields), function(fieldName, next) {
+        var fieldSettings = type.fields[fieldName];
 
         // Add fieldName to fieldSettings.
         fieldSettings.name = fieldName;
 
-        self.application.pick('field', fieldSettings.type, function(error, field) {
+        application.pick('field', fieldSettings.type, function(error, field) {
           if (error) {
             // Application error.
             return next(error);
           }
           if (!field || !(hook in field)) {
-            // Field is of an unrecognized type or there's not a preSave()
-            // callback.
+            // Field is of an unrecognized type or there's not a callback.
             return next();
           }
 
@@ -185,11 +184,11 @@ field.fieldCallback = function(hook) {
 /**
  * Create hook implementations for all type operations to call field hooks.
  */
-['load', 'list', 'save', 'delete'].forEach(function(operation) {
+['create', 'update', 'validate', 'destroy'].forEach(function(operation) {
   var operationCapitalized = utils.capitalizeFirstLetter(operation);
 
   // Add pre operation hooks that call callbacks on fields.
-  ['pre', 'post'].forEach(function(kind) {
+  ['before', 'after'].forEach(function(kind) {
     var hook = kind + operationCapitalized;
     field[hook] = field.fieldCallback(hook);
   });

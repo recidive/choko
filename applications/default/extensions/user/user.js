@@ -159,7 +159,7 @@ user.type = function(types, callback) {
         }]
       }
     },
-    beforeCreate: function(data, callback) {
+    beforeCreate: function(settings, data, callback) {
       self.normalizeUserData(data, callback);
     },
     statics: {

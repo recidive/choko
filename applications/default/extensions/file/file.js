@@ -84,7 +84,7 @@ file.field = function(fields, callback) {
         next(null, 'Invalid file identifier.');
       });
     },
-    preSave: function(settings, item, next) {
+    beforeCreate: function(settings, item, next) {
       var fileId = item[settings.name];
       application.load('file', fileId, function(error, file) {
         if (error) {
