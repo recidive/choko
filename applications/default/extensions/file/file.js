@@ -18,7 +18,7 @@ file.type = function(types, callback) {
     fields: {
       id: {
         type: 'id',
-        title: 'Name',
+        title: 'Id',
         internal: true
       },
       filename: {
@@ -33,7 +33,7 @@ file.type = function(types, callback) {
       },
       size: {
         type: 'number',
-        title: 'size',
+        title: 'Size',
         internal: true
       },
       path: {
@@ -98,9 +98,13 @@ file.field = function(fields, callback) {
 
           var filePath = path.join(application.settings.applicationDir, 'public/files', settings.name, file.filename);
           self.createPathAndSave(filePath, data, function(error) {
+            if (error) {
+              return next(error);
+            }
+
             file.path = file.filename;
             file.temporary = false;
-            next();
+            file.save(next);
           });
         });
       });
@@ -120,13 +124,13 @@ file.route = function(routes, callback) {
   newRoutes['/file'] = {
     access: 'upload files',
     callback: function(request, response, callback) {
-      var requestFile = request.files.file; 
+      var requestFile = request.files.file;
 
       var File = application.type('file');
       File.validateAndSave({
-        filename: requestFile.name,
-        filetype: requestFile.type,
-        size: requestFile.size,
+        filename: requestFile.originalname,
+        filetype: requestFile.mimetype,
+        size: parseInt(requestFile.size),
         path: requestFile.path,
         temporary: true
       },
