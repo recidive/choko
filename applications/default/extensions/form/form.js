@@ -89,6 +89,12 @@ form.form = function(forms, callback) {
       if (fieldSettings.internal) {
         return next();
       }
+      // By pass not 'inline' fields with 'via' set.
+      // @todo: eventually we may want to edit this kind of fields when editing
+      // the main item too.
+      if (fieldSettings.type == 'reference' && 'reference' in fieldSettings && 'via' in fieldSettings.reference) {
+        return next();
+      }
       var element = {
         name: fieldName,
         title: fieldSettings.title || null,
