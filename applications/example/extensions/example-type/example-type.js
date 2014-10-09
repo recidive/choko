@@ -12,6 +12,7 @@ exampleType.type = function(types, callback) {
     description: 'Articles are pieces of text with a title.',
     path: 'article',
     storage: 'database',
+    keyProperty: 'id',
     fields: {
       id: {
         title: 'Id',
