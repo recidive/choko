@@ -15,8 +15,7 @@ field.field = function(fields, callback) {
     title: 'Identifier',
     description: 'A Universally unique identifier.',
     schema: {
-      type: 'string',
-      uuid: true
+      type: 'string'
     },
     beforeCreate: function(settings, item, next) {
       if (!(settings.name in item)) {
