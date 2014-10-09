@@ -23,7 +23,7 @@ navigation.permission = function(permissions, callback) {
 navigation.type = function(types, callback) {
   var application = this.application;
 
-  var clearPanelCache = function(record, callback) {
+  var clearPanelCache = function(settings, record, callback) {
     // The afterDestroy() callback doesn't supply the deleted record.
     if (typeof record === 'function') {
       callback = record;
