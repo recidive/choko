@@ -4,5 +4,5 @@
   "access": "manage-users",
   "type": "list",
   "itemType": "role",
-  "template": "templates/list-group.html"
+  "template": "/templates/list-group.html"
 }

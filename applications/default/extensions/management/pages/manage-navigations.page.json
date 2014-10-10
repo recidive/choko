@@ -6,5 +6,5 @@
   "access": "manage-navigations",
   "type": "list",
   "itemType": "navigation",
-  "template": "templates/list-group.html"
+  "template": "/templates/list-group.html"
 }

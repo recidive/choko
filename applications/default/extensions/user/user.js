@@ -446,12 +446,12 @@ user.panel = function(panels, callback) {
   newPanels['sign-in'] = {
     title: 'Sign in',
     bare: true,
-    template: 'templates/sign-in.html'
+    template: '/templates/sign-in.html'
   };
   newPanels['sign-out'] = {
     title: 'Sign out',
     bare: true,
-    template: 'templates/sign-out.html'
+    template: '/templates/sign-out.html'
   };
 
   callback(null, newPanels);

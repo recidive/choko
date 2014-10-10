@@ -6,5 +6,5 @@
   "access": "manage-pages",
   "type": "list",
   "itemType": "page",
-  "template": "templates/list-group.html"
+  "template": "/templates/list-group.html"
 }
