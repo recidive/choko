@@ -85,8 +85,22 @@ page.pageType = function(pageTypes, callback) {
     fields: {
       itemType: {
         title: 'Item type',
-        type:  'text',
+        type: 'text',
         required: true
+      },
+      listStyle: {
+        title: 'List style',
+        type: 'reference',
+        reference: {
+          type: 'listStyle'
+        }
+      },
+      itemDisplay: {
+        title: 'Item display',
+        type: 'reference',
+        reference: {
+          type: 'display'
+        }
       }
     }
   };
@@ -97,13 +111,20 @@ page.pageType = function(pageTypes, callback) {
     fields: {
       itemType: {
         title: 'Item type',
-        type:  'text',
+        type: 'text',
         required: true
       },
       itemKey: {
         title: 'Item key',
         type:  'text',
         required: true
+      },
+      itemDisplay: {
+        title: 'Item display',
+        type: 'reference',
+        reference: {
+          type: 'display'
+        }
       }
     }
   };
