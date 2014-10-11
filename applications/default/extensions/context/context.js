@@ -73,6 +73,20 @@ context.type = function(types, callback) {
         }
       }
     },
+    displays: {
+      'list-group-item': {
+        'heading': [{
+          fieldName: 'title',
+          format: 'title',
+          weight: 0
+        }],
+        'text': [{
+          fieldName: 'description',
+          format: 'paragraph',
+          weight: 5
+        }]
+      }
+    },
     access: {
       'list': 'manage-contexts',
       'load': 'manage-contexts',

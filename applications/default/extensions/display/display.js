@@ -60,6 +60,20 @@ display.type = function(types, callback) {
       'add': 'manage-displays',
       'edit': 'manage-displays',
       'delete': 'manage-displays'
+    },
+    displays: {
+      'list-group-item': {
+        'heading': [{
+          fieldName: 'title',
+          format: 'title',
+          weight: 0
+        }],
+        'text': [{
+          fieldName: 'description',
+          format: 'paragraph',
+          weight: 5
+        }]
+      }
     }
   };
 
@@ -90,6 +104,9 @@ display.type = function(types, callback) {
   callback(null, newTypes);
 };
 
+/**
+ * The display() hook.
+ */
 display.display = function(displays, callback) {
   var types = this.application.types;
   // Add type display instances to display objects.
@@ -109,6 +126,9 @@ display.display = function(displays, callback) {
   });
 };
 
+/**
+ * The listStyle() hook.
+ */
 display.listStyle = function(listStyles, callback) {
   var newStyles = {};
 
@@ -118,7 +138,8 @@ display.listStyle = function(listStyles, callback) {
   newStyles['list-group'] = {
     title: 'List group'
   };
-  newStyles['thumbnail'] = {
+
+  newStyles['thumbnails'] = {
     title: 'Thumbnails'
   };
 

@@ -52,6 +52,20 @@ page.type = function(types, callback) {
       'add': 'manage-pages',
       'edit': 'manage-pages',
       'delete': 'manage-pages'
+    },
+    displays: {
+      'list-group-item': {
+        'heading': [{
+          fieldName: 'title',
+          format: 'title',
+          weight: 0
+        }],
+        'text': [{
+          fieldName: 'description',
+          format: 'paragraph',
+          weight: 5
+        }]
+      }
     }
   };
 

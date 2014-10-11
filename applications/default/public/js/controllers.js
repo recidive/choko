@@ -356,10 +356,12 @@ angular.module('choko.controllers', [])
         if (!$scope.view.itemTemplate && $scope.view.itemDisplay) {
           Choko.get({type: 'display', key: $scope.view.itemDisplay}, function(display) {
             $scope.display = display;
-            Choko.get({type: 'displayLayout', key: display.layout}, function(layout) {
-              $scope.layout = layout;
-              $scope.view.itemTemplate = '/templates/display-layout.html';
-            });
+            if (display.layout) {
+              Choko.get({type: 'displayLayout', key: display.layout}, function(layout) {
+                $scope.layout = layout;
+                $scope.view.itemTemplate = '/templates/display-layout.html';
+              });
+            }
           });
         }
       }

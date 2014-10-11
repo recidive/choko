@@ -147,15 +147,22 @@ user.type = function(types, callback) {
     },
     displays: {
       'list-item': {
-        'content': [{
+        'text': [{
           fieldName: 'username',
           format: 'title',
           weight: 0
-        },
-        {
+        }]
+      },
+      'list-group-item': {
+        'heading': [{
+          fieldName: 'username',
+          format: 'title',
+          weight: 0
+        }],
+        'text': [{
           fieldName: 'email',
           format: 'paragraph',
-          weight: 5
+          weight: 0
         }]
       }
     },
@@ -241,6 +248,20 @@ user.type = function(types, callback) {
       'add': 'manage-users',
       'edit': 'manage-users',
       'delete': 'manage-users'
+    },
+    displays: {
+      'list-group-item': {
+        'heading': [{
+          fieldName: 'title',
+          format: 'title',
+          weight: 0
+        }],
+        'text': [{
+          fieldName: 'description',
+          format: 'paragraph',
+          weight: 5
+        }]
+      }
     }
   };
 

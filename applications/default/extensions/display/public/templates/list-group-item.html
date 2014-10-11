@@ -1,2 +1,2 @@
-<h4 class="list-group-item-heading">{{item.title}}</h4>
-<p class="list-group-item-text">{{item.description}}</p>
+<h4 ng-controller="DisplayRegionController" class="list-group-item-heading"><span ng-repeat="field in display.instances[view.itemType]['heading'] | orderBy:'weight'" ng-controller="DisplayFieldController" ng-include="field.template"></span></h4>
+<p ng-controller="DisplayRegionController" class="list-group-item-text"><span ng-repeat="field in display.instances[view.itemType]['text'] | orderBy:'weight'" ng-controller="DisplayFieldController" ng-include="field.template"></span></p>

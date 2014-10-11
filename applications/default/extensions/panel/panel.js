@@ -46,6 +46,20 @@ panel.type = function(types, callback) {
       'add': 'manage-panels',
       'edit': 'manage-panels',
       'delete': 'manage-panels'
+    },
+    displays: {
+      'list-group-item': {
+        'heading': [{
+          fieldName: 'title',
+          format: 'title',
+          weight: 0
+        }],
+        'text': [{
+          fieldName: 'description',
+          format: 'paragraph',
+          weight: 5
+        }]
+      }
     }
   };
 
