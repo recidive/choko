@@ -133,14 +133,28 @@ display.listStyle = function(listStyles, callback) {
   var newStyles = {};
 
   newStyles['unformatted'] = {
-    title: 'Unformatted list'
+    title: 'Unformatted list',
+    displayModes: ['custom', 'media']
   };
+
+  newStyles['unordered'] = {
+    title: 'Unordered list',
+    displayModes: ['list-item']
+  };
+
+  newStyles['ordered'] = {
+    title: 'Ordered list',
+    displayModes: ['list-item']
+  };
+
   newStyles['list-group'] = {
-    title: 'List group'
+    title: 'List group',
+    displayModes: ['list-group-item']
   };
 
   newStyles['thumbnails'] = {
-    title: 'Thumbnails'
+    title: 'Thumbnails',
+    displayModes: ['thumbnail', 'custom', 'media']
   };
 
   callback(null, newStyles);

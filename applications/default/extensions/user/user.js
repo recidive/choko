@@ -149,7 +149,7 @@ user.type = function(types, callback) {
       'list-item': {
         'text': [{
           fieldName: 'username',
-          format: 'title',
+          format: 'plain',
           weight: 0
         }]
       },
