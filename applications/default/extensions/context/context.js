@@ -8,7 +8,7 @@ var context = module.exports;
  * The init() hook.
  */
 context.init = function(application, callback) {
-  application.application.use(contextMiddleware(application));
+  application.routers.page.use(contextMiddleware(application));
   callback();
 };
 

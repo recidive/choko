@@ -35,10 +35,10 @@ var RouteController = module.exports = function(application, settings) {
     self.handle(request, response);
   });
 
-  // Register on express.
-  var app = this.application.application;
+  // Register on the appropriate router. Default to 'page' router.
+  var router = this.settings.router ? this.application.routers[this.settings.router] : this.application.routers.page;
   var method = this.settings.method || 'all';
-  app[method].apply(app, params);
+  router[method].apply(router, params);
 };
 
 /**
