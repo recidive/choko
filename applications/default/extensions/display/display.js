@@ -8,6 +8,30 @@ var display = module.exports;
 display.type = function(types, callback) {
   var newTypes = {};
 
+  newTypes['listStyle'] = {
+    title: 'List style',
+    description: 'List styles format the list wrapper. It can be a table, a list, a galery, a graph or a map.',
+    fields: {
+      name: {
+        title: 'Name',
+        type: 'text',
+        required: true
+      },
+      title: {
+        title: 'Title',
+        type: 'text',
+        required: true
+      }
+    },
+    access: {
+      'list': 'manage-displays',
+      'load': true,
+      'add': 'manage-displays',
+      'edit': 'manage-displays',
+      'delete': 'manage-displays'
+    }
+  };
+
   newTypes['display'] = {
     title: 'Display',
     description: 'Displays.',
@@ -83,4 +107,20 @@ display.display = function(displays, callback) {
   }, function() {
     callback();
   });
+};
+
+display.listStyle = function(listStyles, callback) {
+  var newStyles = {};
+
+  newStyles['unformatted'] = {
+    title: 'Unformatted list'
+  };
+  newStyles['list-group'] = {
+    title: 'List group'
+  };
+  newStyles['thumbnail'] = {
+    title: 'Thumbnails'
+  };
+
+  callback(null, newStyles);
 };

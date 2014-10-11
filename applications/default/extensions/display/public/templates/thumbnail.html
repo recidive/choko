@@ -1,0 +1,5 @@
+<div class="row">
+  <div ng-repeat="item in items" ng-controller="ItemController" class="col-xs-6 col-md-3">
+    <div ng-include="view.itemTemplate || '/templates/item.html'" class="thumbnail"></div>
+  </div>
+</div>
