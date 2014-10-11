@@ -16,9 +16,14 @@ var user = module.exports;
  * The init() hook.
  */
 user.init = function(application, callback) {
-  // Initialize passport.
-  application.application.use(passport.initialize());
-  application.application.use(passport.session());
+  // Initialize passport and passportSession middlewares.
+  var passportMiddleware = passport.initialize();
+  application.routers.rest.use(passportMiddleware);
+  application.routers.page.use(passportMiddleware);
+
+  var passportSessionMiddleware = passport.session();
+  application.routers.rest.use(passportSessionMiddleware);
+  application.routers.page.use(passportSessionMiddleware);
 
   var authCallback = function(username, password, callback) {
     var User = application.type('user');
@@ -147,15 +152,22 @@ user.type = function(types, callback) {
     },
     displays: {
       'list-item': {
-        'content': [{
+        'text': [{
+          fieldName: 'username',
+          format: 'plain',
+          weight: 0
+        }]
+      },
+      'list-group-item': {
+        'heading': [{
           fieldName: 'username',
           format: 'title',
           weight: 0
-        },
-        {
+        }],
+        'text': [{
           fieldName: 'email',
           format: 'paragraph',
-          weight: 5
+          weight: 0
         }]
       }
     },
@@ -241,6 +253,20 @@ user.type = function(types, callback) {
       'add': 'manage-users',
       'edit': 'manage-users',
       'delete': 'manage-users'
+    },
+    displays: {
+      'list-group-item': {
+        'heading': [{
+          fieldName: 'title',
+          format: 'title',
+          weight: 0
+        }],
+        'text': [{
+          fieldName: 'description',
+          format: 'paragraph',
+          weight: 5
+        }]
+      }
     }
   };
 

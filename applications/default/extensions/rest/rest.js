@@ -82,7 +82,8 @@ rest.route = function(routes, callback) {
           'POST': 'add'
         };
         accessHelper(methodMapper, request, response, callback);
-      }
+      },
+      router: 'rest'
     };
 
     // Get, update or delete an item.
@@ -119,7 +120,8 @@ rest.route = function(routes, callback) {
           'DELETE': 'delete'
         };
         accessHelper(methodMapper, request, response, callback);
-      }
+      },
+      router: 'rest'
     };
     next();
   }, function(err) {

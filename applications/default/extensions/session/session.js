@@ -8,16 +8,20 @@ var session = module.exports;
  * The init() hook.
  */
 session.init = function(application, callback) {
-
-  application.application.use(expressSession({
+  // Enable session on rest and page routers.
+  var sessionMiddleware = expressSession({
     store: new ChokoStore(application),
     secret: application.settings.sessionSecret,
     resave: true,
     saveUninitialized: true
-  }));
+  });
+  application.routers.rest.use(sessionMiddleware);
+  application.routers.page.use(sessionMiddleware);
 
   // Enable flash messages.
-  application.application.use(flash());
+  var flashMiddleware = flash();
+  application.routers.rest.use(flashMiddleware);
+  application.routers.page.use(flashMiddleware);
 
   // Call init() callback.
   callback();

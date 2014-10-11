@@ -1,0 +1,1 @@
+<span ng-controller="DisplayRegionController"><span ng-repeat="field in display.instances[view.itemType]['text'] | orderBy:'weight'" ng-controller="DisplayFieldController" ng-include="field.template"></span></span>

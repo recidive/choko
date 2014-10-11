@@ -8,7 +8,7 @@ var context = module.exports;
  * The init() hook.
  */
 context.init = function(application, callback) {
-  application.application.use(contextMiddleware(application));
+  application.routers.page.use(contextMiddleware(application));
   callback();
 };
 
@@ -71,6 +71,20 @@ context.type = function(types, callback) {
           inline: true,
           titleField: 'type'
         }
+      }
+    },
+    displays: {
+      'list-group-item': {
+        'heading': [{
+          fieldName: 'title',
+          format: 'title',
+          weight: 0
+        }],
+        'text': [{
+          fieldName: 'description',
+          format: 'paragraph',
+          weight: 5
+        }]
       }
     },
     access: {

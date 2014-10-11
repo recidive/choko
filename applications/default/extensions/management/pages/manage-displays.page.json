@@ -6,5 +6,6 @@
   "access": "manage-displays",
   "type": "list",
   "itemType": "display",
-  "template": "/templates/list-group.html"
+  "listStyle": "list-group",
+  "itemDisplay": "list-group-item"
 }
