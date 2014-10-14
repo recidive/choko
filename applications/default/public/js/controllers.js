@@ -136,6 +136,12 @@ angular.module('choko.controllers', [])
       };
     }])
 
+  .controller('NavigationItemController', ['$scope', '$location', 'Params',
+    function ($scope, $location, Params) {
+      var item = $scope.subItem || $scope.item;
+      item.title = Params.parse(item.title, $scope);
+    }])
+
   .controller('ItemController', ['$scope',
     function ($scope) {
 
