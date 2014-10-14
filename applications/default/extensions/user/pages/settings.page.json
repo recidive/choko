@@ -1,0 +1,10 @@
+{
+  "path": "/settings",
+  "title": "Account settings",
+  "access": "edit-own-account",
+  "type": "form",
+  "formName": "edit-account",
+  "itemType": "user",
+  "itemKey": ":username|user",
+  "redirect": "/settings"
+}

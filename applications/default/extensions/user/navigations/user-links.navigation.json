@@ -1,0 +1,26 @@
+{
+  "title": "User links",
+  "template": "/templates/btn-group.html",
+  "classes": [
+    "btn-group-sm"
+  ],
+  "items": [
+    {
+      "type": "dropdown",
+      "title": ":username|user",
+      "classes": ["navbar-btn", "btn-link"],
+      "items": [
+        {
+          "type": "link",
+          "title": "Settings",
+          "url": "/settings"
+        },
+        {
+          "type": "link",
+          "title": "Sign out",
+          "url": "/sign-out"
+        }
+      ]
+    }
+  ]
+}

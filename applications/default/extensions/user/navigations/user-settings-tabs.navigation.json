@@ -1,0 +1,16 @@
+{
+  "title": "User settings tabs",
+  "classes": [
+    "nav-tabs"
+  ],
+  "items": [
+    {
+      "title": "Account",
+      "url": "/settings"
+    },
+    {
+      "title": "Password",
+      "url": "/settings/password"
+    }
+  ]
+}

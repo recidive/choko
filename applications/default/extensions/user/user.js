@@ -382,6 +382,88 @@ user.route = function(routes, callback) {
     }
   };
 
+  newRoutes['/settings/edit-account-submit/:username'] = {
+    access: 'edit-own-account',
+    callback: function(request, response, callback) {
+      var user = request.user;
+
+      // @todo: figure out how to prevent form controller from sending the
+      // username.
+      if (user.username != request.params.username) {
+        return callback(null, ['Invalid user.'], 400);
+      }
+
+      var data = request.body;
+
+      // Delete unwanted data that may lead to security holes.
+      delete data.id;
+      delete data.password;
+      delete data.salt;
+      delete data.roles;
+
+      var User = application.type('user');
+      User.load(user.username, function(error, account) {
+        utils.extend(account, data);
+        account.save(callback)
+      });
+    }
+  };
+
+  newRoutes['/settings/change-password-submit'] = {
+    access: 'edit-own-account',
+    callback: function(request, response, callback) {
+      var user = request.user;
+      var data = request.body;
+
+      if (!data['password-current']) {
+        return callback(null, ['Please provide your current password.'], 400);
+      }
+
+      if (!data.password || !data['password-confirm']) {
+        return callback(null, ['Please enter a password in both fields.'], 400);
+      }
+
+      if (data.password != data['password-confirm']) {
+        return callback(null, ['Passwords must match.'], 400);
+      }
+
+      var User = application.type('user');
+      User.load(user.username, function(error, account) {
+        if (error) {
+          return callback(error);
+        }
+
+        if (account) {
+          User.hash(data['password-current'], new Buffer(account.salt, 'base64'), function(error, password) {
+            if (error) {
+              return callback(error);
+            }
+
+            if (account.password == password.toString('base64')) {
+              // Password matches.
+              User.hash(data.password, new Buffer(account.salt, 'base64'), function(error, password) {
+                if (error) {
+                  return callback(error);
+                }
+
+                account.password = password.toString('base64');
+                account.save(callback);
+              });
+            }
+            else {
+              // Wrong password.
+              callback(null, ['Wrong current password.'], 400);
+            }
+          });
+        }
+        else {
+          // User not found.
+          callback(null, false);
+        }
+      });
+    }
+  };
+
   newRoutes['/sign-in-submit'] = {
     access: 'sign-in',
     callback: function(request, response, callback) {
@@ -449,7 +531,8 @@ user.role = function(routes, callback) {
     title: 'Authenticated',
     description: 'Authenticated, signed in user.',
     permissions: [
-      'sign-out'
+      'sign-out',
+      'edit-own-account'
     ]
   };
 
