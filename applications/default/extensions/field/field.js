@@ -25,6 +25,7 @@ field.field = function(fields, callback) {
       next();
     }
   };
+
   newFields['text'] = {
     title: 'Text',
     schema: function(settings) {
@@ -52,6 +53,7 @@ field.field = function(fields, callback) {
       next(null, !validator.notEmpty(item[settings.name]) || validator.len(item[settings.name].toString(), settings.minLength, settings.maxLength) || 'Value must have from ' + settings.minLength + ' to ' + settings.maxLength + ' characters.');
     }
   };
+
   newFields['number'] = {
     title: 'Number',
     schema: function(settings) {
@@ -73,6 +75,7 @@ field.field = function(fields, callback) {
       next(null, validator.isNumeric(item[settings.name].toString()) || 'Invalid number.');
     }
   };
+
   newFields['date'] = {
     title: 'Date',
     schema: 'date',
@@ -81,12 +84,14 @@ field.field = function(fields, callback) {
       next(null, validator.isDate(item[settings.name].toString()) || 'Invalid date.');
     }
   };
+
   newFields['boolean'] = {
     title: 'Boolean',
     description: 'True or false, yes or no, on or off.',
     schema: 'boolean',
     element: 'checkbox'
   };
+
   newFields['email'] = {
     title: 'Email',
     schema: {
@@ -100,6 +105,7 @@ field.field = function(fields, callback) {
       next(null, new Boolean(validator.isEmail(item[settings.name].toString())) || 'Invalid email.');
     }
   };
+
   newFields['url'] = {
     title: 'URL',
     schema: {
@@ -111,6 +117,7 @@ field.field = function(fields, callback) {
       next(null, validator.isUrl(item[settings.name].toString()) || 'Invalid URL.');
     }
   };
+
   newFields['telephone'] = {
     title: 'Telephone',
     schema: {
@@ -118,6 +125,7 @@ field.field = function(fields, callback) {
     },
     element: 'tel'
   };
+
   newFields['password'] = {
     title: 'Password',
     element: 'password',
