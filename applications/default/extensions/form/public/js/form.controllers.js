@@ -4,7 +4,6 @@ angular.module('choko.controllers')
 
 .controller('ElementController', ['$scope',
   function ($scope) {
-    $scope._test = 'AHAHA';
     $scope.element.template = $scope.element.template || '/templates/' + $scope.element.type + '.html';
   }])
 
