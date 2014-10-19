@@ -7,4 +7,11 @@ angular.module('choko.directives')
     restrict: 'A',
     controller: 'ElementController'
   }
+})
+
+.directive('ckFileElement', function() {
+  return {
+    restrict: 'A',
+    controller: 'FileElementController'
+  }
 });
