@@ -21,4 +21,25 @@ angular.module('choko.directives')
     restrict: 'A',
     controller: 'ButtonController'
   }
+})
+
+.directive('ckReferenceElement', function() {
+  return {
+    restrict: 'A',
+    controller: 'ReferenceElementController'
+  }
+})
+
+.directive('ckInlineReferenceElement', function() {
+  return {
+    restrict: 'A',
+    controller: 'InlineReferenceElementController'
+  }
+})
+
+.directive('ckInlineReferenceElementItem', function() {
+  return {
+    restrict: 'A',
+    controller: 'InlineReferenceElementItemController'
+  }
 });

@@ -1,5 +1,5 @@
 <label ng-if="element.title && !element.reference.inline" for="element-{{form.name}}-{{element.name}}">{{element.title}}</label>
-<div ng-if="!element.reference.inline" ng-controller="ReferenceElementController" class="controls">
+<div ng-if="!element.reference.inline" ck-reference-element class="controls">
   <div ng-if="element.reference.multiple" ng-repeat="(optionKey, option) in element.options" class="checkbox">
     <label>
       <input ng-checked="data[element.name].indexOf(optionKey) > -1" ng-click="toggleSelection(optionKey)" type="checkbox" value="optionKey">
@@ -19,11 +19,11 @@
   </select>
 </div>
 
-<div ng-if="element.reference.inline" ng-controller="InlineReferenceElementController" class="controls well">
+<div ng-if="element.reference.inline" ck-inline-reference-element class="controls well">
   <fieldset>
     <p ng-if="items.length == 0">No items added yet.</p>
     <div ng-if="items.length > 0" class="list-group">
-      <div ng-repeat="(key, item) in items" ng-controller="InlineReferenceElementItemController" class="list-group-item">
+      <div ng-repeat="(key, item) in items" ck-inline-reference-element-item class="list-group-item">
         <button ng-click="removeItem(key)" type="button" class="close" aria-hidden="true">&times;</button>
         <h4 class="list-group-item-heading"><a ng-click="editItem()">{{element.reference.titleField ? item[element.reference.titleField] : item.title}}</a>
       </div>
