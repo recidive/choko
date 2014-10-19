@@ -33,11 +33,6 @@ angular.module('choko.controllers')
     };
   }])
 
-.controller('SubElementController', ['$scope',
-  function ($scope) {
-    $scope.subElement.template = $scope.subElement.template || '/templates/' + $scope.subElement.type + '.html';
-  }])
-
 .controller('ButtonController', ['$scope',
   function ($scope) {
     $scope.call = function(func, args) {
