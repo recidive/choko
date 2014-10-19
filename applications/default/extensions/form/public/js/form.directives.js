@@ -14,4 +14,11 @@ angular.module('choko.directives')
     restrict: 'A',
     controller: 'FileElementController'
   }
+})
+
+.directive('ckButton', function() {
+  return {
+    restrict: 'A',
+    controller: 'ButtonController'
+  }
 });
