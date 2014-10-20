@@ -5,11 +5,16 @@ angular.module('choko.controllers')
 .controller('ElementController', ['$scope',
   function ($scope) {
     $scope.element.template = $scope.element.template || '/templates/' + $scope.element.type + '.html';
+    $scope.element.id = $scope.element.id || 'element-' + $scope.form.name + '-' + $scope.element.name;
   }])
 
-.controller('FileElementController', ['$scope', '$upload',
-  function ($scope, $upload) {
-    $scope.element.template = $scope.element.template || '/templates/' + $scope.element.type + '.html';
+.controller('FileElementController', ['$scope', '$controller', '$upload',
+  function ($scope, $controller, $upload) {
+    // Inherit ElementController.
+    $controller('ElementController', {
+      $scope: $scope
+    });
+
     $scope.progress = 0;
 
     // Initialize files container.
@@ -33,8 +38,13 @@ angular.module('choko.controllers')
     };
   }])
 
-.controller('ButtonController', ['$scope',
-  function ($scope) {
+.controller('ButtonController', ['$scope', '$controller',
+  function ($scope, $controller) {
+    // Inherit ElementController.
+    $controller('ElementController', {
+      $scope: $scope
+    });
+
     $scope.call = function(func, args) {
       $scope[func].apply(this, args);
     };
@@ -54,8 +64,13 @@ angular.module('choko.controllers')
     };
   }])
 
-.controller('ReferenceElementController', ['$scope', 'Choko',
-  function ($scope, Choko) {
+.controller('ReferenceElementController', ['$scope', '$controller', 'Choko',
+  function ($scope, $controller, Choko) {
+    // Inherit ElementController.
+    $controller('ElementController', {
+      $scope: $scope
+    });
+
     var query = {
       type: $scope.element.reference.type
     };
@@ -89,8 +104,13 @@ angular.module('choko.controllers')
     };
   }])
 
-.controller('InlineReferenceElementController', ['$scope', 'Choko',
-  function ($scope, Choko) {
+.controller('InlineReferenceElementController', ['$scope', '$controller', 'Choko',
+  function ($scope, $controller, Choko) {
+    // Inherit ElementController.
+    $controller('ElementController', {
+      $scope: $scope
+    });
+
     var multiple = $scope.element.reference.multiple;
 
     // Subform errors are handled separately.

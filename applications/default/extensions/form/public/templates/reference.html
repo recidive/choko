@@ -1,4 +1,4 @@
-<label ng-if="element.title && !element.reference.inline" for="element-{{form.name}}-{{element.name}}">{{element.title}}</label>
+<label ng-if="element.title && !element.reference.inline" for="{{element.id}}">{{element.title}}</label>
 <div ng-if="!element.reference.inline" ck-reference-element class="controls">
   <div ng-if="element.reference.multiple" ng-repeat="(optionKey, option) in element.options" class="checkbox">
     <label>

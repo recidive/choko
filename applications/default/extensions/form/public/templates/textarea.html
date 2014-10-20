@@ -1,5 +1,5 @@
 <div ck-element class="form-group">
-  <label ng-if="element.title" for="element-{{form.name}}-{{element.name}}">{{element.title}}</label>
-  <textarea ng-model="data[element.name]" ng-required="element.required" class="form-control" id="element-{{form.name}}-{{element.name}}" placeholder="{{element.placeholder}}" rows="{{element.rows || 3}}"></textarea>
+  <label ng-if="element.title" for="{{element.id}}">{{element.title}}</label>
+  <textarea ng-model="data[element.name]" ng-required="element.required" class="form-control" id="{{element.id}}" placeholder="{{element.placeholder}}" rows="{{element.rows || 3}}"></textarea>
   <p ng-if="element.description" class="help-block">{{element.description}}</p>
 </div>
