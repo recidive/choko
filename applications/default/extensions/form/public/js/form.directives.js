@@ -2,9 +2,17 @@
 
 angular.module('choko.directives')
 
+.directive('ckForm', function() {
+  return {
+    restrict: 'A',
+    controller: 'FormController'
+  }
+})
+
 .directive('ckElement', function() {
   return {
     restrict: 'A',
+    require: ['^ckForm'],
     controller: 'ElementController'
   }
 })
@@ -12,6 +20,7 @@ angular.module('choko.directives')
 .directive('ckFileElement', function() {
   return {
     restrict: 'A',
+    require: ['^ckForm'],
     controller: 'FileElementController'
   }
 })
@@ -19,6 +28,7 @@ angular.module('choko.directives')
 .directive('ckButton', function() {
   return {
     restrict: 'A',
+    require: ['^ckForm'],
     controller: 'ButtonController'
   }
 })
@@ -26,6 +36,7 @@ angular.module('choko.directives')
 .directive('ckReferenceElement', function() {
   return {
     restrict: 'A',
+    require: ['^ckForm'],
     controller: 'ReferenceElementController'
   }
 })
@@ -33,6 +44,7 @@ angular.module('choko.directives')
 .directive('ckInlineReferenceElement', function() {
   return {
     restrict: 'A',
+    require: ['^ckForm'],
     controller: 'InlineReferenceElementController'
   }
 })
@@ -40,6 +52,7 @@ angular.module('choko.directives')
 .directive('ckInlineReferenceElementItem', function() {
   return {
     restrict: 'A',
+    require: ['^ckForm'],
     controller: 'InlineReferenceElementItemController'
   }
 });

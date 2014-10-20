@@ -2,6 +2,11 @@
 
 angular.module('choko.controllers')
 
+.controller('FormController', ['$scope',
+  function ($scope) {
+    $scope.form.id = $scope.form.id || 'form-' + $scope.form.name;
+  }])
+
 .controller('ElementController', ['$scope',
   function ($scope) {
     $scope.element.template = $scope.element.template || '/templates/' + $scope.element.type + '.html';
