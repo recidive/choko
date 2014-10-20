@@ -126,6 +126,7 @@ angular.module('choko.controllers', [])
         $scope.data = {};
 
         if ($scope.view.itemType && $scope.view.itemKey) {
+          // Load item for editing.
           Choko.get({type: $scope.view.itemType, key: $scope.view.itemKey}, function(response) {
             $scope.data = response;
           });
