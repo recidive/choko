@@ -33,6 +33,14 @@ angular.module('choko.directives')
   }
 })
 
+.directive('ckWysiwyg', function() {
+  return {
+    restrict: 'A',
+    require: ['^ckForm'],
+    controller: 'WYSIWYGController'
+  }
+})
+
 .directive('ckReferenceElement', function() {
   return {
     restrict: 'A',
