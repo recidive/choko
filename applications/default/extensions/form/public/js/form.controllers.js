@@ -63,7 +63,7 @@ angular.module('choko.controllers')
         ['style', ['style']],
         ['style', ['bold', 'italic', 'underline', 'clear']],
         ['para', ['ul', 'ol', 'paragraph']],
-        ['insert', ['picture', 'link']],
+        ['insert', ['picture', 'video', 'link']],
         ['table', ['table']]
       ]
     };
