@@ -1,0 +1,6 @@
+{
+  "title": "Media",
+  "Description": "An item with an image and a text.",
+  "listStyles": ["unformatted", "thumbnails"],
+  "regions": ["object", "heading", "body"]
+}
