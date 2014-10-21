@@ -30,7 +30,7 @@ angular.module('choko.controllers')
       for (var i = 0; i < $files.length; i++) {
         var file = $files[i];
         $scope.upload = $upload.upload({
-          url: 'file',
+          url: '/file',
           file: file
         })
         .progress(function(evt) {
