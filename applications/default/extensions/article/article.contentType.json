@@ -1,0 +1,20 @@
+{
+  "title": "Article",
+  "description": "A piece of content with an image and a date",
+  "fields": {
+    "image": {
+      "title": "Image",
+      "type": "file",
+      "weight": -12
+    },
+    "body": {
+      "title": "Body",
+      "type": "text",
+      "element": {
+        "type": "wysiwyg",
+        "rows": 5,
+        "weight": -14
+      }
+    }
+  }
+}
