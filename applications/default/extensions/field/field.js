@@ -128,6 +128,7 @@ field.field = function(fields, callback) {
 
   newFields['password'] = {
     title: 'Password',
+    schema: 'string',
     element: 'password',
     validate: function(settings, item, next) {
       var minLength = settings.minLength || 6;
