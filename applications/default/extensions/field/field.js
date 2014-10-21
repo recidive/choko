@@ -85,6 +85,15 @@ field.field = function(fields, callback) {
     }
   };
 
+  newFields['datetime'] = {
+    title: 'Datetime',
+    schema: 'datetime',
+    element: 'datetime',
+    validate: function(settings, item, next) {
+      next(null, validator.isDate(item[settings.name].toString()) || 'Invalid date/time.');
+    }
+  };
+
   newFields['boolean'] = {
     title: 'Boolean',
     description: 'True or false, yes or no, on or off.',
