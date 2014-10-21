@@ -12,6 +12,10 @@
       "url": "/manage"
     },
     {
+      "title": "Content",
+      "url": "/manage/content"
+    },
+    {
       "title": "Users",
       "url": "/manage/users"
     },

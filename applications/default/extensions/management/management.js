@@ -55,6 +55,19 @@ management.page = function(pages, callback) {
     };
   }
 
+  // Create form contents for all content subtypes.
+  var contentTypes = this.application.types['content'].subtypes;
+  for (var subtypeName in contentTypes) {
+    var subtypeSettings = contentTypes[subtypeName];
+    newPages['manage-content-add-' + subtypeSettings.name] = {
+      path: '/manage/content/add-' + subtypeSettings.name,
+      title: 'Add ' + subtypeSettings.title.toLowerCase(),
+      type: 'form',
+      formName: 'type-' + subtypeSettings.name + 'Content',
+      redirect: '/manage/content'
+    };
+  }
+
   newPages['manage-types'] = {
     path: '/manage/types',
     title: 'Types',
@@ -149,6 +162,35 @@ management.navigation = function(navigations, callback) {
   }
   newNavigations['panel-management-toolbar'] = {
     title: 'Panel management toolbar',
+    template: '/templates/btn-group.html',
+    classes: [
+      'btn-group-sm'
+    ],
+    items: [
+      {
+        type: 'dropdown',
+        title: 'Add',
+        items: items,
+        classes: [
+          'btn-primary'
+        ]
+      }
+    ]
+  };
+
+  // Create navigation dropdown with links for all content types forms.
+  var pageTypes = this.application.types['content'].subtypes;
+  var items = [];
+  for (var subtypeName in pageTypes) {
+    var subtypeSettings = pageTypes[subtypeName];
+    items.push({
+      title: subtypeSettings.title,
+      url: '/manage/content/add-' + subtypeSettings.name
+    });
+  }
+
+  newNavigations['content-management-toolbar'] = {
+    title: 'Content management toolbar',
     template: '/templates/btn-group.html',
     classes: [
       'btn-group-sm'
