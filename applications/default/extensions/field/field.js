@@ -127,7 +127,7 @@ field.field = function(fields, callback) {
     }
   };
 
-  newFields['telephone'] = {
+  newFields['telephone'] = newFields['tel'] = {
     title: 'Telephone',
     schema: {
       type: 'string'
