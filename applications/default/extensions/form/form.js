@@ -129,8 +129,15 @@ form.form = function(forms, callback) {
       }
 
       if (fieldSettings.element) {
-        // Merge in element settings.
-        utils.extend(element, fieldSettings.element);
+        if (typeof fieldSettings.element == 'string') {
+          // Allow a string as element property value in this case this will be
+          // the element type.
+          element.type = fieldSettings.element;
+        }
+        else {
+          // Merge in element settings.
+          utils.extend(element, fieldSettings.element);
+        }
       }
 
       form.elements.push(element);
