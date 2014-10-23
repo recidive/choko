@@ -12,9 +12,9 @@
       "type": "text",
       "element": {
         "type": "wysiwyg",
-        "rows": 5,
-        "weight": -14
-      }
+        "rows": 5
+      },
+      "weight": -14
     }
   }
 }
