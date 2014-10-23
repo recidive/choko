@@ -31,7 +31,8 @@
     "validator": "2.0.x",
     "mkdirp": "0.3.x",
     "node-uuid": "1.4.x",
-    "lodash": "2.x.x"
+    "lodash": "2.x.x",
+    "cors": "^2.4.1"
   },
   "devDependencies": {
     "mocha": "*",
