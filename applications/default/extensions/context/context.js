@@ -339,5 +339,22 @@ context.contextReactionType = function(reactionTypes, callback) {
     }
   };
 
+  newReactionTypes['pageTitle'] = {
+    title: 'Set page title',
+    description: 'Set the title of the page.',
+    standalone: false,
+    fields: {
+      title: {
+        title: 'Title',
+        description: 'Page title.',
+        type: 'text'
+      }
+    },
+    react: function(request, response, title, callback) {
+      response.payload.title = title;
+      callback();
+    }
+  };
+
   callback(null, newReactionTypes);
 };
