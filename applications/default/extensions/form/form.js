@@ -152,7 +152,7 @@ form.form = function(forms, callback) {
           type: 'submit',
           url: '/rest/' + (typeSettings.mainTypeName || typeName),
           classes: ['btn-primary'],
-          weight: 15
+          weight: 50
         });
       }
       next();
