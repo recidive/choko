@@ -51,6 +51,41 @@ describe('REST extension', function(done) {
     });
   });
 
+  it('shouldn\'t update an item via POST on main endpoint', function(done) {
+    var application = this.getServer().getApplication('localhost');
+    userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
+      // Create item.
+      request(testingUrl)
+        .post('/rest/testType')
+        .auth(credentials.username, credentials.password)
+        .send({
+          name: 'a-test',
+          title: 'A test'
+        })
+        .expect(200, function(error, response) {
+          if (error) {
+            throw error;
+          }
+          var result = response.body.data;
+
+          // Attempt to create an item passing the key property.
+          request(testingUrl)
+            .post('/rest/testType')
+            .auth(credentials.username, credentials.password)
+            .send({
+              id: result.id,
+              name: 'a-test-edited',
+              title: 'A test updated'
+            })
+            .expect(200, function(error, response) {
+              // Make sure a new item was created.
+              assert.notEqual(result.id, response.body.data.id);
+              done();
+            });
+        });
+    });
+  });
+
   it('should return 404 error if type does not exist', function(done) {
     request(testingUrl)
       .get('/rest/inexistentType')

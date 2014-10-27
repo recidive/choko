@@ -72,6 +72,11 @@ rest.route = function(routes, callback) {
           });
         }
         if (request.method == 'POST') {
+          // Remove key property to prevent updating.
+          if (type.keyProperty in request.body) {
+            delete request.body[type.keyProperty];
+          }
+
           return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
         }
         callback();
