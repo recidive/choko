@@ -92,6 +92,24 @@ describe('REST extension', function(done) {
       .expect(404, done);
   });
 
+  it('shouldn\'t create an item with fields not in type schema', function(done) {
+    var application = this.getServer().getApplication('localhost');
+    userHelper.createUser(application, ['test-role'], function(error, user, credentials) {
+      request(testingUrl)
+        .post('/rest/testType')
+        .auth(credentials.username, credentials.password)
+        .send({
+          name: 'a-test',
+          title: 'A test',
+          outOfSchema: 'A value for a field not in type schema.'
+        })
+        .expect(200, function(error, response) {
+          assert.ok(!('outOfSchema' in response.body.data));
+          done();
+        });
+    });
+  });
+
   it('should authenticate on REST with Basic authentication', function(done) {
     var application = this.getServer().getApplication('localhost');
     var User = application.type('user');
