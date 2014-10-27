@@ -111,12 +111,14 @@ user.type = function(types, callback) {
       username: {
         title: 'Username',
         type: 'text',
-        required: true
+        required: true,
+        unique: true
       },
       email: {
         title: 'Email',
         type: 'email',
-        required: true
+        required: true,
+        unique: true
       },
       password: {
         title: 'Password',
