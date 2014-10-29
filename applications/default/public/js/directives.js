@@ -1,13 +1,17 @@
 'use strict';
 
-/* Directives */
+/**
+ * @file Choko core directives.
+ */
 
 angular.module('choko')
+
   .directive('appVersion', ['version', function(version) {
     return function(scope, elm, attrs) {
       elm.text(version);
     };
   }])
+
   .directive('ckReplace', function($http, $compile) {
     return {
       restrict: 'E',
@@ -23,6 +27,7 @@ angular.module('choko')
       }
     };
   })
+
   .directive('ckButton', function($http, $compile) {
     return {
       restrict: 'E',

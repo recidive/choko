@@ -1,6 +1,11 @@
 'use strict';
 
+/**
+ * @file Choko core controllers.
+ */
+
 angular.module('choko')
+
   .controller('ApplicationController', ['$rootScope', '$location', '$http', 'applicationState',
     function ($rootScope, $location, $http, applicationState) {
       $rootScope.state = {};
@@ -167,4 +172,4 @@ angular.module('choko')
           $scope.view.template = $scope.view.template || '/templates/form.html';
         });
       }
-    }])
+    }]);

@@ -1,7 +1,11 @@
 'use strict';
 
-/* Services */
-angular.module('choko.services', [])
+/**
+ * @file Choko core services.
+ */
+
+angular.module('choko')
+
   // Single value service for Choko version.
   .value('version', '0.0.1')
 
