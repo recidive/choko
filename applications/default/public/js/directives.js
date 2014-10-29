@@ -2,7 +2,7 @@
 
 /* Directives */
 
-angular.module('choko.directives', [])
+angular.module('choko')
   .directive('appVersion', ['version', function(version) {
     return function(scope, elm, attrs) {
       elm.text(version);

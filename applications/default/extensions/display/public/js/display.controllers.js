@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('choko.controllers')
+angular.module('choko')
 
 .controller('DisplayRegionController', ['$scope',
   function ($scope) {

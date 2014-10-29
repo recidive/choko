@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('choko.controllers')
+angular.module('choko')
 
 .controller('FormController', ['$scope',
   function ($scope) {
@@ -80,10 +80,12 @@ angular.module('choko.controllers')
       type: $scope.element.reference.type
     };
 
+    // Add element defined query.
     if ($scope.element.reference.query) {
       angular.extend(query, $scope.element.reference.query);
     }
 
+    // Get reference items to make a options list.
     Choko.get(query, function(response) {
       $scope.element.options = response;
 

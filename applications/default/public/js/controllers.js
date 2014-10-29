@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('choko.controllers', [])
+angular.module('choko')
   .controller('ApplicationController', ['$rootScope', '$location', '$http', 'applicationState',
     function ($rootScope, $location, $http, applicationState) {
       $rootScope.state = {};

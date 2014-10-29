@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('choko.directives')
+angular.module('choko')
 
 .directive('ckForm', function() {
   return {
