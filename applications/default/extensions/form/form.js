@@ -85,30 +85,61 @@ form.form = function(forms, callback) {
     form.elements = [];
     async.eachSeries(Object.keys(typeSettings.fields), function(fieldName, next) {
       var fieldSettings = typeSettings.fields[fieldName];
-      // By pass 'internal' fields.
-      if (fieldSettings.internal) {
+
+      if (!(fieldSettings.type in self.application.fields)) {
+        // @todo: log warning that field doesn't exist.
         return next();
       }
-      // By pass not 'inline' fields with 'via' set.
-      // @todo: eventually we may want to edit this kind of fields when editing
-      // the main item too.
-      if (fieldSettings.type == 'reference' && 'reference' in fieldSettings && 'via' in fieldSettings.reference) {
-        return next();
+
+      var field = self.application.fields[fieldSettings.type];
+      var element = {};
+
+      // Start with field type defaults
+      if (field.element) {
+        switch (typeof field.element) {
+
+          // If element is a string it's the elememt type.
+          case 'string':
+            element.type = field.element;
+            break;
+
+          // If element is a object it's the element settings object.
+          case 'object':
+            utils.extend(element, field.element);
+            break;
+
+          // If element is a function run it to get the element settings
+          // object.
+          case 'function':
+            utils.extend(element, field.element(fieldSettings));
+            break;
+        }
       }
-      var element = {
+
+      // Add basic properties.
+      utils.extend(element, {
         name: fieldName,
         title: fieldSettings.title || null,
         description: fieldSettings.description || null,
-        // Default type to field type. This can be overriden with element
-        // property.
-        type: fieldSettings.type,
         required: fieldSettings.required || false,
         weight: fieldSettings.weight || 0
-      };
+      });
 
       // Add field options for select and other types if any.
       if (fieldSettings.options) {
         element.options = fieldSettings.options;
+      }
+
+      // Bypass 'internal' fields.
+      if (fieldSettings.internal) {
+        return next();
+      }
+
+      // Bypass not 'inline' fields with 'via' set.
+      // @todo: eventually we may want to edit this kind of fields when editing
+      // the main item too.
+      if (fieldSettings.type == 'reference' && 'reference' in fieldSettings && 'via' in fieldSettings.reference) {
+        return next();
       }
 
       if (fieldSettings.type == 'reference') {

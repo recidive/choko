@@ -42,7 +42,12 @@ field.field = function(fields, callback) {
 
       return schema;
     },
-    element: 'text',
+    element: function(fieldSettings) {
+      return  {
+        // If options is set, use a select element instead of text one.
+        type: 'options' in fieldSettings ? 'select' : 'text'
+      };
+    },
     validate: function(settings, item, next) {
       // Default minLenght to 1.
       settings.minLength = settings.minLength || 1;
@@ -142,6 +147,22 @@ field.field = function(fields, callback) {
     validate: function(settings, item, next) {
       var minLength = settings.minLength || 6;
       next(null, validator.len(item[settings.name].toString(), settings.minLength || 6) || 'Password must have at least ' + minLength + ' characters.');
+    }
+  };
+
+  newFields['reference'] = {
+    title: 'Reference',
+    schema: function(settings) {
+      var schema = {
+        type: settings.multiple ? 'array' : 'json'
+      };
+
+      return schema;
+    },
+    element: 'select',
+    validate: function(settings, item, next) {
+      // @todo: validate references.
+      next();
     }
   };
 
