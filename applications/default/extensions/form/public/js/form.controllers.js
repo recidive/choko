@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @file Form extension controllers.
+ */
+
 angular.module('choko')
 
 .controller('FormController', ['$scope',

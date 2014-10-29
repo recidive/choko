@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @file Form extension directives.
+ */
+
 angular.module('choko')
 
 .directive('ckForm', function() {

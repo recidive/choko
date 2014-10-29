@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @file Display extension controllers.
+ */
+
 angular.module('choko')
 
 .controller('DisplayRegionController', ['$scope',

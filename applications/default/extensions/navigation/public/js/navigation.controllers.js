@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @file Navigation extension controllers.
+ */
+
 angular.module('choko')
 
 .controller('NavigationController', ['$scope', '$location',
