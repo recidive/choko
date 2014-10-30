@@ -14,6 +14,11 @@
 
 ## Installation
 
+  ** Since Choko is under very active development, to have access to the latest
+  functionality, it's advised to install Choko from the sources. For
+  instructions on how to do this, please refer to the [Installing from the
+  sources](#installing-from-the-sources) section bellow.**
+
   You can install the latest version of Choko globally using
   [NPM](http://npmjs.org):
 
@@ -40,11 +45,12 @@
 
     sudo npm update -g choko
 
-## Running from the sources
+## Installing from the sources
 
-  If you have some specific development needs, you might want to install and run
-  Choko from the sources. In order to do so, you can clone the repository and
-  build Choko by hand.
+  If you have some specific development needs, or you want to be involved with
+  Choko core development, you might want to install and run Choko from the
+  sources. In order to do so, you can clone the repository and build Choko by
+  hand.
 
     git clone https://github.com/recidive/choko.git
     cd choko
