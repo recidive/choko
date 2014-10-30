@@ -14,10 +14,10 @@
 
 ## Installation
 
-  ** Since Choko is under very active development, to have access to the latest
-  functionality, it's advised to install Choko from the sources. For
-  instructions on how to do this, please refer to the [Installing from the
-  sources](#installing-from-the-sources) section bellow.**
+  > **Please note:** since Choko is under very active development, to have
+  access to the latest functionality, it's advised to install Choko from the
+  sources. For instructions on how to do this, please refer to the [Installing
+  from the sources](#installing-from-the-sources) section bellow.
 
   You can install the latest version of Choko globally using
   [NPM](http://npmjs.org):
