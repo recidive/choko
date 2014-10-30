@@ -8,6 +8,10 @@
   can manage your application and the content related to it on a central place,
   with flexible and powerful APIs.
 
+## Demo application
+
+  You can see Choko in action at [demo.choko.org](http://demo.choko.org).
+
 ## Installation
 
   You can install the latest version of Choko globally using
