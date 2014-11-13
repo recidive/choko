@@ -22,6 +22,7 @@
         "type": "user",
         "titleField": "username"
       },
+      "index": true,
       "weight": 10
     },
     "path": {
@@ -32,12 +33,14 @@
     "published": {
       "title": "Published",
       "type": "boolean",
+      "index": true,
       "weight": 20
     },
     "created": {
       "title": "Created",
       "type": "datetime",
       "internal": true,
+      "index": true,
       "weight": 30
     },
     "changed": {

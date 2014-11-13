@@ -118,7 +118,8 @@ user.type = function(types, callback) {
         title: 'Email',
         type: 'email',
         required: true,
-        unique: true
+        unique: true,
+        index: true
       },
       password: {
         title: 'Password',
