@@ -159,7 +159,7 @@ field.field = function(fields, callback) {
 
       return schema;
     },
-    element: 'select',
+    element: 'reference',
     validate: function(settings, item, next) {
       // @todo: validate references.
       next();
