@@ -5,10 +5,5 @@
   "access": "sign-in",
   "type": "form",
   "formName": "sign-in",
-  "redirect": "/",
-  "class": [
-    "col-md-4",
-    "col-md-offset-4",
-    "well"
-  ]
+  "redirect": "/"
 }
