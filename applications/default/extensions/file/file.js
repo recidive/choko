@@ -70,7 +70,18 @@ file.field = function(fields, callback) {
 
   newFields['file'] = {
     title: 'File',
-    schema: 'string',
+    schema: function(settings) {
+      var schema = {};
+
+      if (settings.multiple) {
+        schema.collection = 'file';
+      }
+      else {
+        schema.model = 'file';
+      }
+
+      return schema;
+    },
     element: 'file',
     validate: function(settings, item, next) {
       var fileId = item[settings.name];
@@ -83,6 +94,10 @@ file.field = function(fields, callback) {
         }
         next(null, 'Invalid file identifier.');
       });
+    },
+    find: function(settings, query, next) {
+      query.populate(settings.name);
+      next();
     },
     beforeCreate: function(settings, item, next) {
       var fileId = item[settings.name];
