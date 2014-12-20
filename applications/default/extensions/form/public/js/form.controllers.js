@@ -28,7 +28,12 @@ angular.module('choko')
 
     // Initialize files container.
     // @todo support multiple files.
-    $scope.data[$scope.element.name] = $scope.data[$scope.element.name] || null;
+    if ($scope.data[$scope.element.name] && $scope.data[$scope.element.name] instanceof Object) {
+      $scope.data[$scope.element.name] =  $scope.data[$scope.element.name].id;
+    }
+    else {
+      $scope.data[$scope.element.name] =  null;
+    }
 
     $scope.onFileSelect = function($files) {
       for (var i = 0; i < $files.length; i++) {
