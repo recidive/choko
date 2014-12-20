@@ -127,7 +127,7 @@ file.field = function(fields, callback) {
         }
 
         if(!file) {
-          return next(null, 'The file don\'t exist');
+          return next(null, "Error uploading the file");
         }
 
         return next(null, true);
@@ -164,7 +164,7 @@ file.field = function(fields, callback) {
           return next(error);
         }
 
-        // Verify if the file was updated
+        // Verify if the file was updated.
         if (!file.temporary) {
           return next(null);
         }
