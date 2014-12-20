@@ -231,3 +231,17 @@ field.fieldCallback = function(hook) {
     field[hook] = field.fieldCallback(hook);
   });
 });
+
+/**
+ * The find() hook;
+ *
+ * Allow fields to alter queries being executed.
+ */
+field.find = field.fieldCallback('find');
+
+/**
+ * The list() hook;
+ *
+ * Allow fields to alter data being listed.
+ */
+field.list = field.fieldCallback('list');
