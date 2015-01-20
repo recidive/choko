@@ -373,7 +373,7 @@ user.route = function(routes, callback) {
         data.roles = [];
 
         // Create new user resource and save it.
-        var newAccount = User.create(data).exec(function(error, newAccount, errors) {
+        User.validateAndSave(data, function(error, newAccount, errors) {
           if (error) {
             return callback(error);
           }
