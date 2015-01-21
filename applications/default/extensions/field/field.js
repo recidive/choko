@@ -10,6 +10,7 @@ var field = module.exports = {};
  */
 field.field = function(fields, callback) {
   var newFields = {};
+  var application = this.application;
 
   newFields['id'] = {
     title: 'Identifier',
@@ -161,8 +162,51 @@ field.field = function(fields, callback) {
     },
     element: 'reference',
     validate: function(settings, item, next) {
-      // @todo: validate references.
-      next();
+      if (!settings.reference.inline) {
+        return next(null, true);
+      }
+
+      // Validate inline referenced items.
+      var typeModel = application.type(settings.reference.type);
+      var typeSettings = typeModel.type;
+
+      if ('standalone' in typeSettings && typeSettings.standalone !== false) {
+        // Only standalone types will be referenced as full objects.
+        return next(null, true);
+      }
+
+      // Validate multiple items.
+      if (settings.reference.multiple && item[settings.name] instanceof Array) {
+        // Validate multiple items.
+        var referencedItems = item[settings.name];
+        var errors = []
+        return async.each(referencedItems, function(referencedItem, next) {
+          typeModel._validate(referencedItem, function(error, itemErrors) {
+            if (error) {
+              return next(error);
+            }
+            if (itemErrors.length > 0) {
+              errors = errors.concat(itemErrors);
+            }
+            next();
+          });
+        },
+        function(error) {
+          if (error) {
+            return next(error);
+          }
+          next(null, errors);
+        });
+      }
+
+      // Validate single item.
+      if (!settings.reference.multiple && typeof item[settings.name] === 'object') {
+        return typeModel._validate(item[settings.name], next);
+      }
+
+      // If we reach here, field value is not an array, or not an object, which
+      // means it's an invalid value for an inline reference field.
+      next(null, 'Invalid value supplied for field ' + settings.name);
     }
   };
 
