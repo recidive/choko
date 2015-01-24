@@ -144,7 +144,7 @@ angular.module('choko')
 
           $http.post(url, $scope.data)
             .success(function(data, status, headers, config) {
-              $scope.data = data;
+              $scope.data = data.data;
               delete $scope.errors;
               if (redirect) {
                 $location.path(redirect);
