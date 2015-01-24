@@ -403,11 +403,9 @@ user.route = function(routes, callback) {
   newRoutes['/settings/edit-account-submit/:username'] = {
     access: 'edit-own-account',
     callback: function(request, response, callback) {
-      var user = request.user;
-
       // @todo: figure out how to prevent form controller from sending the
       // username.
-      if (user.username != request.params.username) {
+      if (request.user.username != request.params.username) {
         return callback(null, ['Invalid user.'], 400);
       }
 
@@ -421,7 +419,7 @@ user.route = function(routes, callback) {
       delete data.roles;
 
       var User = application.type('user');
-      User.load(user.username, function(error, account) {
+      User.load(request.user.username, function(error, account) {
         utils.extend(account, data);
         account.save(callback)
       });
