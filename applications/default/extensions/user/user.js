@@ -415,6 +415,7 @@ user.route = function(routes, callback) {
 
       // Delete unwanted data that may lead to security holes.
       delete data.id;
+      delete data.username;
       delete data.password;
       delete data.salt;
       delete data.roles;
