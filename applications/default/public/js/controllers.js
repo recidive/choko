@@ -128,12 +128,33 @@ angular.module('choko')
       // Handle 'form' type views.
       if ($scope.view.type === 'form' && $scope.view.formName) {
         $scope.data = {};
+        $scope.buildChokoForm = function () {
+          Choko.get({type: 'form', key: $scope.view.formName}, function(response) {
+            $scope.form = response;
+
+            if ($scope.form.mainTypeName) {
+              $scope.data.type = $scope.form.shortName;
+            }
+
+            // First we look for view (page/panel) redirect, then for form redirect.
+            // The submit button will first look for a property of its own and
+            // fallback to this.
+            $scope.form.redirect = $scope.view.redirect || $scope.form.redirect || null;
+
+            $scope.view.template = $scope.view.template || $scope.form.template;
+            $scope.view.template = $scope.view.template || '/templates/form.html';
+          });
+        };
 
         if ($scope.view.itemType && $scope.view.itemKey) {
           // Load item for editing.
           Choko.get({type: $scope.view.itemType, key: $scope.view.itemKey}, function(response) {
             $scope.data = response;
+            $scope.buildChokoForm();
           });
+        }
+        else {
+          $scope.buildChokoForm();
         }
 
         $scope.submit = function(url, redirect) {
@@ -155,21 +176,5 @@ angular.module('choko')
               $scope.errors = data.data;
             });
         };
-
-        Choko.get({type: 'form', key: $scope.view.formName}, function(response) {
-          $scope.form = response;
-
-          if ($scope.form.mainTypeName) {
-            $scope.data.type = $scope.form.shortName;
-          }
-
-          // First we look for view (page/panel) redirect, then for form redirect.
-          // The submit button will first look for a property of its own and
-          // fallback to this.
-          $scope.form.redirect = $scope.view.redirect || $scope.form.redirect || null;
-
-          $scope.view.template = $scope.view.template || $scope.form.template;
-          $scope.view.template = $scope.view.template || '/templates/form.html';
-        });
       }
     }]);
