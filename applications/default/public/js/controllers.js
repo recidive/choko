@@ -128,7 +128,7 @@ angular.module('choko')
       // Handle 'form' type views.
       if ($scope.view.type === 'form' && $scope.view.formName) {
         $scope.data = {};
-        $scope.buildChokoForm = function () {
+        $scope.buildForm = function () {
           Choko.get({type: 'form', key: $scope.view.formName}, function(response) {
             $scope.form = response;
 
@@ -150,11 +150,11 @@ angular.module('choko')
           // Load item for editing.
           Choko.get({type: $scope.view.itemType, key: $scope.view.itemKey}, function(response) {
             $scope.data = response;
-            $scope.buildChokoForm();
+            $scope.buildForm();
           });
         }
         else {
-          $scope.buildChokoForm();
+          $scope.buildForm();
         }
 
         $scope.submit = function(url, redirect) {
