@@ -10,6 +10,7 @@ var mkdirp = require('mkdirp');
 var lodash = require('lodash');
 
 var APPS_PATH_DEFAULT = 'applications';
+var PORT = process.env.PORT || 3000;
 
 /**
  * Returns the normalized path where all the apps reside.
@@ -119,7 +120,7 @@ program
   .command('*')
   .version('0.0.4')
   .usage('[options] [dir]')
-  .option('-p, --port <number>', 'start server at specified port', parseInt, 3000)
+  .option('-p, --port <number>', 'start server at specified port', parseInt, PORT)
   .action(function () {
     var args = Array.prototype.slice.call(arguments);
     if (!lodash.isString(args[0])) {
@@ -133,7 +134,7 @@ program
   .command('start')
   .description('Run the Choko server.')
   .usage('[options] [dir]')
-  .option('-p, --port <number>', 'start server at specified port', parseInt, 3000)
+  .option('-p, --port <number>', 'start server at specified port', parseInt, PORT)
   .action(function () {
     var args = Array.prototype.slice.call(arguments);
     if (!lodash.isString(args[0])) {
