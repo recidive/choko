@@ -110,8 +110,7 @@ field.field = function(fields, callback) {
   newFields['email'] = {
     title: 'Email',
     schema: {
-      type: 'string',
-      email: true
+      type: 'string'
     },
     element: 'email',
     validate: function(settings, item, next) {
