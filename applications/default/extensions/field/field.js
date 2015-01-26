@@ -189,7 +189,7 @@ field.field = function(fields, callback) {
               errors = errors.concat(itemErrors);
             }
             next();
-          });
+          }, settings.reference);
         },
         function(error) {
           if (error) {
@@ -201,7 +201,7 @@ field.field = function(fields, callback) {
 
       // Validate single item.
       if (!settings.reference.multiple && typeof item[settings.name] === 'object') {
-        return typeModel._validate(item[settings.name], next);
+        return typeModel._validate(item[settings.name], next, settings.reference);
       }
 
       // If we reach here, field value is not an array, or not an object, which
