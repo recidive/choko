@@ -318,7 +318,7 @@ user.type = function(types, callback) {
 };
 
 /**
- * Normalize user data. Hash password
+ * Normalize user data. Hash password.
  */
 user.normalizeUserData = function(data, callback) {
   var User = this.application.type('user');
@@ -421,7 +421,18 @@ user.route = function(routes, callback) {
       var User = application.type('user');
       User.load(request.user.username, function(error, account) {
         utils.extend(account, data);
-        account.save(callback)
+        User.validateAndSave(account, function(error, account, errors) {
+          if (error) {
+            return callback(error);
+          }
+
+          if (errors && errors.length > 0) {
+            // Validation errors.
+            return callback(null, errors, 400);
+          }
+
+          callback(null, account, 201);
+        });
       });
     }
   };
