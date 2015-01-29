@@ -116,7 +116,7 @@ field.field = function(fields, callback) {
     validate: function(settings, item, next) {
       // Email validator oddly returns the email itself, so need to convert to
       // boolean.
-      next(null, new Boolean(validator.isEmail(item[settings.name].toString())) || 'Invalid email.');
+      next(null, !!validator.isEmail(item[settings.name].toString()) || 'Invalid email.');
     }
   };
 
