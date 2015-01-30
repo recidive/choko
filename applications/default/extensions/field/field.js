@@ -56,7 +56,7 @@ field.field = function(fields, callback) {
       // Default maxLenght to 256.
       settings.maxLength = settings.maxLength || 256;
 
-      next(null, !validator.notEmpty(item[settings.name]) || validator.len(item[settings.name].toString(), settings.minLength, settings.maxLength) || 'Value must have from ' + settings.minLength + ' to ' + settings.maxLength + ' characters.');
+      next(null, !validator.notEmpty(item[settings.name]) || validator.len(item[settings.name].toString(), settings.minLength, settings.maxLength) || 'must have from ' + settings.minLength + ' to ' + settings.maxLength + ' characters.');
     }
   };
 
@@ -78,7 +78,7 @@ field.field = function(fields, callback) {
     },
     element: 'number',
     validate: function(settings, item, next) {
-      next(null, validator.isNumeric(item[settings.name].toString()) || 'Invalid number.');
+      next(null, validator.isNumeric(item[settings.name].toString()) || 'must be a valid number.');
     }
   };
 
@@ -87,7 +87,7 @@ field.field = function(fields, callback) {
     schema: 'date',
     element: 'date',
     validate: function(settings, item, next) {
-      next(null, validator.isDate(item[settings.name].toString()) || 'Invalid date.');
+      next(null, validator.isDate(item[settings.name].toString()) || 'must be a valid date.');
     }
   };
 
@@ -96,7 +96,7 @@ field.field = function(fields, callback) {
     schema: 'datetime',
     element: 'datetime',
     validate: function(settings, item, next) {
-      next(null, validator.isDate(item[settings.name].toString()) || 'Invalid date/time.');
+      next(null, validator.isDate(item[settings.name].toString()) || 'must be a valid date/time.');
     }
   };
 
@@ -116,7 +116,7 @@ field.field = function(fields, callback) {
     validate: function(settings, item, next) {
       // Email validator oddly returns the email itself, so need to convert to
       // boolean.
-      next(null, !!validator.isEmail(item[settings.name].toString()) || 'Invalid email.');
+      next(null, !!validator.isEmail(item[settings.name].toString()) || 'must be a valid email.');
     }
   };
 
@@ -128,7 +128,7 @@ field.field = function(fields, callback) {
     },
     element: 'url',
     validate: function(settings, item, next) {
-      next(null, validator.isUrl(item[settings.name].toString()) || 'Invalid URL.');
+      next(null, validator.isUrl(item[settings.name].toString()) || 'must be a valid URL.');
     }
   };
 
@@ -146,7 +146,7 @@ field.field = function(fields, callback) {
     element: 'password',
     validate: function(settings, item, next) {
       var minLength = settings.minLength || 6;
-      next(null, validator.len(item[settings.name].toString(), settings.minLength || 6) || 'Password must have at least ' + minLength + ' characters.');
+      next(null, validator.len(item[settings.name].toString(), settings.minLength || 6) || 'must have at least ' + minLength + ' characters.');
     }
   };
 

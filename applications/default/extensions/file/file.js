@@ -118,7 +118,7 @@ file.field = function(fields, callback) {
       }
 
       if (settings.required && !fileId) {
-        return next(null, settings.title + ' is required');
+        return next(null, 'is required');
       }
 
       application.load('file', fileId, function(error, file) {
