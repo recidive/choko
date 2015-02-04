@@ -20,18 +20,38 @@ angular.module('choko')
             return $location.path(data.data.redirect);
           }
 
-          // Rebuild the layout only when context changes.
-          if ($rootScope.contexts instanceof Array && $rootScope.contexts.toString() == data.data.contexts.toString()) {
+          // If contexts didn't change we just need to update main page content.
+          if ($rootScope.contexts instanceof Array && angular.equals($rootScope.contexts, data.data.contexts)) {
             // Update only panels in content region, and page information.
             // @todo: get the region the page-content panel is attached to
             // dinamically currently this is hadcoded to 'content' and will not work
             // if the page-content panel is attacehd to a different region.
             $rootScope.panels['content'] = data.data.panels['content'];
+
+            // Set page data.
             $rootScope.page = data.data.page;
           }
           else {
-            // Merge data from the server.
-            angular.extend($rootScope, data.data);
+            // We only set everything on scope if it's the first page being
+            // loaded or if the theme or the layout has changed, to avoid some
+            // glitches.
+            // @todo: selectivelly replace/add/remove panels.
+            var needsRebuild = !('page' in $rootScope) ||
+              ('theme' in $rootScope && $rootScope.theme.name != data.data.theme.name) ||
+              ('layout' in $rootScope && $rootScope.layout.name != data.data.layout.name);
+
+            if (needsRebuild) {
+              // Merge all data from the server.
+              angular.extend($rootScope, data.data);
+            }
+            else {
+              // Selectivelly merge data from the server.
+              Object.keys(data.data).forEach(function(propName) {
+                if (['theme', 'layout'].indexOf(propName) === -1) {
+                  $rootScope[propName] = data.data[propName];
+                }
+              });
+            }
 
             // Store scope as application state.
             applicationState.set($rootScope);
