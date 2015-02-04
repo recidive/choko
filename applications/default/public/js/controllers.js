@@ -35,7 +35,6 @@ angular.module('choko')
             // We only set everything on scope if it's the first page being
             // loaded or if the theme or the layout has changed, to avoid some
             // glitches.
-            // @todo: selectivelly replace/add/remove panels.
             var needsRebuild = !('page' in $rootScope) ||
               ('theme' in $rootScope && $rootScope.theme.name != data.data.theme.name) ||
               ('layout' in $rootScope && $rootScope.layout.name != data.data.layout.name);
@@ -47,10 +46,31 @@ angular.module('choko')
             else {
               // Selectivelly merge data from the server.
               Object.keys(data.data).forEach(function(propName) {
-                if (['theme', 'layout'].indexOf(propName) === -1) {
+                if (['theme', 'layout', 'panels'].indexOf(propName) === -1) {
                   $rootScope[propName] = data.data[propName];
                 }
               });
+
+              // Selectivelly add/remove panels.
+              if ('panels' in data.data) {
+                // Merge existing regions.
+                Object.keys($rootScope.panels).forEach(function(regionName) {
+                  if (regionName in data.data.panels) {
+                    $rootScope.mergePanels($rootScope.panels[regionName], data.data.panels[regionName]);
+                  }
+                  else {
+                    // Remove region.
+                    delete $rootScope.panels[regionName];
+                  }
+                });
+
+                // Add new regions.
+                Object.keys(data.data.panels).forEach(function(regionName) {
+                  if (!(regionName in $rootScope.panels)) {
+                    $rootScope.panels[regionName] = data.data.panels[regionName];
+                  }
+                });
+              }
             }
 
             // Store scope as application state.
@@ -59,6 +79,7 @@ angular.module('choko')
         })
         .error(function(data, status, headers, config) {
           // Merge data from the server.
+          $rootScope.page = $rootScope.page || {};
           angular.extend($rootScope.page, data.data);
 
           $rootScope.page.template = '/templates/error.html';
@@ -66,11 +87,47 @@ angular.module('choko')
           // Store scope as application state.
           applicationState.set($rootScope);
         });
-      }
+      };
+
+      $rootScope.mergePanels = function(panelsTo, panelsFrom) {
+        // First remove items on first array that are not on the second one.
+        panelsTo.forEach(function(panel) {
+          // @todo: allow invalidating panel states.
+          if ($rootScope.indexOfPanel(panelsFrom, panel.name) === -1) {
+            panelsTo.splice($rootScope.indexOfPanel(panelsTo, panel), 1);
+          }
+        });
+
+        // If the number of items of the resulting array is equal to the second one
+        // there's nothing to add.
+        if (panelsTo.length === panelsFrom.length) {
+          return panelsTo;
+        }
+
+        // Add new panels.
+        panelsFrom.forEach(function(panel) {
+          if ($rootScope.indexOfPanel(panelsTo, panel.name) === -1) {
+            panelsTo.push(panel);
+          }
+        });
+
+        return panelsTo;
+      };
+
+      $rootScope.indexOfPanel = function(panels, panelName) {
+        var index = -1;
+        panels.forEach(function(panel, panelIndex) {
+          if (panel.name == panelName) {
+            index = panelIndex;
+          }
+        });
+        return index;
+      };
 
       $rootScope.$watch(function() {
         return $location.path();
-      }, function(){
+      },
+      function() {
         $rootScope.changeState();
       });
     }])
