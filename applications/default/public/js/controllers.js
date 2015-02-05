@@ -8,7 +8,8 @@ angular.module('choko')
 
   .controller('ApplicationController', ['$rootScope', '$location', '$http', 'applicationState',
     function ($rootScope, $location, $http, applicationState) {
-      $rootScope.state = {};
+      // Store scope as application state.
+      applicationState.set($rootScope);
 
       $rootScope.changeState = function() {
         var path = (!$location.path() || $location.path() == '/') ? '/home' : $location.path();
@@ -72,9 +73,6 @@ angular.module('choko')
                 });
               }
             }
-
-            // Store scope as application state.
-            applicationState.set($rootScope);
           }
         })
         .error(function(data, status, headers, config) {
@@ -83,9 +81,6 @@ angular.module('choko')
           angular.extend($rootScope.page, data.data);
 
           $rootScope.page.template = '/templates/error.html';
-
-          // Store scope as application state.
-          applicationState.set($rootScope);
         });
       };
 
