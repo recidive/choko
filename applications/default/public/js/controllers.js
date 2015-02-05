@@ -139,6 +139,22 @@ angular.module('choko')
   .controller('ViewController', ['$scope', '$location', '$http', 'Choko', 'Params',
     function ($scope, $location, $http, Choko, Params) {
 
+      $scope.prepareDisplay = function(name, callback) {
+        Choko.get({type: 'display', key: name}, function(display) {
+          $scope.display = display;
+          if (display.layout) {
+            Choko.get({type: 'displayLayout', key: display.layout}, function(layout) {
+              $scope.layout = layout;
+              $scope.view.itemTemplate = '/templates/display-layout.html';
+              callback();
+            });
+          }
+          else {
+            callback();
+          }
+        });
+      };
+
       // Parse parameters when needed.
       if (typeof $scope.view.itemKey !== 'undefined') {
         $scope.view.itemKey = Params.parse($scope.view.itemKey, $scope);
@@ -161,23 +177,21 @@ angular.module('choko')
 
         $scope.items = {};
 
-        Choko.get(query, function(response) {
-          $scope.items = response;
-        });
+        if ($scope.view.template) {
+          Choko.get(query, function(response) {
+            $scope.items = response;
+          });
+        }
 
         if (!$scope.view.template && $scope.view.listStyle) {
           $scope.view.template = '/templates/' + $scope.view.listStyle + '.html';
         }
 
         if (!$scope.view.itemTemplate && $scope.view.itemDisplay) {
-          Choko.get({type: 'display', key: $scope.view.itemDisplay}, function(display) {
-            $scope.display = display;
-            if (display.layout) {
-              Choko.get({type: 'displayLayout', key: display.layout}, function(layout) {
-                $scope.layout = layout;
-                $scope.view.itemTemplate = '/templates/display-layout.html';
-              });
-            }
+          $scope.prepareDisplay($scope.view.itemDisplay, function() {
+            Choko.get(query, function(response) {
+              $scope.items = response;
+            });
           });
         }
       }
