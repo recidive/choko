@@ -126,8 +126,8 @@ file.field = function(fields, callback) {
           return next(error);
         }
 
-        if(!file) {
-          return next(null, "Error uploading the file");
+        if (!file) {
+          return next(null, 'Error uploading the file');
         }
 
         return next(null, true);
@@ -189,8 +189,7 @@ file.route = function(routes, callback) {
     callback: function(request, response, callback) {
       var requestFile = request.files.file;
 
-      var File = application.type('file');
-      File.validateAndSave({
+      application.type('file').save({
         filename: requestFile.originalname,
         filetype: requestFile.mimetype,
         size: parseInt(requestFile.size),
