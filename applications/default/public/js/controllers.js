@@ -67,7 +67,11 @@ angular.module('choko')
 
                 // Add new regions.
                 Object.keys(data.data.panels).forEach(function(regionName) {
-                  if (!(regionName in $rootScope.panels)) {
+                  // Also update panels in content region, and page information.
+                  // @todo: get the region the page-content panel is attached to
+                  // dinamically currently this is hadcoded to 'content' and will not work
+                  // if the page-content panel is attacehd to a different region.
+                  if (!(regionName in $rootScope.panels) || regionName == 'content') {
                     $rootScope.panels[regionName] = data.data.panels[regionName];
                   }
                 });
@@ -89,7 +93,7 @@ angular.module('choko')
         panelsTo.forEach(function(panel) {
           // @todo: allow invalidating panel states.
           if ($rootScope.indexOfPanel(panelsFrom, panel.name) === -1) {
-            panelsTo.splice($rootScope.indexOfPanel(panelsTo, panel), 1);
+            panelsTo.splice($rootScope.indexOfPanel(panelsTo, panel.name), 1);
           }
         });
 
