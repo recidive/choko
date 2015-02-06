@@ -19,5 +19,9 @@ angular.module('choko')
       $scope.value = $scope.item[$scope.field.fieldName];
     }
 
+    if ($scope.field.link) {
+      $scope.link = Params.parse($scope.field.link, $scope);
+    }
+
     $scope.template = $scope.field.template || '/templates/' + $scope.field.format + '.html';
   }]);
