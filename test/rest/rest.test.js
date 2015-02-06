@@ -51,6 +51,36 @@ describe('REST extension', function(done) {
     });
   });
 
+  it('should update an item via PUT', function(done) {
+    var application = this.getServer().getApplication('localhost');
+    userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
+      // Create item.
+      request(testingUrl)
+        .post('/rest/testType')
+        .auth(credentials.username, credentials.password)
+        .send({
+          name: 'a-test',
+          title: 'A test'
+        })
+        .expect(200, function(error, response) {
+          if (error) {
+            throw error;
+          }
+          var result = response.body.data;
+
+          // Update item.
+          request(testingUrl)
+            .put('/rest/testType/' + result.id)
+            .auth(credentials.username, credentials.password)
+            .send({
+              name: 'a-test-edited',
+              title: 'A test updated'
+            })
+            .expect(200, done);
+        });
+    });
+  });
+
   it('shouldn\'t update an item via POST on main endpoint', function(done) {
     var application = this.getServer().getApplication('localhost');
     userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
@@ -83,6 +113,110 @@ describe('REST extension', function(done) {
               done();
             });
         });
+    });
+  });
+
+  it('shouldn\'t update an item via POST on the endpoint of another item', function(done) {
+    var application = this.getServer().getApplication('localhost');
+    userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
+
+      // Create item.
+      request(testingUrl)
+        .post('/rest/testType')
+        .auth(credentials.username, credentials.password)
+        .send({
+          name: 'a-test',
+          title: 'A test'
+        })
+        .expect(200, function(error, response) {
+          if (error) {
+            throw error;
+          }
+          var aResult = response.body.data;
+
+          request(testingUrl)
+            .post('/rest/testType')
+            .auth(credentials.username, credentials.password)
+            .send({
+              name: 'another-test',
+              title: 'Another test'
+            })
+            .expect(200, function(error, response) {
+              if (error) {
+                throw error;
+              }
+              var anotherResult = response.body.data;
+
+              // Attempt to create an item passing the key property.
+              request(testingUrl)
+                .post('/rest/testType/' + aResult.id)
+                .auth(credentials.username, credentials.password)
+                .send({
+                  id: anotherResult.id,
+                  name: 'a-test-edited',
+                  title: 'A test updated'
+                })
+                .expect(200, function(error, response) {
+                  // Make sure a new item was created.
+                  assert.notEqual(anotherResult.id, response.body.data.id);
+                  done();
+                });
+            });
+
+        });
+
+    });
+  });
+
+  it('shouldn\'t update an item via PUT on the endpoint of another item', function(done) {
+    var application = this.getServer().getApplication('localhost');
+    userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
+
+      // Create item.
+      request(testingUrl)
+        .post('/rest/testType')
+        .auth(credentials.username, credentials.password)
+        .send({
+          name: 'a-test',
+          title: 'A test'
+        })
+        .expect(200, function(error, response) {
+          if (error) {
+            throw error;
+          }
+          var aResult = response.body.data;
+
+          request(testingUrl)
+            .post('/rest/testType')
+            .auth(credentials.username, credentials.password)
+            .send({
+              name: 'another-test',
+              title: 'Another test'
+            })
+            .expect(200, function(error, response) {
+              if (error) {
+                throw error;
+              }
+              var anotherResult = response.body.data;
+
+              // Attempt to create an item passing the key property.
+              request(testingUrl)
+                .put('/rest/testType/' + aResult.id)
+                .auth(credentials.username, credentials.password)
+                .send({
+                  id: anotherResult.id,
+                  name: 'a-test-edited',
+                  title: 'A test updated'
+                })
+                .expect(200, function(error, response) {
+                  // Make sure a new item was created.
+                  assert.notEqual(anotherResult.id, response.body.data.id);
+                  done();
+                });
+            });
+
+        });
+
     });
   });
 

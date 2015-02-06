@@ -95,6 +95,9 @@ rest.route = function(routes, callback) {
           return typeModel.load(request.params[paramName], callback);
         }
         if (request.method == 'PUT') {
+          // Force key to avoid updating the wrong item if another key is passed
+          // in request body.
+          request.body[type.keyProperty] = request.params[paramName];
           return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
         }
         if (request.method == 'POST' || request.method == 'PATCH') {
@@ -103,16 +106,14 @@ rest.route = function(routes, callback) {
               return callback(error);
             }
 
-            // Remove key property from incoming data to prevent updating the
-            // wrong item.
-            if (type.keyProperty in request.body) {
-              delete request.body[type.keyProperty];
-            }
-
             if (item) {
               utils.extend(item, request.body);
               request.body = item;
             }
+
+            // Force key to avoid updating the wrong item if another key is
+            // passed in request body.
+            request.body[type.keyProperty] = request.params[paramName];
 
             typeModel.validateAndSave(request.body, validationResponseCallback(callback));
           });
