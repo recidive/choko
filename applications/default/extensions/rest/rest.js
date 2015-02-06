@@ -72,6 +72,13 @@ rest.route = function(routes, callback) {
           });
         }
         if (request.method == 'POST') {
+          // Remove key property if it's an internal to prevent updating.
+          // Otherwise it will get caught on validation if there's an item with
+          // same key, since all keyProperties should be unique.
+          if (type.keyProperty in request.body && type.fields[type.keyProperty].internal) {
+            delete request.body[type.keyProperty];
+          }
+
           return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
         }
         callback();
