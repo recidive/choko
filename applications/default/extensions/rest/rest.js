@@ -113,16 +113,17 @@ rest.route = function(routes, callback) {
               return callback(error);
             }
 
-            if (item) {
-              utils.extend(item, request.body);
-              request.body = item;
+            if (!item) {
+              return callback(null, 'Item not found.', 404);
             }
+
+            utils.extend(item, request.body);
 
             // Force key to avoid updating the wrong item if another key is
             // passed in request body.
-            request.body[type.keyProperty] = request.params[paramName];
+            item[type.keyProperty] = request.params[paramName];
 
-            typeModel.validateAndSave(request.body, validationResponseCallback(callback));
+            typeModel.validateAndSave(item, validationResponseCallback(callback));
           });
         }
         if (request.method == 'DELETE') {
@@ -143,7 +144,8 @@ rest.route = function(routes, callback) {
       router: 'rest'
     };
     next();
-  }, function(err) {
+  },
+  function(error) {
     callback(null, newRoutes);
   });
 };

@@ -51,6 +51,21 @@ describe('REST extension', function(done) {
     });
   });
 
+  it('should return 404 when trying to update an absent item via POST', function(done) {
+    var application = this.getServer().getApplication('localhost');
+    userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
+      // Update item.
+      request(testingUrl)
+        .post('/rest/testType/123')
+        .auth(credentials.username, credentials.password)
+        .send({
+          name: 'a-test-edited',
+          title: 'A test updated'
+        })
+        .expect(404, done);
+    });
+  });
+
   it('should update an item via PUT', function(done) {
     var application = this.getServer().getApplication('localhost');
     userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
