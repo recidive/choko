@@ -192,6 +192,9 @@ user.type = function(types, callback) {
     beforeCreate: function(settings, data, callback) {
       self.normalizeUserData(data, callback);
     },
+    beforeUpdate: function(settings, data, callback) {
+      self.normalizeUserData(data, callback);
+    },
     statics: {
       login: function(data, callback) {
         var User = this;
@@ -357,6 +360,10 @@ user.route = function(routes, callback) {
     callback: function(request, response, callback) {
       var data = request.body;
 
+      if (!('username' in data)) {
+        return callback(null, ['Please provide an username.'], 400);
+      }
+
       var User = application.type('user');
       User.load(data.username, function(error, account) {
         if (error) {
@@ -468,14 +475,19 @@ user.route = function(routes, callback) {
             }
 
             if (account.password == password.toString('base64')) {
-              // Password matches.
-              User.hash(data.password, new Buffer(account.salt, 'base64'), function(error, password) {
+              // Password matches, update password.
+              account.password = data.password;
+              User.validateAndSave(account, function(error, account, errors) {
                 if (error) {
                   return callback(error);
                 }
 
-                account.password = password.toString('base64');
-                account.save(callback);
+                if (errors && errors.length > 0) {
+                  // Validation errors.
+                  return callback(null, errors, 400);
+                }
+
+                callback(null, account);
               });
             }
             else {
