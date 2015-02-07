@@ -324,6 +324,11 @@ user.type = function(types, callback) {
  * Normalize user data. Hash password.
  */
 user.normalizeUserData = function(data, callback) {
+  // If there's salt, don't hash password.
+  if ('salt' in data) {
+    return callback(null, data);
+  }
+
   var User = this.application.type('user');
 
   // Generate a salt and hash the password.
@@ -438,7 +443,7 @@ user.route = function(routes, callback) {
             return callback(null, errors, 400);
           }
 
-          callback(null, account, 201);
+          callback(null, account);
         });
       });
     }
@@ -477,6 +482,10 @@ user.route = function(routes, callback) {
             if (account.password == password.toString('base64')) {
               // Password matches, update password.
               account.password = data.password;
+
+              // Delete salt so password gets hashed properly.
+              delete account.salt;
+
               User.validateAndSave(account, function(error, account, errors) {
                 if (error) {
                   return callback(error);
@@ -492,7 +501,7 @@ user.route = function(routes, callback) {
             }
             else {
               // Wrong password.
-              callback(null, ['Wrong current password.'], 400);
+              callback(null, ['Invalid current password.'], 400);
             }
           });
         }
