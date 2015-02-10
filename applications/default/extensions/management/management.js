@@ -30,9 +30,9 @@ management.page = function(pages, callback) {
   var newPages = {};
 
   // Create form pages for all page subtypes.
-  var pageTypes = this.application.type('page').subtypes;
+  var pageTypes = this.application.types['page'].subtypes;
   for (var subtypeName in pageTypes) {
-    var subtypeSettings = pageTypes[subtypeName].type.settings;
+    var subtypeSettings = pageTypes[subtypeName];
     newPages['manage-pages-add-' + subtypeSettings.name] = {
       path: '/manage/pages/add-' + subtypeSettings.name,
       title: 'Add ' + subtypeSettings.title.toLowerCase(),
@@ -43,15 +43,28 @@ management.page = function(pages, callback) {
   }
 
   // Create form panels for all panels subtypes.
-  var panelTypes = this.application.type('panel').subtypes;
+  var panelTypes = this.application.types['panel'].subtypes;
   for (var subtypeName in panelTypes) {
-    var subtypeSettings = panelTypes[subtypeName].type.settings;
+    var subtypeSettings = panelTypes[subtypeName];
     newPages['manage-panels-add-' + subtypeSettings.name] = {
       path: '/manage/panels/add-' + subtypeSettings.name,
       title: 'Add ' + subtypeSettings.title.toLowerCase(),
       type: 'form',
       formName: 'type-' + subtypeSettings.name + 'Panel',
       redirect: '/manage/panels'
+    };
+  }
+
+  // Create form contents for all content subtypes.
+  var contentTypes = this.application.types['content'].subtypes;
+  for (var subtypeName in contentTypes) {
+    var subtypeSettings = contentTypes[subtypeName];
+    newPages['manage-content-add-' + subtypeSettings.name] = {
+      path: '/manage/content/add-' + subtypeSettings.name,
+      title: 'Add ' + subtypeSettings.title.toLowerCase(),
+      type: 'form',
+      formName: 'type-' + subtypeSettings.name + 'Content',
+      redirect: '/manage/content'
     };
   }
 
@@ -67,14 +80,14 @@ management.page = function(pages, callback) {
       for (var typeName in types) {
         var type = types[typeName];
         result[typeName] = {
-          title: type.type.settings.title,
-          description: type.type.settings.description
+          title: type.title,
+          description: type.description
         };
       }
       response.payload.page.items = result;
       callback();
     },
-    template: 'templates/list-group.html'
+    template: '/templates/list-group.html'
   };
 
   newPages['manage-extensions'] = {
@@ -96,7 +109,7 @@ management.page = function(pages, callback) {
       response.payload.page.items = result;
       callback();
     },
-    template: 'templates/list-group.html'
+    template: '/templates/list-group.html'
   };
 
   callback(null, newPages);
@@ -109,10 +122,10 @@ management.navigation = function(navigations, callback) {
   var newNavigations = {};
 
   // Create navigation dropdown with links for all page types form.
-  var pageTypes = this.application.type('page').subtypes;
+  var pageTypes = this.application.types['page'].subtypes;
   var items = [];
   for (var subtypeName in pageTypes) {
-    var subtypeSettings = pageTypes[subtypeName].type.settings;
+    var subtypeSettings = pageTypes[subtypeName];
     items.push({
       title: subtypeSettings.title,
       url: '/manage/pages/add-' + subtypeSettings.name
@@ -138,10 +151,10 @@ management.navigation = function(navigations, callback) {
 
 
   // Create navigation dropdown with links for all panel types form.
-  var panelTypes = this.application.type('panel').subtypes;
+  var panelTypes = this.application.types['panel'].subtypes;
   var items = [];
   for (var subtypeName in panelTypes) {
-    var subtypeSettings = panelTypes[subtypeName].type.settings;
+    var subtypeSettings = panelTypes[subtypeName];
     items.push({
       title: subtypeSettings.title,
       url: '/manage/panels/add-' + subtypeSettings.name
@@ -165,51 +178,34 @@ management.navigation = function(navigations, callback) {
     ]
   };
 
-  callback(null, newNavigations);
-};
-
-/**
- * The save() hook.
- */
-management.save = function(type, data, callback) {
-  if (type.settings.storage != 'memory') {
-    return callback(null, data);
+  // Create navigation dropdown with links for all content types forms.
+  var pageTypes = this.application.types['content'].subtypes;
+  var items = [];
+  for (var subtypeName in pageTypes) {
+    var subtypeSettings = pageTypes[subtypeName];
+    items.push({
+      title: subtypeSettings.title,
+      url: '/manage/content/add-' + subtypeSettings.name
+    });
   }
 
-  var saveToFile = function(filePath, data, callback) {
-    fs.writeFile(filePath, JSON.stringify(data, null, '  '), function(error) {
-      if (error) {
-        return callback(error);
+  newNavigations['content-management-toolbar'] = {
+    title: 'Content management toolbar',
+    template: '/templates/btn-group.html',
+    classes: [
+      'btn-group-sm'
+    ],
+    items: [
+      {
+        type: 'dropdown',
+        title: 'Add',
+        items: items,
+        classes: [
+          'btn-primary'
+        ]
       }
-      callback(null, data);
-    });
+    ]
   };
 
-  var overridesDir = path.join(this.application.settings.applicationDir, 'overrides', type.name);
-
-  fs.exists(overridesDir, function(exists) {
-    var filePath = path.join(overridesDir, data[type.settings.keyProperty] + '.' + type.name + '.json');
-
-    if (exists) {
-      saveToFile(filePath, data, callback);
-    }
-    else {
-      utils.mkdir(overridesDir, function(error) {
-        if (error) {
-          return callback(error);
-        }
-        saveToFile(filePath, data, callback);
-      });
-    }
-  });
-};
-
-/**
- * The list() hook.
- */
-management.list = function(type, data, callback) {
-  // @todo: this is certainly not the best place to do this since it will make
-  // overrides depend on the management extension. It seems ok for now that
-  // management is a required extension.
-  this.application.overrides(type, data, callback);
+  callback(null, newNavigations);
 };

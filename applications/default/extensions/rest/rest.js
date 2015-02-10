@@ -26,40 +26,17 @@ rest.route = function(routes, callback) {
     };
   };
 
-  // Helper function for performing HTTP Basic authentication.
-  var basicAuth = function(request, response, callback) {
-    passport.authenticate('basic', function(error, account) {
-      if (error) {
-        return callback(error);
-      }
-
-      if (!account) {
-        return callback(null, ['Invalid username or password.'], 401);
-      }
-
-      // Log user in.
-      request.login(account, function(error) {
-        if (error) {
-          return callback(error);
-        }
-        callback(null, account);
-      });
-
-    })(request, response, callback);
-  };
-
-  var self = this;
-  async.each(Object.keys(this.application.types), function(typeName, next) {
-    var typeModel = self.application.types[typeName];
-    var type = typeModel.type;
+  async.each(Object.keys(application.types), function(typeName, next) {
+    var type = application.types[typeName];
+    var typeModel = application.type(typeName);
 
     // Default path to type name.
     if (!type.path) {
-      type.path = '/' + type.name;
+      type.path = '/' + typeName;
     }
 
     // Initialize access rules.
-    type.settings.access = type.settings.access || {};
+    type.access = type.access || {};
 
     // Add default access rules.
     var access = {
@@ -69,7 +46,7 @@ rest.route = function(routes, callback) {
       'edit': false,
       'delete': false
     };
-    utils.extend(access, type.settings.access);
+    utils.extend(access, type.access);
 
     // Helper function that receives a HTTP method/Model method mapper and run
     // the appropriate access checks.
@@ -79,20 +56,12 @@ rest.route = function(routes, callback) {
         return callback(null, true);
       }
 
-      // Run basic auth authentication.
-      basicAuth(request, response, function(error, account) {
-        if (!account) {
-          return callback(null, false);
-        }
-        if (request.method in methodMapper) {
-          return application.access(request, access[modelMethod], callback);
-        }
-        callback();
-      });
+      return application.access(request, access[modelMethod], callback);
     };
 
     // List or add items.
     newRoutes['/rest' + type.path] = {
+      middleware: passport.authenticate(['basic', 'anonymous']),
       callback: function(request, response, callback) {
         if (request.method == 'GET') {
           // @todo: filter out dangerous stuff from query before passing it to
@@ -103,6 +72,13 @@ rest.route = function(routes, callback) {
           });
         }
         if (request.method == 'POST') {
+          // Remove key property if it's an internal to prevent updating.
+          // Otherwise it will get caught on validation if there's an item with
+          // same key, since all keyProperties should be unique.
+          if (type.keyProperty in request.body && type.fields[type.keyProperty].internal) {
+            delete request.body[type.keyProperty];
+          }
+
           return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
         }
         callback();
@@ -113,31 +89,45 @@ rest.route = function(routes, callback) {
           'POST': 'add'
         };
         accessHelper(methodMapper, request, response, callback);
-      }
+      },
+      router: 'rest'
     };
 
     // Get, update or delete an item.
-    newRoutes['/rest' + type.path + '/:' + type.name] = {
+    var paramName = utils.hyphensToCamelCase(typeName);
+    newRoutes['/rest' + type.path + '/:' + paramName] = {
+      middleware: passport.authenticate(['basic', 'anonymous']),
       callback: function(request, response, callback) {
         if (request.method == 'GET') {
-          return typeModel.load(request.params[type.name], callback);
+          return typeModel.load(request.params[paramName], callback);
         }
         if (request.method == 'PUT') {
+          // Force key to avoid updating the wrong item if another key is passed
+          // in request body.
+          request.body[type.keyProperty] = request.params[paramName];
           return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
         }
         if (request.method == 'POST' || request.method == 'PATCH') {
-          return typeModel.load(request.params[type.name], function(err, item) {
-            if (item) {
-              // Delete MongoDB ID if any.
-              delete item._id;
-              utils.extend(item, request.body);
-              request.body = item;
+          return typeModel.load(request.params[paramName], function(error, item) {
+            if (error) {
+              return callback(error);
             }
-            typeModel.validateAndSave(request.body, validationResponseCallback(callback));
+
+            if (!item) {
+              return callback(null, 'Item not found.', 404);
+            }
+
+            utils.extend(item, request.body);
+
+            // Force key to avoid updating the wrong item if another key is
+            // passed in request body.
+            item[type.keyProperty] = request.params[paramName];
+
+            typeModel.validateAndSave(item, validationResponseCallback(callback));
           });
         }
         if (request.method == 'DELETE') {
-          return typeModel.delete(request.params[type.name], callback);
+          return typeModel.delete(request.params[paramName], callback);
         }
         callback();
       },
@@ -147,13 +137,15 @@ rest.route = function(routes, callback) {
           'PUT': 'edit',
           'POST': 'edit',
           'PATCH': 'edit',
-          'PUT': 'delete'
+          'DELETE': 'delete'
         };
         accessHelper(methodMapper, request, response, callback);
-      }
+      },
+      router: 'rest'
     };
     next();
-  }, function(err) {
+  },
+  function(error) {
     callback(null, newRoutes);
   });
 };

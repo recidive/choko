@@ -19,7 +19,7 @@ describe('User extension', function(done) {
     var application = this.getServer().getApplication('localhost');
     var User = application.type('user');
 
-    new User(userHelper.sample()).validateAndSave(function(error, newAccount) {
+    User.validateAndSave(userHelper.sample(), function(error, newAccount) {
       if (error) {
         return assert.fail('error saving');
       }
@@ -38,7 +38,7 @@ describe('User extension', function(done) {
     var user = userHelper.sample();
     user.password = 'small';
 
-    new User(user).validateAndSave(function(error, newAccount, errors) {
+    User.validateAndSave(user, function(error, newAccount, errors) {
       if (error) {
         return assert.fail('error saving');
       }

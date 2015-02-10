@@ -52,6 +52,20 @@ page.type = function(types, callback) {
       'add': 'manage-pages',
       'edit': 'manage-pages',
       'delete': 'manage-pages'
+    },
+    displays: {
+      'list-group-item': {
+        'heading': [{
+          fieldName: 'title',
+          format: 'title',
+          weight: 0
+        }],
+        'text': [{
+          fieldName: 'description',
+          format: 'paragraph',
+          weight: 5
+        }]
+      }
     }
   };
 
@@ -71,8 +85,22 @@ page.pageType = function(pageTypes, callback) {
     fields: {
       itemType: {
         title: 'Item type',
-        type:  'text',
+        type: 'text',
         required: true
+      },
+      listStyle: {
+        title: 'List style',
+        type: 'reference',
+        reference: {
+          type: 'listStyle'
+        }
+      },
+      itemDisplay: {
+        title: 'Item display',
+        type: 'reference',
+        reference: {
+          type: 'display'
+        }
       }
     }
   };
@@ -83,13 +111,20 @@ page.pageType = function(pageTypes, callback) {
     fields: {
       itemType: {
         title: 'Item type',
-        type:  'text',
+        type: 'text',
         required: true
       },
       itemKey: {
         title: 'Item key',
         type:  'text',
         required: true
+      },
+      itemDisplay: {
+        title: 'Item display',
+        type: 'reference',
+        reference: {
+          type: 'display'
+        }
       }
     }
   };
@@ -141,7 +176,7 @@ page.panel = function(panels, callback) {
   newPanels['page-content'] = {
     title: 'Page content',
     description: 'Main page content.',
-    template: 'templates/page-content.html',
+    template: '/templates/page-content.html',
     bare: true
   };
 
@@ -182,7 +217,7 @@ page.route = function(routes, callback) {
 
           if ((page.type === 'item' || page.type === 'form') && page.itemType && !page.itemKey) {
             // Try to get key from request params.
-            var keyProperty = self.application.type(page.itemType).type.settings.keyProperty;
+            var keyProperty = self.application.type(page.itemType).type.keyProperty;
             if (keyProperty in page.params) {
               page.itemKey = page.params[keyProperty];
             }

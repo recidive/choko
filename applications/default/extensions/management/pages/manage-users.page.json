@@ -5,5 +5,5 @@
   "type": "list",
   "itemType": "user",
   "listStyle": "list-group",
-  "itemDisplay": "list-item"
+  "itemDisplay": "list-group-item"
 }

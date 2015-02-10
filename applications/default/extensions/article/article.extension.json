@@ -1,0 +1,5 @@
+{
+  "title": "Article",
+  "description": "Add article content type and article list pages and panels.",
+  "dependencies": ["content"]
+}

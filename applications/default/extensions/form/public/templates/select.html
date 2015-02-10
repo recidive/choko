@@ -1,6 +1,9 @@
-<div ng-controller="ElementController" class="form-group">
-  <label ng-if="element.title" for="element-{{form.name}}-{{element.name}}">{{element.title}}</label>
-  <select ng-model="data[element.name]" ng-required="element.required" class="form-control" name="{{element.name}}">
+<div ck-element class="form-group">
+  <label ng-if="element.title" for="{{element.id}}">{{element.title}}</label>
+  <select ng-if="element.multiple" ng-model="data[element.name]" ng-required="element.required" name="{{element.name}}" id="{{element.id}}" class="form-control" multiple>
+    <option ng-repeat="(optionKey, option) in element.options" value="{{optionKey}}">{{option}}</option>
+  </select>
+  <select ng-if="!element.multiple" ng-model="data[element.name]" ng-required="element.required" name="{{element.name}}" id="{{element.id}}" class="form-control">
     <option ng-repeat="(optionKey, option) in element.options" value="{{optionKey}}">{{option}}</option>
   </select>
   <p ng-if="element.description" class="help-block">{{element.description}}</p>

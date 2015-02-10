@@ -16,18 +16,16 @@ before(function(done) {
 });
 
 beforeEach(function(done) {
-  var db = this.getServer().getApplication('localhost').storage('database').database;
+  var app = this.getServer().getApplication('localhost');
 
-  db.collections(function(err, collections) {
-    var droppers = collections.map(function (collection) {
-      return function (next) {
-        db.dropCollection(collection.collectionName, next);
-      };
-    });
+  var droppers = Object.keys(app.collections).map(function (collection) {
+    return function (next) {
+      app.collections[collection].drop(next);
+    };
+  });
 
-    async.parallel(droppers, function () {
-      done();
-    });
+  async.parallel(droppers, function () {
+    done();
   });
 });
 

@@ -1,4 +1,4 @@
-<form ng-controller="FormController" ng-init="init(this)" name="{{form.name}}" role="form" id="form-{{form.name}}" novalidate>
+<form ck-form ng-init="init(this)" name="{{form.name}}" role="form" id="{{form.id}}" novalidate>
   <div ng-if="errors" class="alert alert-danger">
     <ul>
       <li ng-repeat="error in errors">{{error}}</li>

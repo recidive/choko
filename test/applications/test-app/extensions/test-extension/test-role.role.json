@@ -2,6 +2,6 @@
   "title": "Test role",
   "permissions": [
     "view-test-type",
-    "manage-test-type"
+    "add-test-type"
   ]
 }

@@ -1,0 +1,20 @@
+{
+  "title": "User settings pages",
+  "description": "User settings pages context.",
+  "conditions": {
+    "path": [
+      "/settings",
+      "/settings/*"
+    ]
+  },
+  "reactions": {
+    "panel": {
+      "content": [
+        {
+          "name": "navigation-user-settings-tabs",
+          "weight": -1
+        }
+      ]
+    }
+  }
+}

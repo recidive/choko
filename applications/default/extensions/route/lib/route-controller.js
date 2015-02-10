@@ -21,25 +21,24 @@ var RouteController = module.exports = function(application, settings) {
   this.application = application;
   this.settings = settings;
 
-  var self = this;
-  var app = this.application.application;
-  var method = settings.method || 'all';
-
   // Prepare route register params.
-  var params = [self.settings.path];
+  var params = [this.settings.path];
 
   // Prepare the middleware, if available.
-  if ('middleware' in settings) {
-    params.push(settings.middleware);
+  if ('middleware' in this.settings) {
+    params.push(this.settings.middleware);
   }
 
   // Prepare the route handler.
+  var self = this;
   params.push(function(request, response) {
     self.handle(request, response);
   });
 
-  // Register on express.
-  app[method].apply(app, params);
+  // Register on the appropriate router. Default to 'page' router.
+  var router = this.settings.router ? this.application.routers[this.settings.router] : this.application.routers.page;
+  var method = this.settings.method || 'all';
+  router[method].apply(router, params);
 };
 
 /**
@@ -52,36 +51,39 @@ RouteController.prototype.handle = function(request, response) {
   var self = this;
   var settings = this.settings;
 
-  this.access(request, response, function(err, allow) {
-    if (err) {
-      RouteController.error(request, response, err);
+  // Response decorator function, used to allow extensions to alter the response
+  // for content responses via response() hook.
+  var responseDecorator = function(payload, request, response, callback) {
+    // Run response() hook on all extensions.
+    self.application.invoke('response', payload, request, response, callback);
+  };
+
+  this.access(request, response, function(error, allow) {
+    if (error) {
+      return RouteController.error(request, response, error);
     }
 
-    if (allow) {
-      // A route can have either a content or callback property.
-      if (settings.content) {
-        RouteController.respond(request, response, settings.content);
-      }
-      else if (settings.callback) {
-        settings.callback(request, response, function(err, content, code) {
-          if (err) {
-            RouteController.error(request, response, err);
-          }
-
-          if (content) {
-            RouteController.respond(request, response, content, code);
-          }
-          else {
-            // If there's no content, return 404 error.
-            RouteController.notFound(request, response);
-          }
-        });
-      }
-    }
-    else {
+    if (allow !== true) {
       // Access denied.
-      RouteController.forbidden(request, response);
+      return RouteController.forbidden(request, response);
     }
+
+    if (settings.content) {
+      return RouteController.respond(request, response, settings.content, responseDecorator);
+    }
+
+    if (settings.callback) {
+      return settings.callback(request, response, function(error, content, code) {
+        if (error) {
+          return RouteController.error(request, response, error);
+        }
+
+        RouteController.respond(request, response, content, code, responseDecorator);
+      });
+    }
+
+    // If there's no content nor a callback, return 404 error.
+    RouteController.notFound(request, response);
   });
 };
 
@@ -121,8 +123,10 @@ RouteController.prototype.access = function(request, response, callback) {
  * @param {Response} response Response object.
  * @param {Object|String} content Content to send.
  * @param {Number} [code] HTTP status code.
+ * @param {Function} [decorator] A function to run on the response data before
+ * sending it.
  */
-RouteController.respond = function(request, response, content, code) {
+RouteController.respond = function(request, response, content, code, decorator) {
   // Default to 200 (success).
   var code = code || 200;
 
@@ -136,7 +140,13 @@ RouteController.respond = function(request, response, content, code) {
     payload.data = content;
   }
 
-  response.send(code, payload);
+  if (decorator) {
+    return decorator(payload, request, response, function() {
+      response.status(payload.status.code).send(payload);
+    });
+  }
+
+  response.status(code).send(payload);
 };
 
 /**

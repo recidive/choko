@@ -6,12 +6,16 @@
     "id": {
       "title": "Id",
       "type": "id",
-      "required": true
+      "internal": "true"
     },
     "name": {
       "title": "Name",
       "type": "text",
       "required": true
+    },
+    "title": {
+      "title": "Title",
+      "type": "text"
     }
   },
   "displays": {
@@ -26,7 +30,7 @@
   "access": {
     "list": "view-test-type",
     "load": "view-test-type",
-    "add": "manage-test-type",
+    "add": "add-test-type",
     "edit": "manage-test-type",
     "delete": "manage-test-type"
   },

@@ -1,6 +1,0 @@
-{
-  "path": "/user/:name",
-  "title": "User page",
-  "access": "manage-users",
-  "content": "<p class=\"lead\">User page content.</p>"
-}

@@ -1,8 +1,19 @@
 /**
- * @file 
+ * @file
  * User related utility functions.
  */
-module.exports = {
+var userHelper = module.exports = {
+
+  createUser: function(application, roles, callback) {
+    var User = application.type('user');
+
+    var account = userHelper.sample();
+    account.roles = roles;
+
+    User.validateAndSave(account, function(error, user) {
+      callback(error, user, account);
+    });
+  },
 
   // Generate sample user data used in tests.
   sample: function (confirmation) {

@@ -1,0 +1,7 @@
+{
+  "title": "Test administrator role",
+  "permissions": [
+    "view-test-type",
+    "manage-test-type"
+  ]
+}

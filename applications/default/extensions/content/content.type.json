@@ -1,0 +1,90 @@
+{
+  "title": "Content",
+  "description": "Application content.",
+  "polymorphic": true,
+  "fields": {
+    "id": {
+      "title": "Id",
+      "type": "id",
+      "internal": true,
+      "weight": -20
+    },
+    "title": {
+      "title": "Title",
+      "type": "text",
+      "required": true,
+      "weight": -15
+    },
+    "author": {
+      "title": "Author",
+      "type": "reference",
+      "reference": {
+        "type": "user",
+        "titleField": "username"
+      },
+      "index": true,
+      "weight": 10
+    },
+    "path": {
+      "title": "Path",
+      "type": "text",
+      "weight": 15
+    },
+    "published": {
+      "title": "Published",
+      "type": "boolean",
+      "index": true,
+      "weight": 20
+    },
+    "created": {
+      "title": "Created",
+      "type": "datetime",
+      "internal": true,
+      "index": true,
+      "weight": 30
+    },
+    "changed": {
+      "title": "Updated",
+      "type": "datetime",
+      "internal": true,
+      "weight": 35
+    }
+  },
+  "keyProperty": "id",
+  "storage": "database",
+  "access": {
+    "list": "manage-content",
+    "load": "manage-content",
+    "add": "manage-content",
+    "edit": "manage-content",
+    "delete": "manage-content"
+  },
+  "displays": {
+    "list-item": {
+      "text": [{
+        "fieldName": "title",
+        "format": "plain",
+        "weight": 0
+      }]
+    },
+    "list-group-item": {
+      "heading": [{
+        "fieldName": "title",
+        "format": "title",
+        "weight": 0
+      }]
+    },
+    "media": {
+      "object": [{
+        "fieldName": "image",
+        "format": "image",
+        "weight": 0
+      }],
+      "heading": [{
+        "fieldName": "title",
+        "format": "title",
+        "weight": 0
+      }]
+    }
+  }
+}

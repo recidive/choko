@@ -12,6 +12,10 @@
       "url": "/manage"
     },
     {
+      "title": "Content",
+      "url": "/manage/content"
+    },
+    {
       "title": "Users",
       "url": "/manage/users"
     },
@@ -24,6 +28,10 @@
       "url": "/manage/panels"
     },
     {
+      "title": "Navigations",
+      "url": "/manage/navigations"
+    },
+    {
       "title": "Contexts",
       "url": "/manage/contexts"
     },
@@ -34,10 +42,6 @@
     {
       "title": "Displays",
       "url": "/manage/displays"
-    },
-    {
-      "title": "Navigations",
-      "url": "/manage/navigations"
     },
     {
       "title": "Themes",

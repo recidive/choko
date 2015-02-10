@@ -1,5 +1,5 @@
-<div ng-controller="ElementController" class="form-group">
-  <label ng-if="element.title" for="element-{{form.name}}-{{element.name}}">{{element.title}}</label>
-  <div ng-controller="WYSIWYGController"><summernote ng-model="data[element.name]" ng-required="element.required" config="options" class="form-control" id="element-{{form.name}}-{{element.name}}" placeholder="{{element.placeholder}}"></summernote></div>
+<div ck-element class="form-group">
+  <label ng-if="element.title" for="{{element.id}}">{{element.title}}</label>
+  <div ck-wysiwyg><summernote ng-model="data[element.name]" ng-required="element.required" config="options" class="form-control" id="{{element.id}}" placeholder="{{element.placeholder}}"></summernote></div>
   <p ng-if="element.description" class="help-block">{{element.description}}</p>
 </div>
