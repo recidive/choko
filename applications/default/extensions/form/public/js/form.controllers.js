@@ -9,12 +9,18 @@ angular.module('choko')
 .controller('FormController', ['$scope',
   function ($scope) {
     $scope.form.id = $scope.form.id || 'form-' + $scope.form.name;
+    $scope.formScope = {};
+
+    $scope.$watch($scope.form.name, function(form) {
+      $scope.formScope = $scope[$scope.form.name];
+    });
   }])
 
 .controller('ElementController', ['$scope',
   function ($scope) {
     $scope.element.template = $scope.element.template || '/templates/' + $scope.element.type + '.html';
     $scope.element.id = $scope.element.id || 'element-' + $scope.form.name + '-' + $scope.element.name;
+    $scope.elementScope = $scope.formScope[$scope.element.name];
   }])
 
 .controller('FileElementController', ['$scope', '$controller', '$upload',
