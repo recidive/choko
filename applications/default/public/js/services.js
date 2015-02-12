@@ -39,6 +39,20 @@ angular.module('choko')
     };
   })
 
+  // Token strings contain embedded parameters that can be replaced.
+  .factory('Token', ['Params', function(Params) {
+    var pattern = /\[(.*?)\]/g;
+
+    return {
+      replace: function(params, scope) {
+        var replaced = params.replace(pattern, function(match, subMatch) {
+          return Params.parse(subMatch, scope);
+        });
+        return replaced;
+      }
+    };
+  }])
+
   // Parameter Parser service that can be extend by extensions.
   .provider('Params', function () {
 
