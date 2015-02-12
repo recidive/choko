@@ -9,7 +9,10 @@ angular.module('choko')
 .directive('ckForm', function() {
   return {
     restrict: 'A',
-    controller: 'FormController'
+    controller: 'FormController',
+    link: function(scope, element, attrs, ngFormController) {
+      scope.formScope = scope[scope.form.name];
+    }
   }
 })
 

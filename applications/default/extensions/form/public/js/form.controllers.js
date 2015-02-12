@@ -9,11 +9,7 @@ angular.module('choko')
 .controller('FormController', ['$scope',
   function ($scope) {
     $scope.form.id = $scope.form.id || 'form-' + $scope.form.name;
-    $scope.formScope = {};
 
-    $scope.$watch($scope.form.name, function(form) {
-      $scope.formScope = $scope[$scope.form.name];
-    });
   }])
 
 .controller('ElementController', ['$scope',
