@@ -136,8 +136,8 @@ angular.module('choko')
 
     }])
 
-  .controller('ViewController', ['$scope', '$location', '$http', 'Choko', 'Params',
-    function ($scope, $location, $http, Choko, Params) {
+  .controller('ViewController', ['$scope', '$location', '$http', 'Choko', 'Params', 'Token',
+    function ($scope, $location, $http, Choko, Params, Token) {
 
       $scope.prepareDisplay = function(name, callback) {
         Choko.get({type: 'display', key: name}, function(display) {
@@ -164,6 +164,11 @@ angular.module('choko')
       Object.keys($scope.view.query || {}).forEach(function (param) {
         $scope.view.query[param] = Params.parse($scope.view.query[param], $scope);
       });
+
+      // Replace tokens in title.
+      if ($scope.view.title) {
+        $scope.view.title = Token.replace($scope.view.title, $scope);
+      }
 
       // Handle 'list' type views.
       if ($scope.view.type === 'list' && $scope.view.itemType) {
