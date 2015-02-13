@@ -1,5 +1,5 @@
 var async = require('async');
-var validator = require('validator/lib/validators');
+var validator = require('validator');
 var uuid = require('node-uuid');
 var utils = require('prana').utils;
 
@@ -56,7 +56,7 @@ field.field = function(fields, callback) {
       // Default maxLenght to 256.
       settings.maxLength = settings.maxLength || 256;
 
-      next(null, !validator.notEmpty(item[settings.name]) || validator.len(item[settings.name].toString(), settings.minLength, settings.maxLength) || 'must have from ' + settings.minLength + ' to ' + settings.maxLength + ' characters.');
+      next(null, validator.isLength(item[settings.name].toString(), settings.minLength, settings.maxLength) || 'must have from ' + settings.minLength + ' to ' + settings.maxLength + ' characters.');
     }
   };
 
@@ -116,7 +116,7 @@ field.field = function(fields, callback) {
     validate: function(settings, item, next) {
       // Email validator oddly returns the email itself, so need to convert to
       // boolean.
-      next(null, !!validator.isEmail(item[settings.name].toString()) || 'must be a valid email.');
+      next(null, validator.isEmail(item[settings.name].toString()) || 'must be a valid email.');
     }
   };
 
@@ -128,7 +128,7 @@ field.field = function(fields, callback) {
     },
     element: 'url',
     validate: function(settings, item, next) {
-      next(null, validator.isUrl(item[settings.name].toString()) || 'must be a valid URL.');
+      next(null, validator.isURL(item[settings.name].toString()) || 'must be a valid URL.');
     }
   };
 
@@ -146,7 +146,7 @@ field.field = function(fields, callback) {
     element: 'password',
     validate: function(settings, item, next) {
       var minLength = settings.minLength || 6;
-      next(null, validator.len(item[settings.name].toString(), settings.minLength || 6) || 'must have at least ' + minLength + ' characters.');
+      next(null, validator.isLength(item[settings.name].toString(), settings.minLength || 6) || 'must have at least ' + minLength + ' characters.');
     }
   };
 

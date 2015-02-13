@@ -1,6 +1,5 @@
 var path = require('path');
 var fs = require('fs');
-var validator = require('validator/lib/validators');
 var utils = require('prana').utils;
 
 var file = module.exports = {};
