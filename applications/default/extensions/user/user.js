@@ -86,6 +86,18 @@ user.init = function(application, callback) {
 user.permission = function(permissions, callback) {
   var newPermissions = {};
 
+  newPermissions['sign-in'] = {
+    title: 'Sign in',
+    description: 'Allow users to sign in on the application.'
+  };
+  newPermissions['sign-out'] = {
+    title: 'Sign out',
+    description: 'Allow users to sign out from the application.'
+  };
+  newPermissions['create-account'] = {
+    title: 'Create account',
+    description: 'Allow users to create an account on the application.'
+  };
   newPermissions['edit-own-account'] = {
     title: 'Edit own account',
     description: 'Allow users to load and edit their own user accounts.'
