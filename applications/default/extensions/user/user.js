@@ -129,13 +129,15 @@ user.type = function(types, callback) {
         title: 'Password',
         type: 'password',
         maxLength: 1024,
-        required: true
+        required: true,
+        protected: true
       },
       salt: {
         title: 'Salt',
         type: 'text',
         maxLength: 512,
-        internal: true
+        internal: true,
+        protected: true
       },
       roles: {
         title: 'Roles',
@@ -180,6 +182,7 @@ user.type = function(types, callback) {
         'heading': [{
           fieldName: 'username',
           format: 'title',
+          link: '/manage/users/edit/[username|item]',
           weight: 0
         }],
         'text': [{
@@ -193,6 +196,10 @@ user.type = function(types, callback) {
       self.normalizeUserData(data, callback);
     },
     beforeUpdate: function(settings, data, callback) {
+      // Delete salt so password gets hashed properly.
+      if (data.password) {
+        delete data.salt;
+      }
       self.normalizeUserData(data, callback);
     },
     statics: {
@@ -482,9 +489,6 @@ user.route = function(routes, callback) {
             if (account.password == password.toString('base64')) {
               // Password matches, update password.
               account.password = data.password;
-
-              // Delete salt so password gets hashed properly.
-              delete account.salt;
 
               User.validateAndSave(account, function(error, account, errors) {
                 if (error) {
