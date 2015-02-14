@@ -30,6 +30,13 @@ field.field = function(fields, callback) {
   newFields['text'] = {
     title: 'Text',
     schema: function(settings) {
+      // If options and multiple is set, schema should be a array.
+      if (settings.options && settings.multiple) {
+        return {
+          type: 'array'
+        };
+      }
+
       var schema = {
         type: (settings.maxLength > 256) ? 'text' : 'string'
       };
@@ -50,6 +57,8 @@ field.field = function(fields, callback) {
       };
     },
     validate: function(settings, item, next) {
+      // @todo: validate if value is within options when it's a select field.
+
       // Default minLenght to 1.
       settings.minLength = settings.minLength || 1;
 

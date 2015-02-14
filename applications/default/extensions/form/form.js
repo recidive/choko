@@ -130,6 +130,11 @@ form.form = function(forms, callback) {
         element.options = fieldSettings.options;
       }
 
+      // Forward 'multiple' property.
+      if (fieldSettings.multiple) {
+        element.multiple = fieldSettings.multiple;
+      }
+
       // Bypass 'internal' fields.
       if (fieldSettings.internal) {
         return next();
