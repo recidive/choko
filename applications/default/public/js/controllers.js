@@ -252,7 +252,7 @@ angular.module('choko')
           $scope.buildForm();
         }
 
-        $scope.submit = function(url, redirect) {
+        $scope.submit = function(url) {
           // Add itemKey to the URL if any.
           if ($scope.view.itemKey) {
             url += '/' + $scope.view.itemKey;
@@ -261,9 +261,16 @@ angular.module('choko')
           $http.post(url, $scope.data)
             .success(function(data, status, headers, config) {
               $scope.data = data.data;
+
               delete $scope.errors;
-              if (redirect) {
-                $location.path(redirect);
+
+              if ($scope.form.redirect) {
+                // Replace tokens in redirects. Make 'item' an alias to 'data'
+                // so item parser can be used in tokens.
+                $scope.item = $scope.data;
+                $scope.form.redirect = Token.replace($scope.form.redirect, $scope);
+
+                $location.path($scope.form.redirect);
               }
             })
             .error(function(data, status, headers, config) {
