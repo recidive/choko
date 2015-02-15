@@ -1,9 +1,9 @@
 {
   "title": "Cyborg",
   "description": "Jet black and electric blue.",
-  "thumbnail": "/bootswatch/cyborg/thumbnail.png",
+  "thumbnail": "/lib/bootswatch/cyborg/thumbnail.png",
   "styles": [
-    "/bootswatch/cyborg/bootstrap.min.css",
+    "/lib/bootswatch/cyborg/bootstrap.min.css",
     "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }

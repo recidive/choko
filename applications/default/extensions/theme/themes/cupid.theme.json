@@ -1,9 +1,0 @@
-{
-  "title": "Cupid",
-  "description": "Pretty in pink.",
-  "thumbnail": "/bootswatch/cupid/thumbnail.png",
-  "styles": [
-    "/bootswatch/cupid/bootstrap.min.css",
-    "/lib/font-awesome/css/font-awesome.min.css"
-  ]
-}
