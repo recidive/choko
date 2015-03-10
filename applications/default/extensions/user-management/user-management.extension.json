@@ -1,0 +1,5 @@
+{
+  "title": "User Management",
+  "description": "Provide user management pages.",
+  "dependencies": ["user", "management"]
+}
