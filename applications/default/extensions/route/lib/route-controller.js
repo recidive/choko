@@ -35,8 +35,8 @@ var RouteController = module.exports = function(application, settings) {
     self.handle(request, response);
   });
 
-  // Register on the appropriate router. Default to 'page' router.
-  var router = this.settings.router ? this.application.routers[this.settings.router] : this.application.routers.page;
+  // Register route on the appropriate router.
+  var router = this.application.routers[this.settings.router];
   var method = this.settings.method || 'all';
   router[method].apply(router, params);
 };
