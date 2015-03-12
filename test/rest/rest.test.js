@@ -36,7 +36,7 @@ describe('REST extension', function(done) {
           if (error) {
             throw error;
           }
-          var result = response.body.data;
+          var result = response.body;
 
           // Update item.
           request(testingUrl)
@@ -81,7 +81,7 @@ describe('REST extension', function(done) {
           if (error) {
             throw error;
           }
-          var result = response.body.data;
+          var result = response.body;
 
           // Update item.
           request(testingUrl)
@@ -111,7 +111,7 @@ describe('REST extension', function(done) {
           if (error) {
             throw error;
           }
-          var result = response.body.data;
+          var result = response.body;
 
           // Attempt to create an item passing the key property.
           request(testingUrl)
@@ -124,7 +124,7 @@ describe('REST extension', function(done) {
             })
             .expect(200, function(error, response) {
               // Make sure a new item was created.
-              assert.notEqual(result.id, response.body.data.id);
+              assert.notEqual(result.id, response.body.id);
               done();
             });
         });
@@ -147,7 +147,7 @@ describe('REST extension', function(done) {
           if (error) {
             throw error;
           }
-          var aResult = response.body.data;
+          var aResult = response.body;
 
           request(testingUrl)
             .post('/rest/testType')
@@ -160,7 +160,7 @@ describe('REST extension', function(done) {
               if (error) {
                 throw error;
               }
-              var anotherResult = response.body.data;
+              var anotherResult = response.body;
 
               // Attempt to create an item passing the key property.
               request(testingUrl)
@@ -173,7 +173,7 @@ describe('REST extension', function(done) {
                 })
                 .expect(200, function(error, response) {
                   // Make sure a new item was created.
-                  assert.notEqual(anotherResult.id, response.body.data.id);
+                  assert.notEqual(anotherResult.id, response.body.id);
                   done();
                 });
             });
@@ -199,7 +199,7 @@ describe('REST extension', function(done) {
           if (error) {
             throw error;
           }
-          var aResult = response.body.data;
+          var aResult = response.body;
 
           request(testingUrl)
             .post('/rest/testType')
@@ -212,7 +212,7 @@ describe('REST extension', function(done) {
               if (error) {
                 throw error;
               }
-              var anotherResult = response.body.data;
+              var anotherResult = response.body;
 
               // Attempt to create an item passing the key property.
               request(testingUrl)
@@ -225,7 +225,7 @@ describe('REST extension', function(done) {
                 })
                 .expect(200, function(error, response) {
                   // Make sure a new item was created.
-                  assert.notEqual(anotherResult.id, response.body.data.id);
+                  assert.notEqual(anotherResult.id, response.body.id);
                   done();
                 });
             });
@@ -253,7 +253,7 @@ describe('REST extension', function(done) {
           outOfSchema: 'A value for a field not in type schema.'
         })
         .expect(200, function(error, response) {
-          assert.ok(!('outOfSchema' in response.body.data));
+          assert.ok(!('outOfSchema' in response.body));
           done();
         });
     });

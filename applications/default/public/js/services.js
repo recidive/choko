@@ -17,9 +17,6 @@ angular.module('choko')
     {
       'get': {
         method: 'GET',
-        transformResponse: function (data) {
-          return angular.fromJson(data).data;
-        },
         // Data is an Object, not an Array.
         isArray: false
       }

@@ -130,10 +130,12 @@ RouteController.respond = function(request, response, content, code, decorator) 
   // Default to 200 (success).
   var code = code || 200;
 
+  // Create a payload envelope to pass to the decorator function.
   var payload = {
     status: {
       code: code
-    }
+    },
+    data: null
   };
 
   if (content) {
@@ -142,11 +144,15 @@ RouteController.respond = function(request, response, content, code, decorator) 
 
   if (decorator) {
     return decorator(payload, request, response, function() {
-      response.status(payload.status.code).send(payload);
+      response
+        .status(payload.status.code)
+        .send(payload.data);
     });
   }
 
-  response.status(code).send(payload);
+  response
+    .status(payload.status.code)
+    .send(payload.data);
 };
 
 /**
