@@ -122,8 +122,13 @@ user.type = function(types, callback) {
     title: 'User',
     description: 'Application users.',
     storage: 'database',
-    keyProperty: 'username',
+    keyProperty: 'id',
     fields: {
+      id: {
+        title: 'Id',
+        type: 'id',
+        internal: true
+      },
       username: {
         title: 'Username',
         type: 'text',
@@ -175,7 +180,7 @@ user.type = function(types, callback) {
             return callback(null, false);
           }
           // Allow if user is the same as logged in user.
-          callback(null, request.params.user && request.params.user == request.user.username);
+          callback(null, request.params.user && request.params.user == request.user.id);
         });
       },
       'add': 'manage-users',
@@ -217,7 +222,7 @@ user.type = function(types, callback) {
     statics: {
       login: function(data, callback) {
         var User = this;
-        this.load(data.username, function(error, account) {
+        this.load({username: data.username}, function(error, account) {
           if (error) {
             return callback(error);
           }
@@ -389,7 +394,7 @@ user.route = function(routes, callback) {
       }
 
       var User = application.type('user');
-      User.load(data.username, function(error, account) {
+      User.load({username: data.username}, function(error, account) {
         if (error) {
           return callback(error);
         }
@@ -431,26 +436,19 @@ user.route = function(routes, callback) {
     }
   };
 
-  newRoutes['/settings/edit-account-submit/:username'] = {
+  newRoutes['/settings/edit-account-submit/:id*'] = {
     access: 'edit-own-account',
     callback: function(request, response, callback) {
-      // @todo: figure out how to prevent form controller from sending the
-      // username.
-      if (request.user.username != request.params.username) {
-        return callback(null, ['Invalid user.'], 400);
-      }
-
       var data = request.body;
 
       // Delete unwanted data that may lead to security holes.
       delete data.id;
-      delete data.username;
       delete data.password;
       delete data.salt;
       delete data.roles;
 
       var User = application.type('user');
-      User.load(request.user.username, function(error, account) {
+      User.load({username: request.user.username}, function(error, account) {
         utils.extend(account, data);
         User.validateAndSave(account, function(error, account, errors) {
           if (error) {
@@ -487,7 +485,7 @@ user.route = function(routes, callback) {
       }
 
       var User = application.type('user');
-      User.load(user.username, function(error, account) {
+      User.load({username: user.username}, function(error, account) {
         if (error) {
           return callback(error);
         }
