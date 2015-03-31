@@ -460,6 +460,9 @@ user.route = function(routes, callback) {
             return callback(null, errors, 400);
           }
 
+          // Set user in request to the edited user.
+          request.user = account;
+
           callback(null, account);
         });
       });
