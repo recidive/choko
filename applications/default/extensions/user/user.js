@@ -25,8 +25,9 @@ user.init = function(application, callback) {
   application.routers.rest.use(passportSessionMiddleware);
   application.routers.page.use(passportSessionMiddleware);
 
+  var User = application.type('user');
+
   var authCallback = function(username, password, callback) {
-    var User = application.type('user');
     User.login({username: username, password: password}, function (error, user) {
       if (error) {
         return callback(error);
@@ -53,6 +54,28 @@ user.init = function(application, callback) {
     });
   };
 
+  var cleanUser = function (data, callback) {
+    User.load({id: data.id}, function (error, user) {
+      if (error) {
+        return callback(error);
+      }
+      if (!user) {
+        // User and/or password is invalid.
+        return callback(null, false);
+      }
+
+      user.roles = user.roles || [];
+
+      delete user.password;
+      delete user.salt;
+
+      // Add authenticated role.
+      user.roles.push('authenticated');
+
+      callback(null, user);
+    });
+  }
+
   // Set up passport local strategy.
   passport.use(new LocalStrategy(authCallback));
 
@@ -67,7 +90,7 @@ user.init = function(application, callback) {
   });
 
   passport.deserializeUser(function(user, callback) {
-    callback(null, user);
+    cleanUser(user, callback);
   });
 
   // Add access check method to application object.
@@ -214,9 +237,9 @@ user.type = function(types, callback) {
     },
     beforeUpdate: function(settings, data, callback) {
       // Delete salt so password gets hashed properly.
-      if (data.password) {
-        delete data.salt;
-      }
+      // if (data.password) {
+      //   delete data.salt;
+      // }
       self.normalizeUserData(data, callback);
     },
     statics: {
@@ -461,7 +484,7 @@ user.route = function(routes, callback) {
           }
 
           // Set user in request to the edited user.
-          request.user = account;
+          // request.user = account;
 
           callback(null, account);
         });
@@ -502,6 +525,9 @@ user.route = function(routes, callback) {
             if (account.password == password.toString('base64')) {
               // Password matches, update password.
               account.password = data.password;
+
+              // Delete salt so password gets hashed properly.
+              delete account.salt;
 
               User.validateAndSave(account, function(error, account, errors) {
                 if (error) {
