@@ -496,6 +496,11 @@ user.route = function(routes, callback) {
       delete data.roles;
 
       var User = application.type('user');
+
+      if(self.settings.emailAsUsername) {
+        data.username = data.email;
+      }
+
       User.load(request.user.id, function(error, account) {
         data.salt = account.salt;
 
@@ -509,9 +514,6 @@ user.route = function(routes, callback) {
             // Validation errors.
             return callback(null, errors, 400);
           }
-
-          // Set user in request to the edited user.
-          // request.user = account;
 
           callback(null, account[0]);
         });
