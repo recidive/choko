@@ -487,12 +487,11 @@ user.route = function(routes, callback) {
       delete data.roles;
 
       var User = application.type('user');
-      User.load({username: request.user.username}, function(error, account) {
-
-        // utils.extend(account, data);
+      User.load(request.user.id, function(error, account) {
         data.salt = account.salt;
 
-        User.validateAndSave(data, function(error, account, errors) {
+        // @todo: Validate field.
+        User.update({id: account.id}, data, function(error, account, errors) {
           if (error) {
             return callback(error);
           }
@@ -505,7 +504,7 @@ user.route = function(routes, callback) {
           // Set user in request to the edited user.
           // request.user = account;
 
-          callback(null, account);
+          callback(null, account[0]);
         });
       });
     }
@@ -544,9 +543,6 @@ user.route = function(routes, callback) {
             if (account.password == password.toString('base64')) {
               // Password matches, update password.
               account.password = data.password;
-
-              // Delete salt so password gets hashed properly.
-              // delete account.salt;
 
               User.validateAndSave(account, function(error, account, errors) {
                 if (error) {
