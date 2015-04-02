@@ -427,18 +427,27 @@ user.route = function(routes, callback) {
     access: 'create-account',
     callback: function(request, response, callback) {
       var data = request.body;
+      var fieldName = self.settings.emailAsUsername ? 'email' : 'username';
 
-      if (!('username' in data)) {
-        return callback(null, ['Please provide an username.'], 400);
+      if(fieldName === 'email') {
+        data.username = data.email;
+      }
+
+      if (!(fieldName in data)) {
+        return callback(null, [self.messages('provide-field')], 400);
       }
 
       var User = application.type('user');
-      User.load({username: data.username}, function(error, account) {
+      var query = {};
+
+      query[fieldName] = data[fieldName];
+
+      User.load(query, function(error, account) {
         if (error) {
           return callback(error);
         }
         if (account) {
-          return callback(null, ['This username is not available, please choose another one.'], 409);
+          return callback(null, [self.messages('not-available')], 409);
         }
         if (data.password != data['password-confirm']) {
           return callback(null, ['Passwords must match.'], 400);
@@ -529,7 +538,7 @@ user.route = function(routes, callback) {
       }
 
       var User = application.type('user');
-      User.load({username: user.username}, function(error, account) {
+      User.load({id: user.id}, function(error, account) {
         if (error) {
           return callback(error);
         }
@@ -763,10 +772,14 @@ user.access = function(request, permission, callback) {
 
 user.messages = function(name) {
   var messages = {};
-  var entity = this.settings.emailLogin ? 'email' : 'username';
+  var loginFieldName = this.settings.emailLogin ? 'email' : 'username';
+  var accountFieldName = this.settings.emailAsUsername ? 'email' : 'username';
 
-  messages['provide'] = 'Please provide an ' + entity + ' and a password.';
-  messages['invalid'] = 'Invalid ' + entity + ' or password.';
+  messages['provide'] = 'Please provide an ' + loginFieldName + ' and a password.';
+  messages['invalid'] = 'Invalid ' + loginFieldName + ' or password.';
+
+  messages['not-available'] = 'This ' + accountFieldName + ' is not available, please choose another one.';
+  messages['provide-field'] = 'Please provide an ' + accountFieldName  + '.';
 
   return messages[name];
 }
@@ -775,30 +788,9 @@ user.messages = function(name) {
  * The form() hook.
  */
 user.form = function(forms, callback) {
-  var newForms = {};
-  var element;
 
-  // Create dynamic sign-in form.
-  newForms['sign-in'] = {
-    'title': 'Sign in',
-    'description': 'Sign in to continue.',
-    'elements': [
-      {
-        'name': 'password',
-        'placeholder': 'Password',
-        'type': 'password',
-        'required': true,
-        'weight': 5
-      },
-      {
-        'name': 'submit',
-        'title': 'Sign in',
-        'type': 'submit',
-        'url': '/sign-in-submit',
-        'weight': 10
-      }
-    ]
-  };
+  // Dynamic sign-in form.
+  var element;
 
   if(this.settings.emailLogin) {
     element = {
@@ -819,7 +811,26 @@ user.form = function(forms, callback) {
     }
   }
 
-  newForms['sign-in'].elements.push(element)
+  forms['sign-in'].elements.push(element)
 
-  callback(null, newForms);
+  if(!this.settings.emailAsUsername) {
+
+    forms['create-account'].elements.push({
+      name: 'username',
+      title: 'Choose your username',
+      type: 'text',
+      required: true,
+      weight: 0
+    });
+
+    forms['edit-account'].elements.push({
+      name: 'username',
+      title: 'Username',
+      type: 'text',
+      required: true,
+      weight: -15
+    });
+  }
+
+  callback();
 }

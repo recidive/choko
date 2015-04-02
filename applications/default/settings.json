@@ -19,7 +19,8 @@
     "article": {},
     "session": {},
     "user": {
-      "emailLogin": true
+      "emailLogin": true,
+      "emailAsUsername": true
     },
     "file": {},
     "management": {},
