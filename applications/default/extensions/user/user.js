@@ -26,9 +26,13 @@ user.init = function(application, callback) {
   application.routers.page.use(passportSessionMiddleware);
 
   var User = application.type('user');
+  var self = this;
 
-  var authCallback = function(username, password, callback) {
-    User.login({username: username, password: password}, function (error, user) {
+  var authCallback = function(usernameOrEmail, password, callback) {
+    var data = {password: password};
+    data[(self.settings.emailLogin ? 'email' : 'username')] = usernameOrEmail;
+
+    User.login(data, function (error, user) {
       if (error) {
         return callback(error);
       }
@@ -77,10 +81,16 @@ user.init = function(application, callback) {
   }
 
   // Set up passport local strategy.
-  passport.use(new LocalStrategy(authCallback));
+  passport.use(new LocalStrategy({
+      usernameField: (self.settings.emailLogin ? 'email' : 'username'),
+      passwordField: 'password'
+    }, authCallback));
 
   // Set up passport HTTP strategy.
-  passport.use(new BasicStrategy(authCallback));
+  passport.use(new BasicStrategy({
+      usernameField: (self.settings.emailLogin ? 'email' : 'username'),
+      passwordField: 'password'
+    }, authCallback));
 
   // Set up passport anonymous strategy.
   passport.use(new AnonymousStrategy());
@@ -237,15 +247,20 @@ user.type = function(types, callback) {
     },
     beforeUpdate: function(settings, data, callback) {
       // Delete salt so password gets hashed properly.
-      // if (data.password) {
-      //   delete data.salt;
-      // }
+      if (data.password) {
+        delete data.salt;
+      }
       self.normalizeUserData(data, callback);
     },
     statics: {
       login: function(data, callback) {
+
         var User = this;
-        this.load({username: data.username}, function(error, account) {
+        var query = {};
+        var name = self.settings.emailLogin ? 'email' : 'username';
+        query[name] = data[name];
+
+        this.load(query, function(error, account) {
           if (error) {
             return callback(error);
           }
@@ -404,6 +419,7 @@ user.normalizeUserData = function(data, callback) {
 user.route = function(routes, callback) {
   var newRoutes = {};
   var application = this.application;
+  var self = this;
 
   // We create routes to form submits until we figure out what approach to use
   // for handling form submits.
@@ -472,8 +488,11 @@ user.route = function(routes, callback) {
 
       var User = application.type('user');
       User.load({username: request.user.username}, function(error, account) {
-        utils.extend(account, data);
-        User.validateAndSave(account, function(error, account, errors) {
+
+        // utils.extend(account, data);
+        data.salt = account.salt;
+
+        User.validateAndSave(data, function(error, account, errors) {
           if (error) {
             return callback(error);
           }
@@ -527,7 +546,7 @@ user.route = function(routes, callback) {
               account.password = data.password;
 
               // Delete salt so password gets hashed properly.
-              delete account.salt;
+              // delete account.salt;
 
               User.validateAndSave(account, function(error, account, errors) {
                 if (error) {
@@ -562,16 +581,19 @@ user.route = function(routes, callback) {
       // Check if there are both an username and a password.
       // @todo in the long run we may need a way to validate forms that aren't
       // directly related to a type.
-      if (!request.body.username || !request.body.password) {
-        return callback(null, ['Please provide an username and a password.'], 400);
+      var username = !self.settings.emailLogin ? request.body.username : request.body.email;
+
+      if (!username || !request.body.password) {
+        return callback(null, [self.messages('provide')], 400);
       }
-      passport.authenticate('local', function(error, account) {
+
+      passport.authenticate('local', function(error, account, info) {
         if (error) {
           return callback(error);
         }
 
         if (!account) {
-          return callback(null, ['Invalid username or password.'], 401);
+          return callback(null, [self.messages('invalid')], 401);
         }
 
         // Log user in.
@@ -742,3 +764,66 @@ user.access = function(request, permission, callback) {
     callback(null, result !== undefined);
   });
 };
+
+user.messages = function(name) {
+  var messages = {};
+  var entity = this.settings.emailLogin ? 'email' : 'username';
+
+  messages['provide'] = 'Please provide an ' + entity + ' and a password.';
+  messages['invalid'] = 'Invalid ' + entity + ' or password.';
+
+  return messages[name];
+}
+
+/**
+ * The form() hook.
+ */
+user.form = function(forms, callback) {
+  var newForms = {};
+  var element;
+
+  // Create dynamic sign-in form.
+  newForms['sign-in'] = {
+    'title': 'Sign in',
+    'description': 'Sign in to continue.',
+    'elements': [
+      {
+        'name': 'password',
+        'placeholder': 'Password',
+        'type': 'password',
+        'required': true,
+        'weight': 5
+      },
+      {
+        'name': 'submit',
+        'title': 'Sign in',
+        'type': 'submit',
+        'url': '/sign-in-submit',
+        'weight': 10
+      }
+    ]
+  };
+
+  if(this.settings.emailLogin) {
+    element = {
+      name: 'email',
+      placeholder: 'Email',
+      type: 'email',
+      required: true,
+      weight: 0
+    };
+  }
+  else {
+    element = {
+      name: 'username',
+      placeholder: 'Username',
+      type: 'text',
+      required: true,
+      weight: 0
+    }
+  }
+
+  newForms['sign-in'].elements.push(element)
+
+  callback(null, newForms);
+}
