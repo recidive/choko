@@ -58,9 +58,8 @@ form.form = function(forms, callback) {
   var newForms = {};
   var self = this;
 
-  // Create forms for every type on the system except 'type' and 'extension',
-  // the ones that have the 'form' property set to false, the ones that have
-  // no fields and the ones that are polymorphic.
+  // Create forms for every type on the system except the ones that have no
+  // fields and the ones that are polymorphic.
   async.each(Object.keys(self.application.types), function(typeName, next) {
     var typeSettings = self.application.types[typeName];
     if (!typeSettings.fields || typeSettings.polymorphic) {
