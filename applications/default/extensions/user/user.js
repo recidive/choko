@@ -488,6 +488,7 @@ user.route = function(routes, callback) {
     access: 'edit-own-account',
     callback: function(request, response, callback) {
       var data = request.body;
+      var validateFields = ['username', 'email']
 
       // Delete unwanted data that may lead to security holes.
       delete data.id;
@@ -499,13 +500,14 @@ user.route = function(routes, callback) {
 
       if (self.settings.emailAsUsername) {
         data.username = data.email;
+        validateFields.shift();
       }
 
       User.load(request.user.id, function(error, account) {
-        data.salt = account.salt;
+        utils.extend(account, data);
+        delete account.password;
 
-        // @todo: Validate field.
-        User.update({id: account.id}, data, function(error, account, errors) {
+        User.validateAndSave(account, validateFields, function(error, account, errors) {
           if (error) {
             return callback(error);
           }
@@ -515,7 +517,7 @@ user.route = function(routes, callback) {
             return callback(null, errors, 400);
           }
 
-          callback(null, account[0]);
+          callback(null, account);
         });
       });
     }
