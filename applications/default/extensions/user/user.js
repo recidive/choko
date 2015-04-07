@@ -78,19 +78,19 @@ user.init = function(application, callback) {
 
       callback(null, user);
     });
-  }
+  };
 
   // Set up passport local strategy.
   passport.use(new LocalStrategy({
-      usernameField: (self.settings.emailLogin ? 'email' : 'username'),
-      passwordField: 'password'
-    }, authCallback));
+    usernameField: (self.settings.emailLogin ? 'email' : 'username'),
+    passwordField: 'password'
+  }, authCallback));
 
   // Set up passport HTTP strategy.
   passport.use(new BasicStrategy({
-      usernameField: (self.settings.emailLogin ? 'email' : 'username'),
-      passwordField: 'password'
-    }, authCallback));
+    usernameField: (self.settings.emailLogin ? 'email' : 'username'),
+    passwordField: 'password'
+  }, authCallback));
 
   // Set up passport anonymous strategy.
   passport.use(new AnonymousStrategy());
@@ -498,7 +498,7 @@ user.route = function(routes, callback) {
 
       var User = application.type('user');
 
-      if(self.settings.emailAsUsername) {
+      if (self.settings.emailAsUsername) {
         data.username = data.email;
         validateFields.shift();
       }
@@ -786,7 +786,7 @@ user.messages = function(name) {
   messages['provide-field'] = 'Please provide an ' + accountFieldName  + '.';
 
   return messages[name];
-}
+};
 
 /**
  * The form() hook.
@@ -796,7 +796,7 @@ user.form = function(forms, callback) {
   // Dynamic sign-in form.
   var element;
 
-  if(this.settings.emailLogin) {
+  if (this.settings.emailLogin) {
     element = {
       name: 'email',
       placeholder: 'Email',
@@ -815,9 +815,9 @@ user.form = function(forms, callback) {
     }
   }
 
-  forms['sign-in'].elements.push(element)
+  forms['sign-in'].elements.push(element);
 
-  if(!this.settings.emailAsUsername) {
+  if (!this.settings.emailAsUsername) {
 
     forms['create-account'].elements.push({
       name: 'username',
