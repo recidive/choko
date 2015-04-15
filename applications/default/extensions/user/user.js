@@ -489,7 +489,7 @@ user.route = function(routes, callback) {
     }
   };
 
-  newRoutes['/settings/edit-account-submit/:id*'] = {
+  newRoutes['/settings/edit-account-submit/:id'] = {
     access: 'edit-own-account',
     callback: function(request, response, callback) {
       var data = request.body;
