@@ -1,0 +1,20 @@
+{
+  "title": "Edit account",
+  "description": "Edit your account.",
+  "elements": [
+    {
+      "name": "email",
+      "title": "Email address",
+      "type": "email",
+      "required": true,
+      "weight": -10
+    },
+    {
+      "name": "submit",
+      "title": "Save",
+      "type": "submit",
+      "url": "/settings/edit-account-submit/[:username|user]",
+      "weight": 15
+    }
+  ]
+}
