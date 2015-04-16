@@ -18,10 +18,7 @@
     "content": {},
     "article": {},
     "session": {},
-    "user": {
-      "emailLogin": true,
-      "emailAsUsername": true
-    },
+    "user": {},
     "file": {},
     "management": {},
     "user-management": {},
