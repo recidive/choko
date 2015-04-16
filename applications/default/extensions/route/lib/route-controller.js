@@ -35,10 +35,10 @@ var RouteController = module.exports = function(application, settings) {
     self.handle(request, response);
   });
 
-  // Register on express.
-  var app = this.application.application;
+  // Register route on the appropriate router.
+  var router = this.application.routers[this.settings.router];
   var method = this.settings.method || 'all';
-  app[method].apply(app, params);
+  router[method].apply(router, params);
 };
 
 /**
@@ -51,6 +51,13 @@ RouteController.prototype.handle = function(request, response) {
   var self = this;
   var settings = this.settings;
 
+  // Response decorator function, used to allow extensions to alter the response
+  // for content responses via response() hook.
+  var responseDecorator = function(payload, request, response, callback) {
+    // Run response() hook on all extensions.
+    self.application.invoke('response', payload, request, response, callback);
+  };
+
   this.access(request, response, function(error, allow) {
     if (error) {
       return RouteController.error(request, response, error);
@@ -62,7 +69,7 @@ RouteController.prototype.handle = function(request, response) {
     }
 
     if (settings.content) {
-      return RouteController.respond(request, response, settings.content);
+      return RouteController.respond(request, response, settings.content, responseDecorator);
     }
 
     if (settings.callback) {
@@ -71,7 +78,7 @@ RouteController.prototype.handle = function(request, response) {
           return RouteController.error(request, response, error);
         }
 
-        RouteController.respond(request, response, content, code);
+        RouteController.respond(request, response, content, code, responseDecorator);
       });
     }
 
@@ -116,22 +123,36 @@ RouteController.prototype.access = function(request, response, callback) {
  * @param {Response} response Response object.
  * @param {Object|String} content Content to send.
  * @param {Number} [code] HTTP status code.
+ * @param {Function} [decorator] A function to run on the response data before
+ * sending it.
  */
-RouteController.respond = function(request, response, content, code) {
+RouteController.respond = function(request, response, content, code, decorator) {
   // Default to 200 (success).
   var code = code || 200;
 
+  // Create a payload envelope to pass to the decorator function.
   var payload = {
     status: {
       code: code
-    }
+    },
+    data: null
   };
 
   if (content) {
     payload.data = content;
   }
 
-  response.status(code).send(payload);
+  if (decorator) {
+    return decorator(payload, request, response, function() {
+      response
+        .status(payload.status.code)
+        .send(payload.data);
+    });
+  }
+
+  response
+    .status(payload.status.code)
+    .send(payload.data);
 };
 
 /**

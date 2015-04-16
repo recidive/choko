@@ -5,7 +5,8 @@
 var crypto = require('crypto');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var BasicStrategy = require('passport-http').BasicStrategy
+var BasicStrategy = require('passport-http').BasicStrategy;
+var AnonymousStrategy = require('passport-anonymous');
 var async = require('async');
 var utils = require('prana').utils;
 
@@ -15,9 +16,14 @@ var user = module.exports;
  * The init() hook.
  */
 user.init = function(application, callback) {
-  // Initialize passport.
-  application.application.use(passport.initialize());
-  application.application.use(passport.session());
+  // Initialize passport and passportSession middlewares.
+  var passportMiddleware = passport.initialize();
+  application.routers.rest.use(passportMiddleware);
+  application.routers.page.use(passportMiddleware);
+
+  var passportSessionMiddleware = passport.session();
+  application.routers.rest.use(passportSessionMiddleware);
+  application.routers.page.use(passportSessionMiddleware);
 
   var authCallback = function(username, password, callback) {
     var User = application.type('user');
@@ -53,6 +59,9 @@ user.init = function(application, callback) {
   // Set up passport HTTP strategy.
   passport.use(new BasicStrategy(authCallback));
 
+  // Set up passport anonymous strategy.
+  passport.use(new AnonymousStrategy());
+
   passport.serializeUser(function(user, callback) {
     callback(null, user);
   });
@@ -77,6 +86,22 @@ user.init = function(application, callback) {
 user.permission = function(permissions, callback) {
   var newPermissions = {};
 
+  newPermissions['sign-in'] = {
+    title: 'Sign in',
+    description: 'Allow users to sign in on the application.'
+  };
+  newPermissions['sign-out'] = {
+    title: 'Sign out',
+    description: 'Allow users to sign out from the application.'
+  };
+  newPermissions['create-account'] = {
+    title: 'Create account',
+    description: 'Allow users to create an account on the application.'
+  };
+  newPermissions['edit-own-account'] = {
+    title: 'Edit own account',
+    description: 'Allow users to load and edit their own user accounts.'
+  };
   newPermissions['manage-users'] = {
     title: 'Manage users',
     description: 'List, create and edit users and manage permissions.'
@@ -90,6 +115,7 @@ user.permission = function(permissions, callback) {
  */
 user.type = function(types, callback) {
   var application = this.application;
+  var self = this;
   var newTypes = {};
 
   newTypes['user'] = {
@@ -101,22 +127,29 @@ user.type = function(types, callback) {
       username: {
         title: 'Username',
         type: 'text',
-        required: true
+        required: true,
+        unique: true
       },
       email: {
         title: 'Email',
         type: 'email',
-        required: true
+        required: true,
+        unique: true,
+        index: true
       },
       password: {
         title: 'Password',
         type: 'password',
-        required: true
+        maxLength: 1024,
+        required: true,
+        protected: true
       },
       salt: {
         title: 'Salt',
         type: 'text',
-        internal: true
+        maxLength: 512,
+        internal: true,
+        protected: true
       },
       roles: {
         title: 'Roles',
@@ -133,24 +166,53 @@ user.type = function(types, callback) {
     },
     access: {
       'list': 'manage-users',
-      'load': 'manage-users',
+      'load': function(request, callback) {
+        application.access(request, 'edit-own-account', function(error, allow) {
+          if (error) {
+            return callback(error);
+          }
+          if (!allow) {
+            return callback(null, false);
+          }
+          // Allow if user is the same as logged in user.
+          callback(null, request.params.user && request.params.user == request.user.username);
+        });
+      },
       'add': 'manage-users',
       'edit': 'manage-users',
       'delete': 'manage-users'
     },
     displays: {
       'list-item': {
-        'content': [{
+        'text': [{
+          fieldName: 'username',
+          format: 'plain',
+          weight: 0
+        }]
+      },
+      'list-group-item': {
+        'heading': [{
           fieldName: 'username',
           format: 'title',
+          link: '/manage/users/edit/[username|item]',
           weight: 0
-        },
-        {
+        }],
+        'text': [{
           fieldName: 'email',
           format: 'paragraph',
-          weight: 5
+          weight: 0
         }]
       }
+    },
+    beforeCreate: function(settings, data, callback) {
+      self.normalizeUserData(data, callback);
+    },
+    beforeUpdate: function(settings, data, callback) {
+      // Delete salt so password gets hashed properly.
+      if (data.password) {
+        delete data.salt;
+      }
+      self.normalizeUserData(data, callback);
     },
     statics: {
       login: function(data, callback) {
@@ -231,6 +293,20 @@ user.type = function(types, callback) {
       'add': 'manage-users',
       'edit': 'manage-users',
       'delete': 'manage-users'
+    },
+    displays: {
+      'list-group-item': {
+        'heading': [{
+          fieldName: 'title',
+          format: 'title',
+          weight: 0
+        }],
+        'text': [{
+          fieldName: 'description',
+          format: 'paragraph',
+          weight: 5
+        }]
+      }
     }
   };
 
@@ -264,11 +340,11 @@ user.type = function(types, callback) {
 };
 
 /**
- * The preSave() hook.
+ * Normalize user data. Hash password.
  */
-user.preSave = function(type, data, callback) {
-  if (type.name != 'user') {
-    // Return early on types that are not the user type.
+user.normalizeUserData = function(data, callback) {
+  // If there's salt, don't hash password.
+  if ('salt' in data) {
     return callback(null, data);
   }
 
@@ -308,8 +384,11 @@ user.route = function(routes, callback) {
     callback: function(request, response, callback) {
       var data = request.body;
 
-      var User = application.type('user');
+      if (!('username' in data)) {
+        return callback(null, ['Please provide an username.'], 400);
+      }
 
+      var User = application.type('user');
       User.load(data.username, function(error, account) {
         if (error) {
           return callback(error);
@@ -325,8 +404,7 @@ user.route = function(routes, callback) {
         data.roles = [];
 
         // Create new user resource and save it.
-        var newAccount = new User(data);
-        newAccount.validateAndSave(function(error, newAccount, errors) {
+        User.validateAndSave(data, function(error, newAccount, errors) {
           if (error) {
             return callback(error);
           }
@@ -350,6 +428,104 @@ user.route = function(routes, callback) {
 
       });
 
+    }
+  };
+
+  newRoutes['/settings/edit-account-submit/:username'] = {
+    access: 'edit-own-account',
+    callback: function(request, response, callback) {
+      // @todo: figure out how to prevent form controller from sending the
+      // username.
+      if (request.user.username != request.params.username) {
+        return callback(null, ['Invalid user.'], 400);
+      }
+
+      var data = request.body;
+
+      // Delete unwanted data that may lead to security holes.
+      delete data.id;
+      delete data.username;
+      delete data.password;
+      delete data.salt;
+      delete data.roles;
+
+      var User = application.type('user');
+      User.load(request.user.username, function(error, account) {
+        utils.extend(account, data);
+        User.validateAndSave(account, function(error, account, errors) {
+          if (error) {
+            return callback(error);
+          }
+
+          if (errors && errors.length > 0) {
+            // Validation errors.
+            return callback(null, errors, 400);
+          }
+
+          callback(null, account);
+        });
+      });
+    }
+  };
+
+  newRoutes['/settings/change-password-submit'] = {
+    access: 'edit-own-account',
+    callback: function(request, response, callback) {
+      var user = request.user;
+      var data = request.body;
+
+      if (!data['password-current']) {
+        return callback(null, ['Please provide your current password.'], 400);
+      }
+
+      if (!data.password || !data['password-confirm']) {
+        return callback(null, ['Please enter a password in both fields.'], 400);
+      }
+
+      if (data.password != data['password-confirm']) {
+        return callback(null, ['Passwords must match.'], 400);
+      }
+
+      var User = application.type('user');
+      User.load(user.username, function(error, account) {
+        if (error) {
+          return callback(error);
+        }
+
+        if (account) {
+          User.hash(data['password-current'], new Buffer(account.salt, 'base64'), function(error, password) {
+            if (error) {
+              return callback(error);
+            }
+
+            if (account.password == password.toString('base64')) {
+              // Password matches, update password.
+              account.password = data.password;
+
+              User.validateAndSave(account, function(error, account, errors) {
+                if (error) {
+                  return callback(error);
+                }
+
+                if (errors && errors.length > 0) {
+                  // Validation errors.
+                  return callback(null, errors, 400);
+                }
+
+                callback(null, account);
+              });
+            }
+            else {
+              // Wrong password.
+              callback(null, ['Invalid current password.'], 400);
+            }
+          });
+        }
+        else {
+          // User not found.
+          callback(null, false);
+        }
+      });
     }
   };
 
@@ -420,7 +596,8 @@ user.role = function(routes, callback) {
     title: 'Authenticated',
     description: 'Authenticated, signed in user.',
     permissions: [
-      'sign-out'
+      'sign-out',
+      'edit-own-account'
     ]
   };
 
@@ -443,12 +620,12 @@ user.panel = function(panels, callback) {
   newPanels['sign-in'] = {
     title: 'Sign in',
     bare: true,
-    template: 'templates/sign-in.html'
+    template: '/templates/sign-in.html'
   };
   newPanels['sign-out'] = {
     title: 'Sign out',
     bare: true,
-    template: 'templates/sign-out.html'
+    template: '/templates/sign-out.html'
   };
 
   callback(null, newPanels);
@@ -518,6 +695,11 @@ user.access = function(request, permission, callback) {
     roles: ['anonymous']
   };
 
+  // Permission can be a callback.
+  if (typeof permission === 'function') {
+    return permission.call(this, request, callback);
+  }
+
   var application = this.application;
   async.detect(account.roles, function(roleName, next) {
     application.load('role', roleName, function(error, role) {
@@ -525,7 +707,9 @@ user.access = function(request, permission, callback) {
       next(!error && role && role.permissions.indexOf(permission) !== -1);
     });
   }, function(result) {
-    // @todo Add cache. Sort user roles, glue them together and use as cache id.
+    // @todo: Cache access check by role combination. Sort user roles, glue them
+    // together and use as cache id.
+
     // async.detect() returns roleName or undefined when nothing was detected,
     // so we need to convert it to boolean in some way.
     callback(null, result !== undefined);

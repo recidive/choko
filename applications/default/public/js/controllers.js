@@ -1,139 +1,134 @@
 'use strict';
 
-angular.module('choko.controllers', [])
+/**
+ * @file Choko core controllers.
+ */
 
-  .controller('ApplicationController', ['$scope', '$location', '$http', 'applicationState',
-    function ($scope, $location, $http, applicationState) {
-      $scope.state = {};
+angular.module('choko')
 
-      $scope.changeState = function() {
+  .controller('ApplicationController', ['$rootScope', '$location', '$http', 'applicationState',
+    function ($rootScope, $location, $http, applicationState) {
+      // Store scope as application state.
+      applicationState.set($rootScope);
+
+      $rootScope.changeState = function() {
         var path = (!$location.path() || $location.path() == '/') ? '/home' : $location.path();
 
         $http.get(path)
         .success(function(data, status, headers, config) {
-          if (data.data.redirect) {
+          if (data.redirect) {
             // Server returned a redirect.
-            return $location.path(data.data.redirect);
+            return $location.path(data.redirect);
           }
 
-          // Rebuild the layout only when context changes.
-          if ($scope.contexts instanceof Array && $scope.contexts.toString() == data.data.contexts.toString()) {
+          // If contexts didn't change we just need to update main page content.
+          if ($rootScope.contexts instanceof Array && angular.equals($rootScope.contexts, data.contexts)) {
             // Update only panels in content region, and page information.
             // @todo: get the region the page-content panel is attached to
             // dinamically currently this is hadcoded to 'content' and will not work
             // if the page-content panel is attacehd to a different region.
-            $scope.panels['content'] = data.data.panels['content'];
-            $scope.page = data.data.page;
+            $rootScope.panels['content'] = data.panels['content'];
+
+            // Set page data.
+            $rootScope.page = data.page;
           }
           else {
-            // Merge data from the server.
-            angular.extend($scope, data.data);
+            // We only set everything on scope if it's the first page being
+            // loaded or if the theme or the layout has changed, to avoid some
+            // glitches.
+            var needsRebuild = !('page' in $rootScope) ||
+              ('theme' in $rootScope && $rootScope.theme.name != data.theme.name) ||
+              ('layout' in $rootScope && $rootScope.layout.name != data.layout.name);
 
-            // Store scope as application state.
-            applicationState.set($scope);
+            if (needsRebuild) {
+              // Merge all data from the server.
+              angular.extend($rootScope, data);
+            }
+            else {
+              // Selectivelly merge data from the server.
+              Object.keys(data).forEach(function(propName) {
+                if (['theme', 'layout', 'panels'].indexOf(propName) === -1) {
+                  $rootScope[propName] = data[propName];
+                }
+              });
+
+              // Selectivelly add/remove panels.
+              if ('panels' in data) {
+                // Merge existing regions.
+                Object.keys($rootScope.panels).forEach(function(regionName) {
+                  if (regionName in data.panels) {
+                    $rootScope.mergePanels($rootScope.panels[regionName], data.panels[regionName]);
+                  }
+                  else {
+                    // Remove region.
+                    delete $rootScope.panels[regionName];
+                  }
+                });
+
+                // Add new regions.
+                Object.keys(data.panels).forEach(function(regionName) {
+                  // Also update panels in content region, and page information.
+                  // @todo: get the region the page-content panel is attached to
+                  // dinamically currently this is hadcoded to 'content' and will not work
+                  // if the page-content panel is attacehd to a different region.
+                  if (!(regionName in $rootScope.panels) || regionName == 'content') {
+                    $rootScope.panels[regionName] = data.panels[regionName];
+                  }
+                });
+              }
+            }
           }
         })
         .error(function(data, status, headers, config) {
           // Merge data from the server.
-          angular.extend($scope.page, data.data);
+          $rootScope.page = $rootScope.page || {};
+          angular.extend($rootScope.page, data);
 
-          $scope.page.template = '/templates/error.html';
-
-          // Store scope as application state.
-          applicationState.set($scope);
+          $rootScope.page.template = '/templates/error.html';
         });
-      }
-
-      $scope.$watch(function() {
-        return $location.path();
-      }, function(){
-        $scope.changeState();
-      });
-    }])
-
-  .controller('PanelController', ['$scope', '$controller',
-    function ($scope, $controller) {
-      if ($scope.panel.type && $scope.panel.type !== 'default') {
-        // Set view to the panel itself and call ViewController.
-        $scope.view = $scope.panel;
-
-        // Inherit controller.
-        $controller('ViewController', {
-          $scope: $scope
-        });
-      }
-
-      if ($scope.panel.bare) {
-        $scope.template = $scope.panel.template || 'templates/panel-content.html';
-      }
-      else {
-        $scope.template = 'templates/panel.html';
-      }
-    }])
-
-  .controller('PageController', ['$scope', '$controller',
-    function ($scope, $controller) {
-      if (!$scope.page.type || $scope.page.type === 'default') {
-        $scope.items = $scope.page.items || {};
-        $scope.title = $scope.page.title;
-      }
-      else {
-        // Set view to the panel itself and call ViewController.
-        $scope.view = $scope.page;
-
-        // Inherit controller.
-        $controller('ViewController', {
-          $scope: $scope
-        });
-      }
-    }])
-
-  .controller('RowController', ['$scope',
-    function ($scope) {
-      $scope.name = $scope.row.name;
-
-      $scope.getTemplate = function() {
-        return $scope.template || 'templates/row.html';
-      }
-    }])
-
-  .controller('ColumnController', ['$scope',
-    function ($scope) {
-      $scope.name = $scope.column.name;
-
-      $scope.getTemplate = function() {
-        return $scope.template || 'templates/column.html';
-      };
-    }])
-
-  .controller('RegionController', ['$scope',
-    function ($scope) {
-
-    }])
-
-  .controller('NavigationController', ['$scope', '$location',
-    function ($scope, $location) {
-
-      // Avoid undefined.
-      $scope.panel.classes = $scope.panel.classes || [];
-
-      $scope.panel.classes.unshift('nav');
-
-      $scope.isAbsolute = function(url) {
-        return /^(?:[a-z]+:)?\/\//i.test(url);
       };
 
-      $scope.goTo = function(url, $event) {
-        $location.path(url);
-        if ($event) {
-          $event.preventDefault();
+      $rootScope.mergePanels = function(panelsTo, panelsFrom) {
+        // First remove items on first array that are not on the second one.
+        panelsTo.forEach(function(panel) {
+          // @todo: allow invalidating panel states.
+          if ($rootScope.indexOfPanel(panelsFrom, panel.name) === -1) {
+            panelsTo.splice($rootScope.indexOfPanel(panelsTo, panel.name), 1);
+          }
+        });
+
+        // If the number of items of the resulting array is equal to the second one
+        // there's nothing to add.
+        if (panelsTo.length === panelsFrom.length) {
+          return panelsTo;
         }
+
+        // Add new panels.
+        panelsFrom.forEach(function(panel) {
+          if ($rootScope.indexOfPanel(panelsTo, panel.name) === -1) {
+            panelsTo.push(panel);
+          }
+        });
+
+        return panelsTo;
       };
 
-      $scope.isActive = function(route) {
-        //var regexp = new RegExp('^' + pattern + '.*$', ["i"]);
-        return route === $location.path();
+      $rootScope.indexOfPanel = function(panels, panelName) {
+        var index = -1;
+        panels.forEach(function(panel, panelIndex) {
+          if (panel.name == panelName) {
+            index = panelIndex;
+          }
+        });
+        return index;
       };
+
+      $rootScope.$watch(function() {
+        return $location.path();
+      },
+      function() {
+        $rootScope.changeState();
+      });
     }])
 
   .controller('ItemController', ['$scope',
@@ -141,192 +136,45 @@ angular.module('choko.controllers', [])
 
     }])
 
-  .controller('DisplayRegionController', ['$scope',
-    function ($scope) {
+  .controller('ViewController', ['$scope', '$location', '$http', 'Choko', 'Params', 'Token', 'Restangular',
+    function ($scope, $location, $http, Choko, Params, Token, Restangular) {
 
-    }])
-
-  .controller('DisplayFieldController', ['$scope',
-    function ($scope) {
-      $scope.field.template = $scope.field.template || '/templates/' + $scope.field.format + '.html';
-    }])
-
-  .controller('ReferenceElementController', ['$scope', 'Choko',
-    function ($scope, Choko) {
-      var query = {
-        type: $scope.element.reference.type
-      };
-
-      if ($scope.element.reference.query) {
-        angular.extend(query, $scope.element.reference.query);
-      }
-
-      Choko.get(query, function(response) {
-        $scope.element.options = response;
-
-        // Use radios if less then 5 options.
-        $scope.fewOptions = ($scope.element.options && Object.keys($scope.element.options).length <= 5);
-      });
-
-      // Initialize data container if needed.
-      $scope.data[$scope.element.name] = $scope.data[$scope.element.name] || [];
-
-      // Toggle selection for a given option by name.
-      $scope.toggleSelection = function(option) {
-        var index = $scope.data[$scope.element.name].indexOf(option);
-
-        // Is currently selected.
-        if (index > -1) {
-          $scope.data[$scope.element.name].splice(index, 1);
-        }
-        // Is newly selected.
-        else {
-          $scope.data[$scope.element.name].push(option);
-        }
-      };
-    }])
-
-  .controller('InlineReferenceElementController', ['$scope', 'Choko',
-    function ($scope, Choko) {
-      var multiple = $scope.element.reference.multiple;
-
-      // Subform errors are handled separately.
-      $scope.errors = [];
-
-      if (multiple) {
-        // Initialize items container.
-        if ($scope.data[$scope.element.name]) {
-          $scope.items = $scope.data[$scope.element.name];
-        }
-        else {
-          $scope.items = $scope.data[$scope.element.name] = [];
-        }
-
-        // Initilize local data container.
-        $scope.data = {};
-
-        $scope.saveItem = function(key) {
-          // @todo: validate item.
-          // Add item and cleanup data container and items.
-          if (key != undefined) {
-            $scope.items[key] = $scope.data;
-          }
-          else {
-            $scope.items.push($scope.data);
-          }
-          $scope.data = {};
-
-          // Reset form to original state.
-          delete $scope.element.subform;
-        };
-
-        $scope.removeItem = function(index) {
-          $scope.items.splice(index, 1);
-        };
-      }
-      else {
-        if ($scope.data[$scope.element.name]) {
-          $scope.data = $scope.data[$scope.element.name];
-        }
-        else {
-          $scope.data = $scope.data[$scope.element.name] = {};
-        }
-      }
-
-      $scope.setSubForm = function(type, sub, data, key) {
-        // Start by destroying the subform and its data.
-        // @todo: eventually we may want to add a confirmation, if form is "dirty".
-        delete $scope.element.subform;
-        $scope.data = {};
-
-        // Get the new subform from the REST server.
-        Choko.get({type: 'form', key: 'type-' + type}, function(response) {
-          var subform = $scope.element.subform = response;
-
-          // We are editing a item, store data.
-          if (data) {
-            $scope.editing = true;
-
-            // Make a copy of original data for restoring on cancel.
-            $scope.data = angular.copy(data);
-          }
-          else {
-            $scope.editing = false;
-          }
-
-          if (multiple) {
-            subform.elements.push({
-              name: 'add',
-              title: 'Save',
-              type: 'button',
-              click: 'saveItem',
-              arguments: [key],
-              classes: ['btn-default'],
-              weight: 15
-            });
-            subform.elements.push({
-              name: 'cancel',
-              title: 'Cancel',
-              type: 'button',
-              click: 'cancel',
-              classes: ['btn-link'],
-              weight: 20
+      $scope.prepareDisplay = function(name, callback) {
+        Choko.get({type: 'display', key: name}, function(display) {
+          $scope.display = display;
+          if (display.layout) {
+            Choko.get({type: 'displayLayout', key: display.layout}, function(layout) {
+              $scope.layout = layout;
+              $scope.view.itemTemplate = '/templates/display-layout.html';
+              callback();
             });
           }
-
-          if (sub) {
-            // Set subform element type to subform short name.
-            $scope.data.type = subform.shortName;
+          else {
+            callback();
           }
         });
       };
 
-      if (multiple) {
-        if ($scope.element.reference.subtypes && $scope.element.reference.subtypes.length == 1) {
-          $scope.setSubForm($scope.element.reference.subtypes[0]);
-        }
-
-        $scope.cancel = function() {
-          delete $scope.element.subform;
-          $scope.data = {};
-        };
-      }
-      else {
-        $scope.setSubForm($scope.element.reference.type);
-      }
-    }])
-
-  .controller('InlineReferenceElementItemController', ['$scope',
-    function ($scope) {
-
-      $scope.editItem = function() {
-        $scope.setSubForm($scope.typeName(), !!$scope.element.reference.subtypes, $scope.item, $scope.key);
-      };
-
-      $scope.typeName = function() {
-        var typeName = $scope.element.reference.type;
-
-        // If it has subtypes, i.e. it's a polymorphic type, get the actual type
-        // being added to load the correct form.
-        if ($scope.element.reference.subtypes) {
-          $scope.element.reference.subtypes.forEach(function(subtype) {
-            if (subtype.shortName == $scope.item.type) {
-              typeName = subtype.name;
-            }
-          });
-        }
-
-        return typeName;
-      };
-    }])
-
-  .controller('ViewController', ['$scope', '$location', '$http', 'Choko', 'Restangular',
-    function ($scope, $location, $http, Choko, Restangular) {
 
       // Prevente creation of service if no itemType set.
       if ($scope.view.itemType) {
         // Create a new Service for Itemtype.
         var itemTypeREST = Restangular.service($scope.view.itemType);
+      }
+
+      // Parse parameters when needed.
+      if (typeof $scope.view.itemKey !== 'undefined') {
+        $scope.view.itemKey = Params.parse($scope.view.itemKey, $scope);
+      }
+
+      // Parse other params.
+      Object.keys($scope.view.query || {}).forEach(function (param) {
+        $scope.view.query[param] = Params.parse($scope.view.query[param], $scope);
+      });
+
+      // Replace tokens in title.
+      if ($scope.view.title) {
+        $scope.view.title = Token.replace($scope.view.title, $scope);
       }
 
       // Handle 'list' type views.
@@ -337,9 +185,17 @@ angular.module('choko.controllers', [])
           angular.extend(query, $scope.view.query);
         }
 
+        if ($scope.view.template) {
+          Choko.get(query, function(response) {
+            $scope.items = response;
+          });
+        }
+
+        // Expose view list promise to scope
+        $scope.viewList = itemTypeREST.getList(query);
         $scope.items = {};
 
-        itemTypeREST.getList(query).then(function(response) {
+        $scope.viewList.then(function(response) {
           $scope.items = response;
         });
 
@@ -348,11 +204,9 @@ angular.module('choko.controllers', [])
         }
 
         if (!$scope.view.itemTemplate && $scope.view.itemDisplay) {
-          Choko.get({type: 'display', key: $scope.view.itemDisplay}, function(display) {
-            $scope.display = display;
-            Choko.get({type: 'displayLayout', key: display.layout}, function(layout) {
-              $scope.layout = layout;
-              $scope.view.itemTemplate = '/templates/display-layout.html';
+          $scope.prepareDisplay($scope.view.itemDisplay, function() {
+            Choko.get(query, function(response) {
+              $scope.items = response;
             });
           });
         }
@@ -360,18 +214,21 @@ angular.module('choko.controllers', [])
 
       // Handle 'item' type views.
       if ($scope.view.type === 'item' && $scope.view.itemType) {
+
+        // Expose variables to the scope
         $scope.data = {};
         $scope.view.title = '';
+        $scope.viewItem = itemTypeREST.one($scope.view.itemKey).get();
 
-        itemTypeREST.one($scope.view.itemKey).get().then(function(response) {
+        $scope.viewItem.then(function(response) {
           $scope.data = response;
           $scope.view.title = response.title;
         }, function(response) {
           // Error.
           if ($scope.page) {
             // If it's a page, show error, otherwise fail silently.
-            $scope.data = response.data;
-            $scope.view.title = response.data.title;
+            $scope.data = response;
+            $scope.view.title = response.title;
             $scope.view.template = '/templates/error.html';
           }
         });
@@ -379,110 +236,88 @@ angular.module('choko.controllers', [])
 
       // Handle 'form' type views.
       if ($scope.view.type === 'form' && $scope.view.formName) {
-        $scope.data = {};
         var typeForm = 'post';
+        var itemREST = null;
 
-        if ($scope.view.itemType && $scope.view.itemKey) {
-          itemTypeREST.one($scope.view.itemKey).then(function(response) {
-            $scope.data = response;
-            typeForm = 'put'
-          });
-        }
+        $scope.data = {};
 
-        $scope.submit = function(url, redirect) {
+        $scope.buildForm = function () {
+          Choko.get({type: 'form', key: $scope.view.formName}, function(response) {
+            $scope.form = response;
 
-          var formREST = null;
-
-          if(!itemTypeREST) {
-            formREST = Restangular.oneUrl('url', url).post('', $scope.data);
-          }
-          else {
-            formREST = typeForm == 'post'? itemTypeREST.post($scope.data) : itemTypeREST.put($scope.data);
-          }
-
-          formREST.then(function(response) {
-            $scope.data = response;
-            delete $scope.errors;
-            if (redirect) {
-              $location.path(redirect);
+            if ($scope.form.mainTypeName) {
+              $scope.data.type = $scope.form.shortName;
             }
-          }, function(response) {
-            $scope.errors = response.data.data;
-            $scope.status = response.status;
+
+            // First we look for view (page/panel) redirect, then for form redirect.
+            // The submit button will first look for a property of its own and
+            // fallback to this.
+            $scope.form.redirect = $scope.view.redirect || $scope.form.redirect || null;
+
+            $scope.view.template = $scope.view.template || $scope.form.template;
+            $scope.view.template = $scope.view.template || '/templates/form.html';
           });
         };
 
-        Choko.get({type: 'form', key: $scope.view.formName}, function(response) {
-          $scope.form = response;
+        if ($scope.view.itemType && $scope.view.itemKey) {
 
-          if ($scope.form.mainTypeName) {
-            $scope.data.type = $scope.form.shortName;
+          // Set type form to PUT.
+          typeForm = 'put';
+
+          itemTypeREST.one($scope.view.itemKey)
+            .get()
+            .then(function(response) {
+              $scope.data = response;
+              $scope.buildForm();
+            });
+        }
+
+        // Verify if the form is the type PUT to build the form
+        if (typeForm != 'put') {
+          $scope.buildForm();
+        }
+
+        $scope.submit = function(url) {
+
+          // Replace tokens in url.
+          if (url) {
+            url = Token.replace(url, $scope);
           }
 
-          // First we look for view (page/panel) redirect, then for form redirect.
-          // The submit button will first look for a property of its own and
-          // fallback to this.
-          $scope.form.redirect = $scope.view.redirect || $scope.form.redirect || null;
+          // Add params to data if any.
+          Object.keys($scope.view.params || {}).forEach(function(param) {
+            $scope.data[param] = $scope.data[param] || $scope.view.params[param];
+          });
 
-          $scope.view.template = $scope.view.template || $scope.form.template;
-          $scope.view.template = $scope.view.template || 'templates/form.html';
-        });
-      }
-    }])
+          if(!itemTypeREST) {
+            $scope.viewForm = Restangular.oneUrl('url', url).post('', $scope.data);
+          }
+          else {
+            if (url) {
+              $scope.viewForm = Restangular.oneUrl('url', url).post('', $scope.data);
+            } else {
+              $scope.viewForm = typeForm === 'post' ?
+              itemTypeREST.post($scope.data) :
+              $scope.data.put();
+            }
+          }
 
-  .controller('ElementController', ['$scope',
-    function ($scope) {
-      $scope.element.template = $scope.element.template || 'templates/' + $scope.element.type + '.html';
-    }])
+          $scope.viewForm.then(function(response) {
+            $scope.data = response;
+            delete $scope.errors;
 
-  .controller('FileElementController', ['$scope', '$upload',
-    function ($scope, $upload) {
-      $scope.element.template = $scope.element.template || 'templates/' + $scope.element.type + '.html';
-      $scope.progress = 0;
+            if ($scope.form.redirect) {
+              // Replace tokens in redirects. Make 'item' an alias to 'data'
+              // so item parser can be used in tokens.
+              $scope.item = $scope.data;
+              $scope.form.redirect = Token.replace($scope.form.redirect, $scope);
 
-      // Initialize files container.
-      // @todo support multiple files.
-      $scope.data[$scope.element.name] = $scope.data[$scope.element.name] || null;
-
-      $scope.onFileSelect = function($files) {
-        for (var i = 0; i < $files.length; i++) {
-          var file = $files[i];
-          $scope.upload = $upload.upload({
-            url: 'file',
-            file: file
-          })
-          .progress(function(evt) {
-            $scope.progress = parseInt(100.0 * evt.loaded / evt.total);
-          })
-          .success(function(data, status, headers, config) {
-            $scope.data[$scope.element.name] = data.data.id;
+              $location.path($scope.form.redirect);
+            }
+          }, function(response) {
+            $scope.status = response.status;
+            $scope.errors = response.data;
           });
         }
-      };
-    }])
-
-  .controller('SubElementController', ['$scope',
-    function ($scope) {
-      $scope.subElement.template = $scope.subElement.template || 'templates/' + $scope.subElement.type + '.html';
-    }])
-
-  .controller('ButtonController', ['$scope',
-    function ($scope) {
-      $scope.call = function(func, args) {
-        $scope[func].apply(this, args);
-      };
-    }])
-
-  .controller('WYSIWYGController', ['$scope',
-    function ($scope) {
-      $scope.options = {
-        height: $scope.element.height || 300,
-        toolbar: [
-          ['style', ['style']],
-          ['style', ['bold', 'italic', 'underline', 'clear']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['insert', ['picture', 'link']],
-          ['table', ['table']]
-        ]
-      };
-    }])
+      }
+    }]);

@@ -1,20 +1,24 @@
 'use strict';
 
-/* Directives */
+/**
+ * @file Choko core directives.
+ */
 
-angular.module('choko.directives', [])
+angular.module('choko')
+
   .directive('appVersion', ['version', function(version) {
     return function(scope, elm, attrs) {
       elm.text(version);
     };
   }])
-  .directive('ckReplace', function($http, $compile) {
+
+  .directive('ckReplace', ['$http', '$compile', function($http, $compile) {
     return {
       restrict: 'E',
       scope: true,
       compile: function(element, attrs) {
         return function(scope, element, attrs) {
-          scope.element.template = scope.element.template || 'templates/' + scope.element.type + '.html';
+          scope.element.template = scope.element.template || '/templates/' + scope.element.type + '.html';
           $http({method: 'GET', url: scope.element.template, cache: true}).then(function(result) {
             var template = angular.element($compile(result.data)(scope));
             element.replaceWith(template);
@@ -22,8 +26,9 @@ angular.module('choko.directives', [])
         };
       }
     };
-  })
-  .directive('ckButton', function($http, $compile) {
+  }])
+
+  .directive('ckButton', ['$http', '$compile', function($http, $compile) {
     return {
       restrict: 'E',
       scope: true,
@@ -39,4 +44,4 @@ angular.module('choko.directives', [])
         };
       }
     };
-  });
+  }]);

@@ -1,0 +1,21 @@
+{
+  "title": "Content management pages",
+  "description": "Content management pages.",
+  "weight": -1,
+  "conditions": {
+    "path": [
+      "/manage/content",
+      "/manage/content/*"
+    ]
+  },
+  "reactions": {
+    "panel": {
+      "page-header": [
+        {
+          "name": "navigation-content-management-toolbar",
+          "weight": 0
+        }
+      ]
+    }
+  }
+}

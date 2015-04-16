@@ -16,10 +16,10 @@ describe('User extension', function(done) {
   });
 
   it('should authenticate an user with correct credentials', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     var User = application.type('user');
 
-    new User(userHelper.sample()).validateAndSave(function(error, newAccount) {
+    User.validateAndSave(userHelper.sample(), function(error, newAccount) {
       if (error) {
         return assert.fail('error saving');
       }
@@ -32,13 +32,13 @@ describe('User extension', function(done) {
   });
 
   it('should not create an account via API with a password less then 6 characters long', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     var User = application.type('user');
 
     var user = userHelper.sample();
     user.password = 'small';
 
-    new User(user).validateAndSave(function(error, newAccount, errors) {
+    User.validateAndSave(user, function(error, newAccount, errors) {
       if (error) {
         return assert.fail('error saving');
       }

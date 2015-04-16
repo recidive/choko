@@ -1,0 +1,5 @@
+{
+  "title": "List group item",
+  "Description": "List group item display.",
+  "regions": ["heading", "text"]
+}

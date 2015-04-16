@@ -1,0 +1,9 @@
+{
+  "title": "Sandstone",
+  "description": "A touch of warmth.",
+  "thumbnail": "/lib/bootswatch/sandstone/thumbnail.png",
+  "styles": [
+    "/lib/bootswatch/sandstone/bootstrap.min.css",
+    "/lib/font-awesome/css/font-awesome.min.css"
+  ]
+}

@@ -1,0 +1,5 @@
+<div ck-element class="form-group">
+  <label ng-if="element.title" for="{{element.id}}">{{element.title}}</label>
+  <input ng-model="data[element.name]" ng-required="element.required" type="datetime" class="form-control" id="{{element.id}}" placeholder="{{element.placeholder}}">
+  <p ng-if="element.description" class="help-block">{{element.description}}</p>
+</div>

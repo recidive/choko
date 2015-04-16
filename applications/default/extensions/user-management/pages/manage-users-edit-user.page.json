@@ -1,0 +1,9 @@
+{
+  "path": "/manage/users/edit/:username",
+  "title": "Edit user",
+  "access": "manage-users",
+  "type": "form",
+  "formName": "type-user",
+  "itemType": "user",
+  "redirect": "/manage/users"
+}

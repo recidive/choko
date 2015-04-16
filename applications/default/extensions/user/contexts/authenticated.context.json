@@ -7,7 +7,7 @@
   "reactions": {
     "panel": {
       "navbar-right": [{
-        "name": "sign-out",
+        "name": "navigation-user-links",
         "weight": 0
       }]
     }

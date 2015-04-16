@@ -1,1 +1,1 @@
-<button ng-click="submit(element.url, element.redirect || form.redirect)" ng-disabled="isClean() || [form.name].$invalid" ng-class="element.classes" type="submit" class="btn" id="element-{{form.name}}-{{element.name}}">{{element.title}}</button>
+<button ck-button ng-click="submit(element.url)" ng-disabled="isClean() || [form.name].$invalid" ng-class="element.classes" type="submit" class="btn" id="{{element.id}}">{{element.title}}</button>

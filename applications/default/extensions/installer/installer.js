@@ -61,8 +61,7 @@ installer.route = function(routes, callback) {
       var createAdminUser = function(app, callback) {
         // Create the administrator user.
         var User = app.type('user');
-        var newAccount = new User(adminUser);
-        newAccount.validateAndSave(function(error, newAccount, errors) {
+        User.validateAndSave(adminUser, function(error, newAccount, errors) {
           if (error) {
             return callback(error);
           }
