@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/recidive/choko.png?label=ready&title=Ready)](https://waffle.io/recidive/choko)
 # ![Choko](https://raw.github.com/recidive/choko/master/applications/default/public/img/logo.png)
 
   Web Application Framework for Node.js. With Choko you can develop complex
