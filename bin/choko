@@ -111,7 +111,7 @@ var install = function(destination, prg, callback) {
 
 program
   .command('*')
-  .version('0.0.4')
+  .version('0.0.5')
   .usage('[options] [dir]')
   .option('-p, --port <number>', 'start application at specified port', parseInt, DEFAULT_PORT)
   .action(function () {

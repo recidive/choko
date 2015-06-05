@@ -1,6 +1,6 @@
 {
   "name": "choko",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "High performance and high level web application framework.",
   "scripts": {
     "test": "mocha test"

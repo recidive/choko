@@ -7,7 +7,7 @@
 angular.module('choko')
 
   // Single value service for Choko version.
-  .value('version', '0.0.1')
+  .value('version', '0.0.5')
 
   .factory('Choko', ['$resource', function($resource) {
     return $resource('/rest/:type/:key', {
