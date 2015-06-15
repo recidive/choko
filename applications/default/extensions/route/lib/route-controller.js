@@ -35,8 +35,8 @@ var RouteController = module.exports = function(application, settings) {
     self.handle(request, response);
   });
 
-  // Register on the appropriate router. Default to 'page' router.
-  var router = this.settings.router ? this.application.routers[this.settings.router] : this.application.routers.page;
+  // Register route on the appropriate router.
+  var router = this.application.routers[this.settings.router];
   var method = this.settings.method || 'all';
   router[method].apply(router, params);
 };
@@ -130,10 +130,12 @@ RouteController.respond = function(request, response, content, code, decorator) 
   // Default to 200 (success).
   var code = code || 200;
 
+  // Create a payload envelope to pass to the decorator function.
   var payload = {
     status: {
       code: code
-    }
+    },
+    data: null
   };
 
   if (content) {
@@ -142,11 +144,15 @@ RouteController.respond = function(request, response, content, code, decorator) 
 
   if (decorator) {
     return decorator(payload, request, response, function() {
-      response.status(payload.status.code).send(payload);
+      response
+        .status(payload.status.code)
+        .send(payload.data);
     });
   }
 
-  response.status(code).send(payload);
+  response
+    .status(payload.status.code)
+    .send(payload.data);
 };
 
 /**

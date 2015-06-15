@@ -20,36 +20,8 @@
       "url": "/manage/users"
     },
     {
-      "title": "Pages",
-      "url": "/manage/pages"
-    },
-    {
-      "title": "Panels",
-      "url": "/manage/panels"
-    },
-    {
-      "title": "Navigations",
-      "url": "/manage/navigations"
-    },
-    {
-      "title": "Contexts",
-      "url": "/manage/contexts"
-    },
-    {
-      "title": "Layouts",
-      "url": "/manage/layouts"
-    },
-    {
-      "title": "Displays",
-      "url": "/manage/displays"
-    },
-    {
       "title": "Themes",
       "url": "/manage/themes"
-    },
-    {
-      "title": "Types",
-      "url": "/manage/types"
     },
     {
       "title": "Extensions",

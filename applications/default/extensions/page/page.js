@@ -58,6 +58,8 @@ page.type = function(types, callback) {
         'heading': [{
           fieldName: 'title',
           format: 'title',
+          // @todo: make Params parse work inside a string.
+          link: '/manage/pages/edit/[name|item]',
           weight: 0
         }],
         'text': [{

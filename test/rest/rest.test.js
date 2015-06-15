@@ -8,7 +8,7 @@ var testingUrl = 'http://localhost:3200';
 describe('REST extension', function(done) {
 
   it('should create an item via POST', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     userHelper.createUser(application, ['test-role'], function(error, user, credentials) {
       request(testingUrl)
         .post('/rest/testType')
@@ -22,7 +22,7 @@ describe('REST extension', function(done) {
   });
 
   it('should update an item via POST', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
       // Create item.
       request(testingUrl)
@@ -36,7 +36,7 @@ describe('REST extension', function(done) {
           if (error) {
             throw error;
           }
-          var result = response.body.data;
+          var result = response.body;
 
           // Update item.
           request(testingUrl)
@@ -52,7 +52,7 @@ describe('REST extension', function(done) {
   });
 
   it('should return 404 when trying to update an absent item via POST', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
       // Update item.
       request(testingUrl)
@@ -67,7 +67,7 @@ describe('REST extension', function(done) {
   });
 
   it('should update an item via PUT', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
       // Create item.
       request(testingUrl)
@@ -81,7 +81,7 @@ describe('REST extension', function(done) {
           if (error) {
             throw error;
           }
-          var result = response.body.data;
+          var result = response.body;
 
           // Update item.
           request(testingUrl)
@@ -97,7 +97,7 @@ describe('REST extension', function(done) {
   });
 
   it('shouldn\'t update an item via POST on main endpoint', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
       // Create item.
       request(testingUrl)
@@ -111,7 +111,7 @@ describe('REST extension', function(done) {
           if (error) {
             throw error;
           }
-          var result = response.body.data;
+          var result = response.body;
 
           // Attempt to create an item passing the key property.
           request(testingUrl)
@@ -124,7 +124,7 @@ describe('REST extension', function(done) {
             })
             .expect(200, function(error, response) {
               // Make sure a new item was created.
-              assert.notEqual(result.id, response.body.data.id);
+              assert.notEqual(result.id, response.body.id);
               done();
             });
         });
@@ -132,7 +132,7 @@ describe('REST extension', function(done) {
   });
 
   it('shouldn\'t update an item via POST on the endpoint of another item', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
 
       // Create item.
@@ -147,7 +147,7 @@ describe('REST extension', function(done) {
           if (error) {
             throw error;
           }
-          var aResult = response.body.data;
+          var aResult = response.body;
 
           request(testingUrl)
             .post('/rest/testType')
@@ -160,7 +160,7 @@ describe('REST extension', function(done) {
               if (error) {
                 throw error;
               }
-              var anotherResult = response.body.data;
+              var anotherResult = response.body;
 
               // Attempt to create an item passing the key property.
               request(testingUrl)
@@ -173,7 +173,7 @@ describe('REST extension', function(done) {
                 })
                 .expect(200, function(error, response) {
                   // Make sure a new item was created.
-                  assert.notEqual(anotherResult.id, response.body.data.id);
+                  assert.notEqual(anotherResult.id, response.body.id);
                   done();
                 });
             });
@@ -184,7 +184,7 @@ describe('REST extension', function(done) {
   });
 
   it('shouldn\'t update an item via PUT on the endpoint of another item', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     userHelper.createUser(application, ['test-type-manager'], function(error, user, credentials) {
 
       // Create item.
@@ -199,7 +199,7 @@ describe('REST extension', function(done) {
           if (error) {
             throw error;
           }
-          var aResult = response.body.data;
+          var aResult = response.body;
 
           request(testingUrl)
             .post('/rest/testType')
@@ -212,7 +212,7 @@ describe('REST extension', function(done) {
               if (error) {
                 throw error;
               }
-              var anotherResult = response.body.data;
+              var anotherResult = response.body;
 
               // Attempt to create an item passing the key property.
               request(testingUrl)
@@ -225,7 +225,7 @@ describe('REST extension', function(done) {
                 })
                 .expect(200, function(error, response) {
                   // Make sure a new item was created.
-                  assert.notEqual(anotherResult.id, response.body.data.id);
+                  assert.notEqual(anotherResult.id, response.body.id);
                   done();
                 });
             });
@@ -242,7 +242,7 @@ describe('REST extension', function(done) {
   });
 
   it('shouldn\'t create an item with fields not in type schema', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     userHelper.createUser(application, ['test-role'], function(error, user, credentials) {
       request(testingUrl)
         .post('/rest/testType')
@@ -253,14 +253,14 @@ describe('REST extension', function(done) {
           outOfSchema: 'A value for a field not in type schema.'
         })
         .expect(200, function(error, response) {
-          assert.ok(!('outOfSchema' in response.body.data));
+          assert.ok(!('outOfSchema' in response.body));
           done();
         });
     });
   });
 
   it('should authenticate on REST with Basic authentication', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     var User = application.type('user');
 
     var userData = userHelper.sample();
@@ -279,7 +279,7 @@ describe('REST extension', function(done) {
   });
 
   it('should not be able to run denied REST requests', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     var User = application.type('user');
 
     var userData = userHelper.sample();

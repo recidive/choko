@@ -58,6 +58,10 @@ route.processRoute = function(path, route) {
       access: true
     };
   }
+
+  // Set default router to 'page'.
+  route.router = route.router || 'page';
+
   // Create route controller instance.
   route.controller = new RouteController(this.application, route);
 };

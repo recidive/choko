@@ -1,9 +1,9 @@
 {
   "title": "Yeti",
   "description": "A friendly foundation.",
-  "thumbnail": "/bootswatch/yeti/thumbnail.png",
+  "thumbnail": "/lib/bootswatch/yeti/thumbnail.png",
   "styles": [
-    "/bootswatch/yeti/bootstrap.min.css",
+    "/lib/bootswatch/yeti/bootstrap.min.css",
     "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }

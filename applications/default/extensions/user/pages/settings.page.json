@@ -5,6 +5,6 @@
   "type": "form",
   "formName": "edit-account",
   "itemType": "user",
-  "itemKey": ":username|user",
+  "itemKey": ":id|user",
   "redirect": "/settings"
 }
