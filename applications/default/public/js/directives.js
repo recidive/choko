@@ -12,7 +12,7 @@ angular.module('choko')
     };
   }])
 
-  .directive('ckReplace', function($http, $compile) {
+  .directive('ckReplace', ['$http', '$compile', function($http, $compile) {
     return {
       restrict: 'E',
       scope: true,
@@ -26,9 +26,9 @@ angular.module('choko')
         };
       }
     };
-  })
+  }])
 
-  .directive('ckButton', function($http, $compile) {
+  .directive('ckButton', ['$http', '$compile', function($http, $compile) {
     return {
       restrict: 'E',
       scope: true,
@@ -44,4 +44,4 @@ angular.module('choko')
         };
       }
     };
-  });
+  }]);

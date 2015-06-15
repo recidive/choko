@@ -1,9 +1,9 @@
 {
   "title": "Cerulean",
   "description": "A calm blue sky.",
-  "thumbnail": "/bootswatch/cerulean/thumbnail.png",
+  "thumbnail": "/lib/bootswatch/cerulean/thumbnail.png",
   "styles": [
-    "/bootswatch/cerulean/bootstrap.min.css",
+    "/lib/bootswatch/cerulean/bootstrap.min.css",
     "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "title": "Paper",
+  "description": "Material is the metaphor.",
+  "thumbnail": "/lib/bootswatch/paper/thumbnail.png",
+  "styles": [
+    "/lib/bootswatch/paper/bootstrap.min.css",
+    "/lib/font-awesome/css/font-awesome.min.css"
+  ]
+}
