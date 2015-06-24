@@ -164,7 +164,7 @@ var install = function(destination, prg, callback) {
       }, destination);
 
       start(dir, prg, function(dir, app) {
-        util.log('Navigate to http://localhost:' + prg.port + ' to start building your new application.'.green.bold.bgBlack);
+        util.log('Navigate to http://localhost:' + prg.port + ' to start building your new application.');
 
         // Create the admin user.
         var User = app.type('user');
