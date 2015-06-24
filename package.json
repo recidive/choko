@@ -25,6 +25,7 @@
     "path-to-regexp": "0.1.x",
     "connect-flash": "0.1.x",
     "commander": "1.3.x",
+    "prompt": "0.2.x",
     "async": "0.2.x",
     "passport": "0.1.x",
     "passport-local": "0.1.x",

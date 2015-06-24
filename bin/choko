@@ -8,6 +8,9 @@ var program = require('commander');
 var Application = require('../lib/application');
 var mkdirp = require('mkdirp');
 var lodash = require('lodash');
+var async = require('async');
+var prompt = require('prompt');
+var validator = require('validator');
 
 var DEFAULT_PATH = '.';
 var DEFAULT_PORT = process.env.PORT || 3000;
@@ -37,13 +40,13 @@ var start = function(destination, prg, callback) {
   var dir = appPath(destination);
 
   if (!isInstalled(dir)) {
-    return install(dir, prg);
+    return install(dir, prg, callback);
   }
 
   var app = new Application(dir);
   app.start(prg.port, function () {
     if (lodash.isFunction(callback)) {
-      callback(dir);
+      callback(dir, app);
     }
   });
 };
@@ -78,36 +81,119 @@ var install = function(destination, prg, callback) {
   }
 
   program.confirm('No application found on ' + dirMode + ' folder, create a new application on "' + dir + '" path? ', function(ok) {
+
     if (!ok) {
       return process.stdin.destroy();
     }
 
-    // Create application directories if they don't exist.
-    var folders = [
-      dir,
-      path.join(dir, '/public'),
-      path.join(dir, '/extensions')
-    ];
-    folders.forEach(function(folder) {
-      if (!fs.existsSync(folder)) {
-        fs.mkdirSync(folder);
+    prompt.start();
+
+    var appMachine;
+
+    var schema = {
+      properties: {
+        appName: {
+          description: 'Application name',
+          pattern: /^[a-zA-Z0-9\s\-]+$/,
+          message: 'Application name must be only letters, spaces, or dashes',
+          default: path.basename(dir),
+          required: true
+        },
+        appEmail: {
+          description: 'Application email address',
+          conform: validator.isEmail,
+          message: 'Enter a valid email',
+          required: true
+        },
+        adminName: {
+          description: 'Administrator username',
+          conform: validator.isAlphanumeric,
+          default: 'admin',
+          message: 'Enter a valid username e.g. admin',
+          required: true
+        },
+        adminEmail: {
+          description: 'Administrator email address',
+          conform: validator.isEmail,
+          message: 'Enter a valid email',
+          required: true
+        },
+        adminPass: {
+          description: 'Administrator password (at least 6 characters)',
+          hidden: true,
+          conform: function (pass) {
+            return validator.isLength(pass, 6);
+          },
+          message: 'Password must have at least 6 characters.',
+          required: true
+        },
+        database: {
+          description: 'Database URI',
+          conform: function(uri) {
+            return validator.isURL(uri, {
+              protocols: ['mongodb'],
+              require_protocol: true,
+              allow_underscores: true
+            });
+          },
+          default: 'mongodb://localhost/chokoapp',
+          message: 'Enter a valid URI for your database e.g. mongodb://localhost/chokoapp',
+          required: true
+        }
+
       }
-    });
-
-    var initialSettings = {
-      application: {
-        name: 'Install Choko'
-      },
-      extensions: {}
     };
-    fs.writeFileSync(path.join(dir, '/settings.json'), JSON.stringify(initialSettings, null, '  '), {flag: 'w'});
 
-    start(dir, prg, function(dir) {
-      util.log('Navigate to http://localhost:' + prg.port + '/install' + ' to create your first application.');
+    prompt.get(schema, function (error, result) {
+
+      doInstall({
+        application: {
+          name: result.appName,
+          email: result.appEmail
+        },
+        database: result.database
+      }, destination);
+
+      start(dir, prg, function(dir, app) {
+        util.log('Navigate to http://localhost:' + prg.port + ' to start building your new application.');
+
+        // Create the admin user.
+        var User = app.type('user');
+        var userData = {
+          username: result.adminName,
+          password: result.adminPass,
+          email: result.adminEmail,
+          roles: ['administrator']
+        };
+        User.validateAndSave(userData, function(error, newAccount, errors) {
+          // @todo: handle errors.
+        });
+      });
     });
 
   });
-};
+
+}
+
+function doInstall(settings, destination) {
+  // Create application directories if they don't exist.
+  var dir = appPath(destination);
+  var folders = [
+    dir,
+    path.join(dir, '/public'),
+    path.join(dir, '/extensions')
+  ];
+  folders.forEach(function(folder) {
+    if (!fs.existsSync(folder)) {
+      fs.mkdirSync(folder);
+    }
+  });
+
+  settings.sessionSecret = 'change-me';
+
+  fs.writeFileSync(path.join(dir, '/settings.json'), JSON.stringify(settings, null, '  '), {flag: 'w'});
+}
+
 
 program
   .command('*')
