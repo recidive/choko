@@ -11,6 +11,7 @@ var lodash = require('lodash');
 var async = require('async');
 var prompt = require('prompt');
 var validator = require('validator');
+var crypto = require('crypto');
 
 var DEFAULT_PATH = '.';
 var DEFAULT_PORT = process.env.PORT || 3000;
@@ -189,7 +190,7 @@ function doInstall(settings, destination) {
     }
   });
 
-  settings.sessionSecret = 'change-me';
+  settings.sessionSecret = crypto.randomBytes(32).toString('base64');
 
   fs.writeFileSync(path.join(dir, '/settings.json'), JSON.stringify(settings, null, '  '), {flag: 'w'});
 }
