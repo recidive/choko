@@ -10,6 +10,7 @@ var mkdirp = require('mkdirp');
 var lodash = require('lodash');
 var async = require('async');
 var prompt = require('prompt');
+var colors = require('colors');
 var validator = require('validator');
 var crypto = require('crypto');
 
@@ -81,7 +82,9 @@ var install = function(destination, prg, callback) {
     dirMode = 'specified';
   }
 
-  program.confirm('No application found on ' + dirMode + ' folder, create a new application on "' + dir + '" path? ', function(ok) {
+  console.log(getLogo().green);
+
+  program.confirm('No application found on ' + dirMode + ' folder.\n:: Create a new application on "' + path.resolve(dir) + '" ? ', function(ok) {
 
     if (!ok) {
       return process.stdin.destroy();
@@ -89,38 +92,33 @@ var install = function(destination, prg, callback) {
 
     prompt.start();
 
-    var appMachine;
+    prompt.message = ':'.white.bold.bgBlack;
+    prompt.delimiter = ': '.white.bold.bgBlack;
 
     var schema = {
       properties: {
         appName: {
-          description: 'Application name',
+          description: 'Application name'.white.bold.bgBlack,
           pattern: /^[a-zA-Z0-9\s\-]+$/,
           message: 'Application name must be only letters, spaces, or dashes',
           default: path.basename(dir),
           required: true
         },
         appEmail: {
-          description: 'Application email address',
+          description: 'Application email address'.white.bold.bgBlack,
           conform: validator.isEmail,
           message: 'Enter a valid email',
           required: true
         },
         adminName: {
-          description: 'Administrator username',
+          description: 'Administrator username'.white.bold.bgBlack,
           conform: validator.isAlphanumeric,
           default: 'admin',
           message: 'Enter a valid username e.g. admin',
           required: true
         },
-        adminEmail: {
-          description: 'Administrator email address',
-          conform: validator.isEmail,
-          message: 'Enter a valid email',
-          required: true
-        },
         adminPass: {
-          description: 'Administrator password (at least 6 characters)',
+          description: 'Administrator password (at least 6 characters)'.white.bold.bgBlack,
           hidden: true,
           conform: function (pass) {
             return validator.isLength(pass, 6);
@@ -128,8 +126,14 @@ var install = function(destination, prg, callback) {
           message: 'Password must have at least 6 characters.',
           required: true
         },
+        adminEmail: {
+          description: 'Administrator email address'.white.bold.bgBlack,
+          conform: validator.isEmail,
+          message: 'Enter a valid email',
+          required: true
+        },
         database: {
-          description: 'Database URI',
+          description: 'Database URI'.white.bold.bgBlack,
           conform: function(uri) {
             return validator.isURL(uri, {
               protocols: ['mongodb'],
@@ -146,6 +150,10 @@ var install = function(destination, prg, callback) {
     };
 
     prompt.get(schema, function (error, result) {
+
+      if (error) {
+        return console.log('\nInstall aborted, no changes were made.');
+      }
 
       doInstall({
         application: {
@@ -192,9 +200,12 @@ function doInstall(settings, destination) {
 
   settings.sessionSecret = crypto.randomBytes(32).toString('base64');
 
-  fs.writeFileSync(path.join(dir, '/settings.json'), JSON.stringify(settings, null, '  '), {flag: 'w'});
+  fs.writeFileSync(appSettingsPath(dir), JSON.stringify(settings, null, '  '), {flag: 'w'});
 }
 
+function getLogo() {
+  return fs.readFileSync(path.resolve(__dirname + '/../lib/logo.txt'), 'utf-8');
+}
 
 program
   .command('*')
