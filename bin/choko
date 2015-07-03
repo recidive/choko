@@ -1,18 +1,12 @@
 #!/usr/bin/env node
 
-var os = require('os');
 var fs = require('fs');
 var path = require('path');
-var util = require('util');
 var program = require('commander');
 var Application = require('../lib/application');
-var mkdirp = require('mkdirp');
+var install = require('../lib/install');
 var lodash = require('lodash');
-var async = require('async');
-var prompt = require('prompt');
 var colors = require('colors');
-var validator = require('validator');
-var crypto = require('crypto');
 
 var DEFAULT_PATH = '.';
 var DEFAULT_PORT = process.env.PORT || 3000;
@@ -38,19 +32,30 @@ var appSettingsPath = function (dir) {
 /**
  * Starts the application in the specified destination path.
  */
-var start = function(destination, prg, callback) {
+var start = function(destination, prg) {
   var dir = appPath(destination);
 
   if (!isInstalled(dir)) {
-    return install(dir, prg, callback);
+
+    // No destination is defined, so "applications" dir should be default.
+    var dirMode = DEFAULT_PATH;
+    if (destination != null) {
+      dirMode = 'specified';
+    }
+
+    console.log(getLogo().green);
+
+    return program.confirm('No application found on ' + dirMode + ' folder.\n:: Create a new application on "' + path.resolve(dir) + '" ? ', function(ok) {
+      if (!ok) {
+        return process.stdin.destroy();
+      }
+
+      install(dir, prg);
+    });
   }
 
   var app = new Application(dir);
-  app.start(prg.port, function () {
-    if (lodash.isFunction(callback)) {
-      callback(dir, app);
-    }
-  });
+  app.start(prg.port);
 };
 
 /**
@@ -64,143 +69,6 @@ var isInstalled = function(dir) {
 
   // Specified directory.
   return fs.existsSync(appSettingsPath(dir));
-}
-
-/**
- * Prepare a structure of directories and files, to run the installer.
- */
-var install = function(destination, prg, callback) {
-  var dir = appPath(destination);
-
-  if (isInstalled(dir)) {
-    return process.stdin.destroy();
-  }
-
-  // No destination is defined, so "applications" dir should be default.
-  var dirMode = DEFAULT_PATH;
-  if (destination != null) {
-    dirMode = 'specified';
-  }
-
-  console.log(getLogo().green);
-
-  program.confirm('No application found on ' + dirMode + ' folder.\n:: Create a new application on "' + path.resolve(dir) + '" ? ', function(ok) {
-
-    if (!ok) {
-      return process.stdin.destroy();
-    }
-
-    prompt.start();
-
-    prompt.message = ':'.white.bold.bgBlack;
-    prompt.delimiter = ': '.white.bold.bgBlack;
-
-    var schema = {
-      properties: {
-        appName: {
-          description: 'Application name'.white.bold.bgBlack,
-          pattern: /^[a-zA-Z0-9\s\-]+$/,
-          message: 'Application name must be only letters, spaces, or dashes',
-          default: path.basename(dir),
-          required: true
-        },
-        appEmail: {
-          description: 'Application email address'.white.bold.bgBlack,
-          conform: validator.isEmail,
-          message: 'Enter a valid email',
-          required: true
-        },
-        adminName: {
-          description: 'Administrator username'.white.bold.bgBlack,
-          conform: validator.isAlphanumeric,
-          default: 'admin',
-          message: 'Enter a valid username e.g. admin',
-          required: true
-        },
-        adminPass: {
-          description: 'Administrator password (at least 6 characters)'.white.bold.bgBlack,
-          hidden: true,
-          conform: function (pass) {
-            return validator.isLength(pass, 6);
-          },
-          message: 'Password must have at least 6 characters.',
-          required: true
-        },
-        adminEmail: {
-          description: 'Administrator email address'.white.bold.bgBlack,
-          conform: validator.isEmail,
-          message: 'Enter a valid email',
-          required: true
-        },
-        database: {
-          description: 'Database URI'.white.bold.bgBlack,
-          conform: function(uri) {
-            return validator.isURL(uri, {
-              protocols: ['mongodb'],
-              require_protocol: true,
-              allow_underscores: true
-            });
-          },
-          default: 'mongodb://localhost/chokoapp',
-          message: 'Enter a valid URI for your database e.g. mongodb://localhost/chokoapp',
-          required: true
-        }
-
-      }
-    };
-
-    prompt.get(schema, function (error, result) {
-
-      if (error) {
-        return console.log('\nInstall aborted, no changes were made.');
-      }
-
-      doInstall({
-        application: {
-          name: result.appName,
-          email: result.appEmail
-        },
-        database: result.database
-      }, destination);
-
-      start(dir, prg, function(dir, app) {
-        util.log('Navigate to http://localhost:' + prg.port + ' to start building your new application.');
-
-        // Create the admin user.
-        var User = app.type('user');
-        var userData = {
-          username: result.adminName,
-          password: result.adminPass,
-          email: result.adminEmail,
-          roles: ['administrator']
-        };
-        User.validateAndSave(userData, function(error, newAccount, errors) {
-          // @todo: handle errors.
-        });
-      });
-    });
-
-  });
-
-}
-
-function doInstall(settings, destination) {
-  // Create application directories if they don't exist.
-  var dir = appPath(destination);
-  var folders = [
-    dir,
-    path.join(dir, '/public'),
-    path.join(dir, '/extensions')
-  ];
-  folders.forEach(function(folder) {
-    if (!fs.existsSync(folder)) {
-      fs.mkdirSync(folder);
-    }
-  });
-
-  settings.sessionSecret = crypto.randomBytes(32).toString('base64');
-
-  fs.writeFileSync(appSettingsPath(dir), JSON.stringify(settings, null, '  '), {flag: 'w'});
 }
 
 function getLogo() {
