@@ -14,7 +14,7 @@ var DEFAULT_PORT = process.env.PORT || 3000;
 /**
  * Returns the normalized path where all the apps reside.
  */
-var appPath = function (destination) {
+function appPath(destination) {
   // Default destination.
   if (!lodash.isString(destination)) {
     destination = DEFAULT_PATH;
@@ -25,14 +25,14 @@ var appPath = function (destination) {
 /**
  * Append in a path the applications.json file.
  */
-var appSettingsPath = function (dir) {
+function appSettingsPath(dir) {
   return path.join(dir, 'settings.json');
 }
 
 /**
  * Starts the application in the specified destination path.
  */
-var start = function(destination, prg) {
+function start(destination, prg) {
   var dir = appPath(destination);
 
   if (!isInstalled(dir)) {
@@ -56,12 +56,12 @@ var start = function(destination, prg) {
 
   var app = new Application(dir);
   app.start(prg.port);
-};
+}
 
 /**
  * Define if Choko is installed.
  */
-var isInstalled = function(dir) {
+function isInstalled(dir) {
   // Running from the "applications" directory.
   if (dir == null && fs.existsSync(appSettingsPath(appPath()))) {
     return true;
