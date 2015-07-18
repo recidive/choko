@@ -185,7 +185,6 @@ form.form = function(forms, callback) {
           name: 'submit',
           title: 'Save',
           type: 'submit',
-          url: '/rest/' + (typeSettings.mainTypeName || typeName),
           classes: ['btn-primary'],
           weight: 50
         });

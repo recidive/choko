@@ -11,6 +11,7 @@
     "angular-sanitize": "1.3.x",
     "summernote": "0.6.x",
     "angular-summernote": "0.3.x",
-    "ng-file-upload": "1.6.x"
+    "ng-file-upload": "1.6.x",
+    "restangular": "1.4.x"
   }
 }

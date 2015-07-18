@@ -136,8 +136,8 @@ angular.module('choko')
 
     }])
 
-  .controller('ViewController', ['$scope', '$location', '$http', 'Choko', 'Params', 'Token',
-    function ($scope, $location, $http, Choko, Params, Token) {
+  .controller('ViewController', ['$scope', '$location', '$http', 'Choko', 'Params', 'Token', 'Restangular',
+    function ($scope, $location, $http, Choko, Params, Token, Restangular) {
 
       $scope.prepareDisplay = function(name, callback) {
         Choko.get({type: 'display', key: name}, function(display) {
@@ -154,6 +154,13 @@ angular.module('choko')
           }
         });
       };
+
+
+      // Prevente creation of service if no itemType set.
+      if ($scope.view.itemType) {
+        // Create a new Service for Itemtype.
+        var itemTypeREST = Restangular.service($scope.view.itemType);
+      }
 
       // Parse parameters when needed.
       if (typeof $scope.view.itemKey !== 'undefined') {
@@ -172,21 +179,25 @@ angular.module('choko')
 
       // Handle 'list' type views.
       if ($scope.view.type === 'list' && $scope.view.itemType) {
-        var query = {
-          type: $scope.view.itemType
-        };
+        var query = {};
 
         if ($scope.view.query) {
           angular.extend(query, $scope.view.query);
         }
-
-        $scope.items = {};
 
         if ($scope.view.template) {
           Choko.get(query, function(response) {
             $scope.items = response;
           });
         }
+
+        // Expose view list promise to scope
+        $scope.viewList = itemTypeREST.getList(query);
+        $scope.items = {};
+
+        $scope.viewList.then(function(response) {
+          $scope.items = response;
+        });
 
         if (!$scope.view.template && $scope.view.listStyle) {
           $scope.view.template = '/templates/' + $scope.view.listStyle + '.html';
@@ -203,13 +214,16 @@ angular.module('choko')
 
       // Handle 'item' type views.
       if ($scope.view.type === 'item' && $scope.view.itemType) {
+
+        // Expose variables to the scope
         $scope.data = {};
         $scope.view.title = '';
-        Choko.get({type: $scope.view.itemType, key: $scope.view.itemKey}, function(response) {
+        $scope.viewItem = itemTypeREST.one($scope.view.itemKey).get();
+
+        $scope.viewItem.then(function(response) {
           $scope.data = response;
           $scope.view.title = response.title;
-        },
-        function(response) {
+        }, function(response) {
           // Error.
           if ($scope.page) {
             // If it's a page, show error, otherwise fail silently.
@@ -222,7 +236,11 @@ angular.module('choko')
 
       // Handle 'form' type views.
       if ($scope.view.type === 'form' && $scope.view.formName) {
+        var typeForm = 'post';
+        var itemREST = null;
+
         $scope.data = {};
+
         $scope.buildForm = function () {
           Choko.get({type: 'form', key: $scope.view.formName}, function(response) {
             $scope.form = response;
@@ -242,41 +260,64 @@ angular.module('choko')
         };
 
         if ($scope.view.itemType && $scope.view.itemKey) {
-          // Load item for editing.
-          Choko.get({type: $scope.view.itemType, key: $scope.view.itemKey}, function(response) {
-            $scope.data = response;
-            $scope.buildForm();
-          });
+
+          // Set type form to PUT.
+          typeForm = 'put';
+
+          itemTypeREST.one($scope.view.itemKey)
+            .get()
+            .then(function(response) {
+              $scope.data = response;
+              $scope.buildForm();
+            });
         }
-        else {
+
+        // Verify if the form is the type PUT to build the form
+        if (typeForm != 'put') {
           $scope.buildForm();
         }
 
         $scope.submit = function(url) {
-          // Add itemKey to the URL if any.
-          if ($scope.view.itemKey) {
-            url += '/' + $scope.view.itemKey;
+
+          // Replace tokens in url.
+          if (url) {
+            url = Token.replace(url, $scope);
           }
 
-          $http.post(url, $scope.data)
-            .success(function(data, status, headers, config) {
-              $scope.data = data;
+          // Add params to data if any.
+          Object.keys($scope.view.params || {}).forEach(function(param) {
+            $scope.data[param] = $scope.data[param] || $scope.view.params[param];
+          });
 
-              delete $scope.errors;
+          if(!itemTypeREST) {
+            $scope.viewForm = Restangular.oneUrl('url', url).post('', $scope.data);
+          }
+          else {
+            if (url) {
+              $scope.viewForm = Restangular.oneUrl('url', url).post('', $scope.data);
+            } else {
+              $scope.viewForm = typeForm === 'post' ?
+              itemTypeREST.post($scope.data) :
+              $scope.data.put();
+            }
+          }
 
-              if ($scope.form.redirect) {
-                // Replace tokens in redirects. Make 'item' an alias to 'data'
-                // so item parser can be used in tokens.
-                $scope.item = $scope.data;
-                $scope.form.redirect = Token.replace($scope.form.redirect, $scope);
+          $scope.viewForm.then(function(response) {
+            $scope.data = response;
+            delete $scope.errors;
 
-                $location.path($scope.form.redirect);
-              }
-            })
-            .error(function(data, status, headers, config) {
-              $scope.status = status;
-              $scope.errors = data;
-            });
-        };
+            if ($scope.form.redirect) {
+              // Replace tokens in redirects. Make 'item' an alias to 'data'
+              // so item parser can be used in tokens.
+              $scope.item = $scope.data;
+              $scope.form.redirect = Token.replace($scope.form.redirect, $scope);
+
+              $location.path($scope.form.redirect);
+            }
+          }, function(response) {
+            $scope.status = response.status;
+            $scope.errors = response.data;
+          });
+        }
       }
     }]);
