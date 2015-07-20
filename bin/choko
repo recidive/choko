@@ -71,6 +71,9 @@ function isInstalled(dir) {
   return fs.existsSync(appSettingsPath(dir));
 }
 
+/**
+ * Get Choko logo ASCII Art.
+ */
 function getLogo() {
   return fs.readFileSync(path.resolve(__dirname + '/../lib/logo.txt'), 'utf-8');
 }
