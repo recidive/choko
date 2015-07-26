@@ -38,6 +38,7 @@
     "waterline-prana": "recidive/waterline-prana#master"
   },
   "devDependencies": {
+    "bower": "*",
     "mocha": "*",
     "supertest": "0.13.x"
   },
