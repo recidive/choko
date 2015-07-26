@@ -39,6 +39,8 @@
   },
   "devDependencies": {
     "bower": "*",
+    "gulp": "*",
+    "gulp-bower": "*",
     "mocha": "*",
     "supertest": "0.13.x"
   },
