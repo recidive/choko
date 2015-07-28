@@ -7,6 +7,7 @@ var Application = require('../lib/application');
 var install = require('../lib/install');
 var lodash = require('lodash');
 var colors = require('colors');
+var chokoVersion = require('../package').version;
 
 var DEFAULT_PATH = '.';
 var DEFAULT_PORT = process.env.PORT || 3000;
@@ -80,7 +81,7 @@ function getLogo() {
 
 program
   .command('*')
-  .version('0.0.5')
+  .version(chokoVersion)
   .usage('[options] [dir]')
   .option('-p, --port <number>', 'start application at specified port', parseInt, DEFAULT_PORT)
   .action(function () {
