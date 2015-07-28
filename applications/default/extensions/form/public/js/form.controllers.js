@@ -85,6 +85,16 @@ angular.module('choko')
       $scope: $scope
     });
 
+    // Parse query reference params.
+    Object.keys($scope.element.reference.query || {}).forEach(function(param) {
+      $scope.element.reference.query[param] = Params.parse($scope.element.reference.query[param], $scope);
+    });
+
+    // Parse other reference params.
+    Object.keys($scope.element.reference.params || {}).forEach(function(param) {
+      $scope.element.reference.params[param] = Params.parse($scope.element.reference.params[param], $scope);
+    });
+
     var query = {
       type: $scope.element.reference.type
     };
@@ -95,7 +105,9 @@ angular.module('choko')
     }
 
     // Get reference items to make a options list.
-    Choko.get(query, function(response) {
+    $scope.element.options = Choko.get(query);
+
+    $scope.element.options.$promise.then(function(response) {
       $scope.element.options = response;
 
       // Use radios if less then 5 options.
