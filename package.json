@@ -41,6 +41,7 @@
     "bower": "*",
     "gulp": "*",
     "gulp-bower": "*",
+    "gulp-git": "*",
     "mocha": "*",
     "supertest": "0.13.x"
   },
