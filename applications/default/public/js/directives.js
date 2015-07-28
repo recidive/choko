@@ -7,13 +7,6 @@
 // Append directives to main choko module.
 angular.module('choko')
 
-  // Directive to return the application's version.
-  .directive('appVersion', ['version', function(version) {
-    return function(scope, elm, attrs) {
-      elm.text(version);
-    };
-  }])
-
   // Directive to replace any tag with overridable templates from the server.
   .directive('ckReplace', ['$http', '$compile', function($http, $compile) {
     return {
