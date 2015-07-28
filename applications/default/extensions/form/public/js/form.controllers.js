@@ -130,7 +130,7 @@ angular.module('choko')
     var multiple = $scope.element.reference.multiple;
 
     // Subform errors are handled separately.
-    $scope.errors = [];
+    $scope.errors = null;
 
     if (multiple) {
       // Initialize items container.
