@@ -29,11 +29,11 @@ angular.module('choko')
   }
 })
 
-.directive('ckButton', function() {
+.directive('ckFormButton', function() {
   return {
     restrict: 'A',
     require: ['^ckForm'],
-    controller: 'ButtonController'
+    controller: 'FormButtonController'
   }
 })
 

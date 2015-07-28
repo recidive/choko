@@ -52,7 +52,7 @@ angular.module('choko')
     };
   }])
 
-.controller('ButtonController', ['$scope', '$controller',
+.controller('FormButtonController', ['$scope', '$controller',
   function ($scope, $controller) {
     // Inherit ElementController.
     $controller('ElementController', {
