@@ -25,8 +25,9 @@ user.init = function(application, callback) {
   application.routers.rest.use(passportSessionMiddleware);
   application.routers.page.use(passportSessionMiddleware);
 
+  var User = application.type('user');
+
   var authCallback = function(username, password, callback) {
-    var User = application.type('user');
     User.login({username: username, password: password}, function (error, user) {
       if (error) {
         return callback(error);
@@ -53,6 +54,28 @@ user.init = function(application, callback) {
     });
   };
 
+  var cleanUser = function (data, callback) {
+    User.load({id: data.id}, function (error, user) {
+      if (error) {
+        return callback(error);
+      }
+      if (!user) {
+        // User and/or password is invalid.
+        return callback(null, false);
+      }
+
+      user.roles = user.roles || [];
+
+      delete user.password;
+      delete user.salt;
+
+      // Add authenticated role.
+      user.roles.push('authenticated');
+
+      callback(null, user);
+    });
+  };
+
   // Set up passport local strategy.
   passport.use(new LocalStrategy(authCallback));
 
@@ -67,7 +90,7 @@ user.init = function(application, callback) {
   });
 
   passport.deserializeUser(function(user, callback) {
-    callback(null, user);
+    cleanUser(user, callback);
   });
 
   // Add access check method to application object.
@@ -122,8 +145,13 @@ user.type = function(types, callback) {
     title: 'User',
     description: 'Application users.',
     storage: 'database',
-    keyProperty: 'username',
+    keyProperty: 'id',
     fields: {
+      id: {
+        title: 'Id',
+        type: 'id',
+        internal: true
+      },
       username: {
         title: 'Username',
         type: 'text',
@@ -175,7 +203,7 @@ user.type = function(types, callback) {
             return callback(null, false);
           }
           // Allow if user is the same as logged in user.
-          callback(null, request.params.user && request.params.user == request.user.username);
+          callback(null, request.params.user && request.params.user == request.user.id);
         });
       },
       'add': 'manage-users',
@@ -194,7 +222,7 @@ user.type = function(types, callback) {
         'heading': [{
           fieldName: 'username',
           format: 'title',
-          link: '/manage/users/edit/[username|item]',
+          link: '/manage/users/edit/[:id|item]',
           weight: 0
         }],
         'text': [{
@@ -216,8 +244,13 @@ user.type = function(types, callback) {
     },
     statics: {
       login: function(data, callback) {
+
         var User = this;
-        this.load(data.username, function(error, account) {
+        var query = {
+          username: data.username
+        };
+
+        this.load(query, function(error, account) {
           if (error) {
             return callback(error);
           }
@@ -389,7 +422,12 @@ user.route = function(routes, callback) {
       }
 
       var User = application.type('user');
-      User.load(data.username, function(error, account) {
+
+      var query = {
+        username: data.username
+      };
+
+      User.load(query, function(error, account) {
         if (error) {
           return callback(error);
         }
@@ -431,28 +469,30 @@ user.route = function(routes, callback) {
     }
   };
 
-  newRoutes['/settings/edit-account-submit/:username'] = {
+  newRoutes['/settings/edit-account-submit/:id'] = {
     access: 'edit-own-account',
     callback: function(request, response, callback) {
       // @todo: figure out how to prevent form controller from sending the
       // username.
-      if (request.user.username != request.params.username) {
+      if (request.user.id != request.params.id) {
         return callback(null, ['Invalid user.'], 400);
       }
 
       var data = request.body;
+      var validateFields = ['username', 'email']
 
       // Delete unwanted data that may lead to security holes.
       delete data.id;
-      delete data.username;
       delete data.password;
       delete data.salt;
       delete data.roles;
 
       var User = application.type('user');
-      User.load(request.user.username, function(error, account) {
+      User.load(request.user.id, function(error, account) {
         utils.extend(account, data);
-        User.validateAndSave(account, function(error, account, errors) {
+        delete account.password;
+
+        User.validateAndSave(account, validateFields, function(error, account, errors) {
           if (error) {
             return callback(error);
           }
@@ -487,7 +527,7 @@ user.route = function(routes, callback) {
       }
 
       var User = application.type('user');
-      User.load(user.username, function(error, account) {
+      User.load(user.id, function(error, account) {
         if (error) {
           return callback(error);
         }
@@ -538,7 +578,7 @@ user.route = function(routes, callback) {
       if (!request.body.username || !request.body.password) {
         return callback(null, ['Please provide an username and a password.'], 400);
       }
-      passport.authenticate('local', function(error, account) {
+      passport.authenticate('local', function(error, account, info) {
         if (error) {
           return callback(error);
         }
@@ -586,7 +626,8 @@ user.role = function(routes, callback) {
     description: 'Anonymous, unauthenticated user.',
     permissions: [
       'create-account',
-      'sign-in'
+      'sign-in',
+      'view-content'
     ]
   };
 
@@ -597,7 +638,8 @@ user.role = function(routes, callback) {
     description: 'Authenticated, signed in user.',
     permissions: [
       'sign-out',
-      'edit-own-account'
+      'edit-own-account',
+      'view-content'
     ]
   };
 

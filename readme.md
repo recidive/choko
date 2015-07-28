@@ -31,11 +31,11 @@
 
 ## Getting started
 
-  To create your first application with Choko, you should create a folder that
-  will be your applications repository, then run Choko on that folder.
+  To create your first application with Choko, you should call the choko
+  command passing a folder name or path that will be your application root
+  folder.
 
-    mkdir applications
-    choko applications
+    choko myApp
 
   Then follow the steps to have access to the installer.
 
@@ -60,7 +60,7 @@
   Now you can start the Choko server by going to the choko main folder and
   running it.
 
-    node server.js
+    node server.js myApp
 
   You can also run it using the choko script like this:
 

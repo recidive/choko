@@ -1,8 +1,0 @@
-{
-  "path": "/manage/layouts/add-layout",
-  "title": "Add layout",
-  "access": "manage-layouts",
-  "type": "form",
-  "formName": "type-layout",
-  "redirect": "/manage/layouts"
-}

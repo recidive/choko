@@ -3,6 +3,7 @@
     <label>
       <input ng-model="data[element.name]" type="checkbox">
       {{element.title}}
+      <p ng-if="element.description" class="help-block">{{element.description}}</p>
     </label>
   </div>
 </div>

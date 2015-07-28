@@ -16,7 +16,7 @@ describe('User extension', function(done) {
   });
 
   it('should authenticate an user with correct credentials', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     var User = application.type('user');
 
     User.validateAndSave(userHelper.sample(), function(error, newAccount) {
@@ -32,7 +32,7 @@ describe('User extension', function(done) {
   });
 
   it('should not create an account via API with a password less then 6 characters long', function(done) {
-    var application = this.getServer().getApplication('localhost');
+    var application = this.getApp('localhost');
     var User = application.type('user');
 
     var user = userHelper.sample();

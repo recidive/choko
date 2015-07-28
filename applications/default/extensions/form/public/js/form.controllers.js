@@ -46,7 +46,7 @@ angular.module('choko')
           $scope.progress = parseInt(100.0 * evt.loaded / evt.total);
         })
         .success(function(data, status, headers, config) {
-          $scope.data[$scope.element.name] = data.data.id;
+          $scope.data[$scope.element.name] = data.id;
         });
       }
     };
@@ -130,7 +130,7 @@ angular.module('choko')
     var multiple = $scope.element.reference.multiple;
 
     // Subform errors are handled separately.
-    $scope.errors = [];
+    $scope.errors = null;
 
     if (multiple) {
       // Initialize items container.
