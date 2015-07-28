@@ -1,5 +1,5 @@
 {
-  "path": "/manage/users/edit/:username",
+  "path": "/manage/users/edit/:id",
   "title": "Edit user",
   "access": "manage-users",
   "type": "form",

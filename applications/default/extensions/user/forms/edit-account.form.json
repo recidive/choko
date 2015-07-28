@@ -3,6 +3,13 @@
   "description": "Edit your account.",
   "elements": [
     {
+      "name": "username",
+      "title": "Username",
+      "type": "text",
+      "required": true,
+      "weight": -15
+    },
+    {
       "name": "email",
       "title": "Email address",
       "type": "email",

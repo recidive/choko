@@ -1,24 +1,24 @@
 #!/usr/bin/env node
 
-var os = require('os');
 var fs = require('fs');
 var path = require('path');
-var util = require('util');
 var program = require('commander');
-var Server = require('../lib/server');
-var mkdirp = require('mkdirp');
+var Application = require('../lib/application');
+var install = require('../lib/install');
 var lodash = require('lodash');
+var colors = require('colors');
+var chokoVersion = require('../package').version;
 
-var APPS_PATH_DEFAULT = 'applications';
-var PORT = process.env.PORT || 3000;
+var DEFAULT_PATH = '.';
+var DEFAULT_PORT = process.env.PORT || 3000;
 
 /**
  * Returns the normalized path where all the apps reside.
  */
-var appsPath = function (destination) {
+function appPath(destination) {
   // Default destination.
   if (!lodash.isString(destination)) {
-    destination = APPS_PATH_DEFAULT;
+    destination = DEFAULT_PATH;
   }
   return path.normalize(destination);
 }
@@ -26,119 +26,81 @@ var appsPath = function (destination) {
 /**
  * Append in a path the applications.json file.
  */
-var appsSettingsPath = function (dir) {
-  return path.join(dir, 'applications.json');
+function appSettingsPath(dir) {
+  return path.join(dir, 'settings.json');
 }
 
 /**
- * Starts the applications in the specified destination path.
+ * Starts the application in the specified destination path.
  */
-var start = function(destination, prg, callback) {
-  var dir = appsPath(destination);
+function start(destination, prg) {
+  var dir = appPath(destination);
 
   if (!isInstalled(dir)) {
-    return install(dir, prg);
+
+    // No destination is defined, so "applications" dir should be default.
+    var dirMode = DEFAULT_PATH;
+    if (destination != null) {
+      dirMode = 'specified';
+    }
+
+    console.log(getLogo().green);
+
+    return program.confirm('No application found on ' + dirMode + ' folder.\n:: Create a new application on "' + path.resolve(dir) + '" ? ', function(ok) {
+      if (!ok) {
+        return process.stdin.destroy();
+      }
+
+      install(dir, prg);
+    });
   }
 
-  var server = new Server(dir);
-  server.start(prg.port, function () {
-    if (lodash.isFunction(callback)) {
-      callback(dir);
-    }
-  });
-};
+  var app = new Application(dir);
+  app.start(prg.port);
+}
 
 /**
  * Define if Choko is installed.
  */
-var isInstalled = function(dir) {
+function isInstalled(dir) {
   // Running from the "applications" directory.
-  if (dir == null && fs.existsSync(appsSettingsPath(appsPath()))) {
+  if (dir == null && fs.existsSync(appSettingsPath(appPath()))) {
     return true;
   }
 
   // Specified directory.
-  return fs.existsSync(appsSettingsPath(dir));
+  return fs.existsSync(appSettingsPath(dir));
 }
 
 /**
- * Prepare a structure of directories and files, to run the installer.
+ * Get Choko logo ASCII Art.
  */
-var install = function(destination, prg, callback) {
-  var dir = appsPath(destination);
-
-  if (isInstalled(dir)) {
-    return process.stdin.destroy();
-  }
-
-  // No destination is defined, so "applications" dir should be default.
-  var dirMode = APPS_PATH_DEFAULT;
-  if (destination != null) {
-    dirMode = 'specified';
-  }
-
-  program.confirm('No applications found on ' + dirMode + ' folder, create an application repository on the "' + dir + '" path? ', function(ok) {
-    if (!ok) {
-      return process.stdin.destroy();
-    }
-
-    // Create "applications" directory if not exist.
-    if (!fs.existsSync(dir)) {
-      mkdirp.sync(dir);
-    }
-
-    var hostname = os.hostname();
-    program.prompt("What should be the initial domain for your application? [" + hostname + "] ", function(domain) {
-      var domain = domain || hostname;
-
-      var initialApps = {};
-      initialApps[domain] = domain;
-
-      fs.writeFileSync(appsSettingsPath(dir), JSON.stringify(initialApps, null, '  '), {flag: 'w'});
-
-      var appDir = path.join(dir, domain);
-      fs.mkdirSync(appDir);
-      fs.mkdirSync(path.join(appDir, '/public'));
-      fs.mkdirSync(path.join(appDir, '/extensions'));
-
-      var initialSettings = {
-        application: {
-          name: domain
-        },
-        extensions: {}
-      };
-      fs.writeFileSync(path.join(appDir, '/settings.json'), JSON.stringify(initialSettings, null, '  '), {flag: 'w'});
-
-      start(dir, prg, function(dir) {
-        util.log('Navigate to http://' + domain + ':' + prg.port + '/#/install' + ' to create your first application.');
-      });
-    });
-  });
-};
+function getLogo() {
+  return fs.readFileSync(path.resolve(__dirname + '/../lib/logo.txt'), 'utf-8');
+}
 
 program
   .command('*')
-  .version('0.0.4')
+  .version(chokoVersion)
   .usage('[options] [dir]')
-  .option('-p, --port <number>', 'start server at specified port', parseInt, PORT)
+  .option('-p, --port <number>', 'start application at specified port', parseInt, DEFAULT_PORT)
   .action(function () {
     var args = Array.prototype.slice.call(arguments);
     if (!lodash.isString(args[0])) {
-      args.unshift(APPS_PATH_DEFAULT);
+      args.unshift(DEFAULT_PATH);
     }
     start.apply(this, args);
   });
 
-
 program
   .command('start')
-  .description('Run the Choko server.')
   .usage('[options] [dir]')
-  .option('-p, --port <number>', 'start server at specified port', parseInt, PORT)
+  .description('Start a Choko application.')
+  .option('-p, --port <number>', 'start application at specified port', parseInt, DEFAULT_PORT)
   .action(function () {
     var args = Array.prototype.slice.call(arguments);
     if (!lodash.isString(args[0])) {
-      args.unshift(APPS_PATH_DEFAULT);
+      args.unshift(DEFAULT_PATH);
     }
     start.apply(this, args);
   });

@@ -5,6 +5,7 @@ module.exports = function(application) {
   return function(request, response, callback) {
     // Initialize payload object.
     response.payload = {
+      version: application.version,
       contexts: []
     };
 

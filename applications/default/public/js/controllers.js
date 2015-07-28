@@ -16,48 +16,48 @@ angular.module('choko')
 
         $http.get(path)
         .success(function(data, status, headers, config) {
-          if (data.data.redirect) {
+          if (data.redirect) {
             // Server returned a redirect.
-            return $location.path(data.data.redirect);
+            return $location.path(data.redirect);
           }
 
           // If contexts didn't change we just need to update main page content.
-          if ($rootScope.contexts instanceof Array && angular.equals($rootScope.contexts, data.data.contexts)) {
+          if ($rootScope.contexts instanceof Array && angular.equals($rootScope.contexts, data.contexts)) {
             // Update only panels in content region, and page information.
             // @todo: get the region the page-content panel is attached to
             // dinamically currently this is hadcoded to 'content' and will not work
             // if the page-content panel is attacehd to a different region.
-            $rootScope.panels['content'] = data.data.panels['content'];
+            $rootScope.panels['content'] = data.panels['content'];
 
             // Set page data.
-            $rootScope.page = data.data.page;
+            $rootScope.page = data.page;
           }
           else {
             // We only set everything on scope if it's the first page being
             // loaded or if the theme or the layout has changed, to avoid some
             // glitches.
             var needsRebuild = !('page' in $rootScope) ||
-              ('theme' in $rootScope && $rootScope.theme.name != data.data.theme.name) ||
-              ('layout' in $rootScope && $rootScope.layout.name != data.data.layout.name);
+              ('theme' in $rootScope && $rootScope.theme.name != data.theme.name) ||
+              ('layout' in $rootScope && $rootScope.layout.name != data.layout.name);
 
             if (needsRebuild) {
               // Merge all data from the server.
-              angular.extend($rootScope, data.data);
+              angular.extend($rootScope, data);
             }
             else {
               // Selectivelly merge data from the server.
-              Object.keys(data.data).forEach(function(propName) {
+              Object.keys(data).forEach(function(propName) {
                 if (['theme', 'layout', 'panels'].indexOf(propName) === -1) {
-                  $rootScope[propName] = data.data[propName];
+                  $rootScope[propName] = data[propName];
                 }
               });
 
               // Selectivelly add/remove panels.
-              if ('panels' in data.data) {
+              if ('panels' in data) {
                 // Merge existing regions.
                 Object.keys($rootScope.panels).forEach(function(regionName) {
-                  if (regionName in data.data.panels) {
-                    $rootScope.mergePanels($rootScope.panels[regionName], data.data.panels[regionName]);
+                  if (regionName in data.panels) {
+                    $rootScope.mergePanels($rootScope.panels[regionName], data.panels[regionName]);
                   }
                   else {
                     // Remove region.
@@ -66,13 +66,13 @@ angular.module('choko')
                 });
 
                 // Add new regions.
-                Object.keys(data.data.panels).forEach(function(regionName) {
+                Object.keys(data.panels).forEach(function(regionName) {
                   // Also update panels in content region, and page information.
                   // @todo: get the region the page-content panel is attached to
                   // dinamically currently this is hadcoded to 'content' and will not work
                   // if the page-content panel is attacehd to a different region.
                   if (!(regionName in $rootScope.panels) || regionName == 'content') {
-                    $rootScope.panels[regionName] = data.data.panels[regionName];
+                    $rootScope.panels[regionName] = data.panels[regionName];
                   }
                 });
               }
@@ -82,7 +82,7 @@ angular.module('choko')
         .error(function(data, status, headers, config) {
           // Merge data from the server.
           $rootScope.page = $rootScope.page || {};
-          angular.extend($rootScope.page, data.data);
+          angular.extend($rootScope.page, data);
 
           $rootScope.page.template = '/templates/error.html';
         });
@@ -213,8 +213,8 @@ angular.module('choko')
           // Error.
           if ($scope.page) {
             // If it's a page, show error, otherwise fail silently.
-            $scope.data = response.data;
-            $scope.view.title = response.data.title;
+            $scope.data = response;
+            $scope.view.title = response.title;
             $scope.view.template = '/templates/error.html';
           }
         });
@@ -260,7 +260,7 @@ angular.module('choko')
 
           $http.post(url, $scope.data)
             .success(function(data, status, headers, config) {
-              $scope.data = data.data;
+              $scope.data = data;
 
               delete $scope.errors;
 
@@ -275,7 +275,7 @@ angular.module('choko')
             })
             .error(function(data, status, headers, config) {
               $scope.status = status;
-              $scope.errors = data.data;
+              $scope.errors = data;
             });
         };
       }
