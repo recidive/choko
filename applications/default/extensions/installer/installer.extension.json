@@ -1,5 +1,0 @@
-{
-  "title": "Installer",
-  "description": "Install a Choko application.",
-  "dependencies": ["page"]
-}

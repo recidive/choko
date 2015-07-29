@@ -1,8 +1,0 @@
-{
-  "path": "/install",
-  "title": "Install Choko",
-  "description": "Create your first Choko application.",
-  "type": "form",
-  "formName": "install",
-  "redirect": "/"
-}

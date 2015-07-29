@@ -1,6 +1,10 @@
 'use strict';
 
-angular.module('choko.controllers')
+/**
+ * @file Page extension controllers.
+ */
+
+angular.module('choko')
 
 .controller('PageController', ['$scope', '$controller',
   function ($scope, $controller) {

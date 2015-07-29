@@ -1,7 +1,7 @@
 {
   "title": "Default",
   "description": "Basic Bootstrap.",
-  "thumbnail": "/bootswatch/default/thumbnail.png",
+  "thumbnail": "/lib/bootswatch/default/thumbnail.png",
   "styles": [
     "/lib/bootstrap/dist/css/bootstrap.min.css",
     "/lib/font-awesome/css/font-awesome.min.css"

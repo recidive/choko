@@ -72,6 +72,13 @@ rest.route = function(routes, callback) {
           });
         }
         if (request.method == 'POST') {
+          // Remove key property if it's an internal to prevent updating.
+          // Otherwise it will get caught on validation if there's an item with
+          // same key, since all keyProperties should be unique.
+          if (type.keyProperty in request.body && type.fields[type.keyProperty].internal) {
+            delete request.body[type.keyProperty];
+          }
+
           return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
         }
         callback();
@@ -95,15 +102,28 @@ rest.route = function(routes, callback) {
           return typeModel.load(request.params[paramName], callback);
         }
         if (request.method == 'PUT') {
+          // Force key to avoid updating the wrong item if another key is passed
+          // in request body.
+          request.body[type.keyProperty] = request.params[paramName];
           return typeModel.validateAndSave(request.body, validationResponseCallback(callback));
         }
         if (request.method == 'POST' || request.method == 'PATCH') {
-          return typeModel.load(request.params[paramName], function(err, item) {
-            if (item) {
-              utils.extend(item, request.body);
-              request.body = item;
+          return typeModel.load(request.params[paramName], function(error, item) {
+            if (error) {
+              return callback(error);
             }
-            typeModel.validateAndSave(request.body, validationResponseCallback(callback));
+
+            if (!item) {
+              return callback(null, 'Item not found.', 404);
+            }
+
+            utils.extend(item, request.body);
+
+            // Force key to avoid updating the wrong item if another key is
+            // passed in request body.
+            item[type.keyProperty] = request.params[paramName];
+
+            typeModel.validateAndSave(item, validationResponseCallback(callback));
           });
         }
         if (request.method == 'DELETE') {
@@ -124,7 +144,8 @@ rest.route = function(routes, callback) {
       router: 'rest'
     };
     next();
-  }, function(err) {
+  },
+  function(error) {
     callback(null, newRoutes);
   });
 };

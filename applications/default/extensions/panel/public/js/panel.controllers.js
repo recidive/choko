@@ -1,6 +1,10 @@
 'use strict';
 
-angular.module('choko.controllers')
+/**
+ * @file Panel extension controllers.
+ */
+
+angular.module('choko')
 
 .controller('PanelController', ['$scope', '$controller',
   function ($scope, $controller) {

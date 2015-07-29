@@ -1,6 +1,10 @@
 'use strict';
 
-angular.module('choko.directives')
+/**
+ * @file Form extension directives.
+ */
+
+angular.module('choko')
 
 .directive('ckForm', function() {
   return {
@@ -25,11 +29,11 @@ angular.module('choko.directives')
   }
 })
 
-.directive('ckButton', function() {
+.directive('ckFormButton', function() {
   return {
     restrict: 'A',
     require: ['^ckForm'],
-    controller: 'ButtonController'
+    controller: 'FormButtonController'
   }
 })
 

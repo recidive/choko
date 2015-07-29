@@ -1,6 +1,10 @@
 'use strict';
 
-angular.module('choko.controllers')
+/**
+ * @file Form extension controllers.
+ */
+
+angular.module('choko')
 
 .controller('FormController', ['$scope',
   function ($scope) {
@@ -24,7 +28,12 @@ angular.module('choko.controllers')
 
     // Initialize files container.
     // @todo support multiple files.
-    $scope.data[$scope.element.name] = $scope.data[$scope.element.name] || null;
+    if ($scope.data[$scope.element.name] && $scope.data[$scope.element.name] instanceof Object) {
+      $scope.data[$scope.element.name] =  $scope.data[$scope.element.name].id;
+    }
+    else {
+      $scope.data[$scope.element.name] =  null;
+    }
 
     $scope.onFileSelect = function($files) {
       for (var i = 0; i < $files.length; i++) {
@@ -37,13 +46,13 @@ angular.module('choko.controllers')
           $scope.progress = parseInt(100.0 * evt.loaded / evt.total);
         })
         .success(function(data, status, headers, config) {
-          $scope.data[$scope.element.name] = data.data.id;
+          $scope.data[$scope.element.name] = data.id;
         });
       }
     };
   }])
 
-.controller('ButtonController', ['$scope', '$controller',
+.controller('FormButtonController', ['$scope', '$controller',
   function ($scope, $controller) {
     // Inherit ElementController.
     $controller('ElementController', {
@@ -80,10 +89,12 @@ angular.module('choko.controllers')
       type: $scope.element.reference.type
     };
 
+    // Add element defined query.
     if ($scope.element.reference.query) {
       angular.extend(query, $scope.element.reference.query);
     }
 
+    // Get reference items to make a options list.
     Choko.get(query, function(response) {
       $scope.element.options = response;
 
@@ -119,7 +130,7 @@ angular.module('choko.controllers')
     var multiple = $scope.element.reference.multiple;
 
     // Subform errors are handled separately.
-    $scope.errors = [];
+    $scope.errors = null;
 
     if (multiple) {
       // Initialize items container.

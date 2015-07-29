@@ -1,6 +1,10 @@
 'use strict';
 
-angular.module('choko.controllers')
+/**
+ * @file Layout extension controllers.
+ */
+
+angular.module('choko')
 
 .controller('RowController', ['$scope',
   function ($scope) {

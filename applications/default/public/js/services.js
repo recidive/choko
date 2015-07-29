@@ -1,11 +1,13 @@
 'use strict';
 
-/* Services */
-angular.module('choko.services', [])
-  // Single value service for Choko version.
-  .value('version', '0.0.1')
+/**
+ * @file Choko core services.
+ */
 
-  .factory('Choko', function($resource) {
+angular.module('choko')
+
+
+  .factory('Choko', ['$resource', function($resource) {
     return $resource('/rest/:type/:key', {
       type: '@type',
       key: '@key'
@@ -13,17 +15,14 @@ angular.module('choko.services', [])
     {
       'get': {
         method: 'GET',
-        transformResponse: function (data) {
-          return angular.fromJson(data).data;
-        },
         // Data is an Object, not an Array.
         isArray: false
       }
     });
-  })
+  }])
 
   // Shared server with application state.
-  .factory('applicationState', function($rootScope) {
+  .factory('applicationState', ['$rootScope', function($rootScope) {
     var state = {};
     return {
       get: function() {
@@ -33,7 +32,21 @@ angular.module('choko.services', [])
         return state = newState;
       },
     };
-  })
+  }])
+
+  // Token strings contain embedded parameters that can be replaced.
+  .factory('Token', ['Params', function(Params) {
+    var pattern = /\[(.*?)\]/g;
+
+    return {
+      replace: function(params, scope) {
+        var replaced = params.replace(pattern, function(match, subMatch) {
+          return Params.parse(subMatch, scope);
+        });
+        return replaced;
+      }
+    };
+  }])
 
   // Parameter Parser service that can be extend by extensions.
   .provider('Params', function () {

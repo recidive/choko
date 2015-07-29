@@ -1,6 +1,5 @@
 var path = require('path');
 var fs = require('fs');
-var validator = require('validator/lib/validators');
 var utils = require('prana').utils;
 
 var file = module.exports = {};
@@ -68,53 +67,108 @@ file.field = function(fields, callback) {
   var newFields = {};
   var self = this;
 
+  function moveTemporaryFile(settings, fileId, file, next) {
+    // @todo: move the file without reading it to memory for performance and
+    // to avoid memory leaks.
+
+    fs.readFile(file.path, function(error, data) {
+      if (error) {
+        return next(error);
+      }
+
+      // Create a new filename based on file ID and file extension.
+      var fileName = fileId + path.extname(file.path);
+
+      // Create a path for file based on field name and the new filename.
+      var filePath = path.join(application.settings.applicationDir, 'public/files', settings.name, fileName);
+
+      self.createPathAndSave(filePath, data, function(error) {
+        if (error) {
+          return next(error);
+        }
+
+        file.path = path.join(settings.name, fileName);
+        file.temporary = false;
+        file.save(next);
+      });
+    });
+  };
+
   newFields['file'] = {
     title: 'File',
-    schema: 'string',
+    schema: function(settings) {
+      var schema = {};
+
+      if (settings.multiple) {
+        schema.collection = 'file';
+      }
+      else {
+        schema.model = 'file';
+      }
+
+      return schema;
+    },
     element: 'file',
     validate: function(settings, item, next) {
       var fileId = item[settings.name];
+
+      if(!fileId && !settings.required) {
+        return next(null, true);
+      }
+
+      if (settings.required && !fileId) {
+        return next(null, 'is required');
+      }
+
       application.load('file', fileId, function(error, file) {
         if (error) {
           return next(error);
         }
-        if (file && file.temporary) {
-          return next(null, true);
+
+        if (!file) {
+          return next(null, 'Error uploading the file');
         }
-        next(null, 'Invalid file identifier.');
+
+        return next(null, true);
       });
+    },
+    find: function(settings, query, next) {
+      query.populate(settings.name);
+      next();
     },
     beforeCreate: function(settings, item, next) {
       var fileId = item[settings.name];
 
+      if (!fileId) {
+        return next(null);
+      };
+
       application.load('file', fileId, function(error, file) {
         if (error) {
           return next(error);
         }
 
-        // @todo: move the file without reading it to memory for performance and
-        // to avoid memory leaks.
-        fs.readFile(file.path, function(error, data) {
-          if (error) {
-            return next(error);
-          }
+        moveTemporaryFile(settings, fileId, file, next);
+      });
+    },
+    beforeUpdate: function(settings, item, next) {
+      var fileId = item[settings.name];
 
-          // Create a new filename based on file ID and file extension.
-          var fileName = fileId + path.extname(file.path);
+      if (!fileId) {
+        return next(null);
+      };
 
-          // Create a path for file based on field name and the new filename.
-          var filePath = path.join(application.settings.applicationDir, 'public/files', settings.name, fileName);
+      application.load('file', fileId, function(error, file) {
+        if (error) {
+          return next(error);
+        }
 
-          self.createPathAndSave(filePath, data, function(error) {
-            if (error) {
-              return next(error);
-            }
+        // Verify if the file was updated.
+        if (!file.temporary) {
+          return next(null);
+        }
 
-            file.path = path.join(settings.name, fileName);
-            file.temporary = false;
-            file.save(next);
-          });
-        });
+        moveTemporaryFile(settings, fileId, file, next);
       });
     }
   };
@@ -134,8 +188,7 @@ file.route = function(routes, callback) {
     callback: function(request, response, callback) {
       var requestFile = request.files.file;
 
-      var File = application.type('file');
-      File.validateAndSave({
+      application.type('file').save({
         filename: requestFile.originalname,
         filetype: requestFile.mimetype,
         size: parseInt(requestFile.size),

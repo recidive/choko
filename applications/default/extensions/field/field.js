@@ -1,5 +1,5 @@
 var async = require('async');
-var validator = require('validator/lib/validators');
+var validator = require('validator');
 var uuid = require('node-uuid');
 var utils = require('prana').utils;
 
@@ -10,6 +10,7 @@ var field = module.exports = {};
  */
 field.field = function(fields, callback) {
   var newFields = {};
+  var application = this.application;
 
   newFields['id'] = {
     title: 'Identifier',
@@ -29,6 +30,13 @@ field.field = function(fields, callback) {
   newFields['text'] = {
     title: 'Text',
     schema: function(settings) {
+      // If options and multiple is set, schema should be a array.
+      if (settings.options && settings.multiple) {
+        return {
+          type: 'array'
+        };
+      }
+
       var schema = {
         type: (settings.maxLength > 256) ? 'text' : 'string'
       };
@@ -42,15 +50,22 @@ field.field = function(fields, callback) {
 
       return schema;
     },
-    element: 'text',
+    element: function(fieldSettings) {
+      return  {
+        // If options is set, use a select element instead of text one.
+        type: 'options' in fieldSettings ? 'select' : 'text'
+      };
+    },
     validate: function(settings, item, next) {
+      // @todo: validate if value is within options when it's a select field.
+
       // Default minLenght to 1.
       settings.minLength = settings.minLength || 1;
 
       // Default maxLenght to 256.
       settings.maxLength = settings.maxLength || 256;
 
-      next(null, !validator.notEmpty(item[settings.name]) || validator.len(item[settings.name].toString(), settings.minLength, settings.maxLength) || 'Value must have from ' + settings.minLength + ' to ' + settings.maxLength + ' characters.');
+      next(null, validator.isLength(item[settings.name].toString(), settings.minLength, settings.maxLength) || 'must have from ' + settings.minLength + ' to ' + settings.maxLength + ' characters.');
     }
   };
 
@@ -72,7 +87,7 @@ field.field = function(fields, callback) {
     },
     element: 'number',
     validate: function(settings, item, next) {
-      next(null, validator.isNumeric(item[settings.name].toString()) || 'Invalid number.');
+      next(null, validator.isNumeric(item[settings.name].toString()) || 'must be a valid number.');
     }
   };
 
@@ -81,7 +96,7 @@ field.field = function(fields, callback) {
     schema: 'date',
     element: 'date',
     validate: function(settings, item, next) {
-      next(null, validator.isDate(item[settings.name].toString()) || 'Invalid date.');
+      next(null, validator.isDate(item[settings.name].toString()) || 'must be a valid date.');
     }
   };
 
@@ -90,7 +105,7 @@ field.field = function(fields, callback) {
     schema: 'datetime',
     element: 'datetime',
     validate: function(settings, item, next) {
-      next(null, validator.isDate(item[settings.name].toString()) || 'Invalid date/time.');
+      next(null, validator.isDate(item[settings.name].toString()) || 'must be a valid date/time.');
     }
   };
 
@@ -104,14 +119,13 @@ field.field = function(fields, callback) {
   newFields['email'] = {
     title: 'Email',
     schema: {
-      type: 'string',
-      email: true
+      type: 'string'
     },
     element: 'email',
     validate: function(settings, item, next) {
       // Email validator oddly returns the email itself, so need to convert to
       // boolean.
-      next(null, new Boolean(validator.isEmail(item[settings.name].toString())) || 'Invalid email.');
+      next(null, validator.isEmail(item[settings.name].toString()) || 'must be a valid email.');
     }
   };
 
@@ -123,7 +137,7 @@ field.field = function(fields, callback) {
     },
     element: 'url',
     validate: function(settings, item, next) {
-      next(null, validator.isUrl(item[settings.name].toString()) || 'Invalid URL.');
+      next(null, validator.isURL(item[settings.name].toString()) || 'must be a valid URL.');
     }
   };
 
@@ -141,7 +155,66 @@ field.field = function(fields, callback) {
     element: 'password',
     validate: function(settings, item, next) {
       var minLength = settings.minLength || 6;
-      next(null, validator.len(item[settings.name].toString(), settings.minLength || 6) || 'Password must have at least ' + minLength + ' characters.');
+      next(null, validator.isLength(item[settings.name].toString(), settings.minLength || 6) || 'must have at least ' + minLength + ' characters.');
+    }
+  };
+
+  newFields['reference'] = {
+    title: 'Reference',
+    schema: function(settings) {
+      var schema = {
+        type: settings.multiple ? 'array' : 'json'
+      };
+
+      return schema;
+    },
+    element: 'reference',
+    validate: function(settings, item, next) {
+      if (!settings.reference.inline) {
+        return next(null, true);
+      }
+
+      // Validate inline referenced items.
+      var typeModel = application.type(settings.reference.type);
+      var typeSettings = typeModel.type;
+
+      if ('standalone' in typeSettings && typeSettings.standalone !== false) {
+        // Only standalone types will be referenced as full objects.
+        return next(null, true);
+      }
+
+      // Validate multiple items.
+      if (settings.reference.multiple && item[settings.name] instanceof Array) {
+        // Validate multiple items.
+        var referencedItems = item[settings.name];
+        var errors = []
+        return async.each(referencedItems, function(referencedItem, next) {
+          typeModel._validate(referencedItem, function(error, itemErrors) {
+            if (error) {
+              return next(error);
+            }
+            if (itemErrors.length > 0) {
+              errors = errors.concat(itemErrors);
+            }
+            next();
+          }, settings.reference);
+        },
+        function(error) {
+          if (error) {
+            return next(error);
+          }
+          next(null, errors);
+        });
+      }
+
+      // Validate single item.
+      if (!settings.reference.multiple && typeof item[settings.name] === 'object') {
+        return typeModel._validate(item[settings.name], next, settings.reference);
+      }
+
+      // If we reach here, field value is not an array, or not an object, which
+      // means it's an invalid value for an inline reference field.
+      next(null, 'Invalid value supplied for field ' + settings.name);
     }
   };
 
@@ -210,3 +283,17 @@ field.fieldCallback = function(hook) {
     field[hook] = field.fieldCallback(hook);
   });
 });
+
+/**
+ * The find() hook;
+ *
+ * Allow fields to alter queries being executed.
+ */
+field.find = field.fieldCallback('find');
+
+/**
+ * The list() hook;
+ *
+ * Allow fields to alter data being listed.
+ */
+field.list = field.fieldCallback('list');
