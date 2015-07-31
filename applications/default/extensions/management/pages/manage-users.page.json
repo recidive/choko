@@ -1,8 +1,0 @@
-{
-  "path": "/manage/users",
-  "description": "Manage users and permissions.",
-  "access": "manage-users",
-  "type": "list",
-  "itemType": "user",
-  "template": "templates/user-list.html"
-}

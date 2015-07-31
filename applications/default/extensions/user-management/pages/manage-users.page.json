@@ -1,0 +1,9 @@
+{
+  "path": "/manage/users",
+  "description": "Manage users and permissions.",
+  "access": "manage-users",
+  "type": "list",
+  "itemType": "user",
+  "listStyle": "list-group",
+  "itemDisplay": "list-group-item"
+}

@@ -1,9 +1,9 @@
 {
   "title": "Simplex",
   "description": "Mini and minimalist.",
-  "thumbnail": "/bootswatch/simplex/thumbnail.png",
+  "thumbnail": "/lib/bootswatch/simplex/thumbnail.png",
   "styles": [
-    "/bootswatch/simplex/bootstrap.min.css",
+    "/lib/bootswatch/simplex/bootstrap.min.css",
     "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }

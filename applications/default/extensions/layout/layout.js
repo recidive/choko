@@ -50,6 +50,20 @@ layout.type = function(types, callback) {
       'add': 'manage-layouts',
       'edit': 'manage-layouts',
       'delete': 'manage-layouts'
+    },
+    displays: {
+      'list-group-item': {
+        'heading': [{
+          fieldName: 'title',
+          format: 'title',
+          weight: 0
+        }],
+        'text': [{
+          fieldName: 'description',
+          format: 'paragraph',
+          weight: 5
+        }]
+      }
     }
   };
 

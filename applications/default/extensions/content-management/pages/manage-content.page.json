@@ -1,0 +1,10 @@
+{
+  "path": "/manage/content",
+  "title": "Content",
+  "description": "Manage application content.",
+  "access": "manage-content",
+  "type": "list",
+  "itemType": "content",
+  "listStyle": "list-group",
+  "itemDisplay": "list-group-item"
+}

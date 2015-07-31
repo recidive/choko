@@ -1,9 +1,9 @@
 {
   "title": "Slate",
   "description": "Shades of gunmetal gray.",
-  "thumbnail": "/bootswatch/slate/thumbnail.png",
+  "thumbnail": "/lib/bootswatch/slate/thumbnail.png",
   "styles": [
-    "/bootswatch/slate/bootstrap.min.css",
+    "/lib/bootswatch/slate/bootstrap.min.css",
     "/lib/font-awesome/css/font-awesome.min.css"
   ]
 }

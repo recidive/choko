@@ -1,4 +1,4 @@
-var express = require('express');
+var expressSession = require('express-session');
 var ChokoStore = require('./lib/choko-store');
 var flash = require('connect-flash');
 
@@ -8,14 +8,20 @@ var session = module.exports;
  * The init() hook.
  */
 session.init = function(application, callback) {
-
-  application.application.use(express.session({
+  // Enable session on rest and page routers.
+  var sessionMiddleware = expressSession({
     store: new ChokoStore(application),
-    secret: application.settings.sessionSecret
-  }));
+    secret: application.settings.sessionSecret,
+    resave: true,
+    saveUninitialized: true
+  });
+  application.routers.rest.use(sessionMiddleware);
+  application.routers.page.use(sessionMiddleware);
 
   // Enable flash messages.
-  application.application.use(flash());
+  var flashMiddleware = flash();
+  application.routers.rest.use(flashMiddleware);
+  application.routers.page.use(flashMiddleware);
 
   // Call init() callback.
   callback();
@@ -48,6 +54,7 @@ session.type = function(types, callback) {
         title: 'Data',
         // @todo: change to appropriate serialized/mixed field.
         type: 'text',
+        maxLenght: 2048,
         required: true
       }
     }

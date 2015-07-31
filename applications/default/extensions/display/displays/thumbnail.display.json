@@ -1,0 +1,5 @@
+{
+  "title": "Thumbnail",
+  "Description": "Thumbnail display.",
+  "regions": ["image", "caption"]
+}

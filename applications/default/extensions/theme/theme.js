@@ -13,12 +13,51 @@ theme.type = function(types, callback) {
   newTypes['theme'] = {
     title: 'Theme',
     description: 'Themes change application look & feel.',
+    fields: {
+      name: {
+        title: 'Name',
+        type: 'text',
+        required: true
+      },
+      title: {
+        title: 'Title',
+        type: 'text',
+        required: true
+      },
+      description: {
+        title: 'Title',
+        type: 'text'
+      },
+      thumbnail: {
+        title: 'Thumbnail',
+        type: 'text'
+      }
+    },
     access: {
       'list': 'manage-themes',
       'load': 'manage-themes',
       'add': 'manage-themes',
       'edit': 'manage-themes',
       'delete': 'manage-themes'
+    },
+    displays: {
+      'thumbnail': {
+        'image': [{
+          fieldName: 'thumbnail',
+          format: 'image',
+          weight: 0
+        }],
+        'caption': [{
+          fieldName: 'title',
+          format: 'title',
+          weight: 0
+        },
+        {
+          fieldName: 'description',
+          format: 'paragraph',
+          weight: 5
+        }]
+      }
     }
   };
 
@@ -34,7 +73,7 @@ theme.contextReactionType = function(reactionTypes, callback) {
 
   newReactionTypes['theme'] = {
     title: 'Set theme',
-    description: 'Chage application look & feel.',
+    description: 'Change application look & feel.',
     standalone: false,
     fields: {
       theme: {

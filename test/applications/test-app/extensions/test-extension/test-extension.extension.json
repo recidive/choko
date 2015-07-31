@@ -1,0 +1,5 @@
+{
+  "title": "Test extension",
+  "description": "Extension for tests purposes.",
+  "dependencies": ["user"]
+}

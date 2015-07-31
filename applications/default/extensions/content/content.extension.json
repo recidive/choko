@@ -1,0 +1,5 @@
+{
+  "title": "Content",
+  "description": "Content management features.",
+  "dependencies": ["page"]
+}

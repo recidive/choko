@@ -8,64 +8,60 @@ var route = module.exports;
 route.init = function(application, callback) {
   var self = this;
 
-  // Load all pages and routes.
-  var Page = this.application.type('page');
-  var Route = this.application.type('route');
-  Page.list({}, function(err, pages) {
-    if (err) {
-      return callback(err);
+  // Load and process all routes.
+  this.application.collect('route', function(error, routes) {
+    if (error) {
+      return callback(error);
     }
 
-    Route.list({}, function(err, routes) {
-      if (err) {
-        return callback(err);
-      }
-      // Initialize the router middleware.
-      self.application.application.use(self.application.application.router);
+    // Process all routes.
+    self.processRoutes(routes);
+    application.routes = routes;
 
-      // The last middleware is the one that catches 404 errors.
-      self.application.application.use(function(req, res, next){
-        RouteController.notFound.call(self, req, res);
-      });
-
-      callback();
+    // The last middleware is the one that catches 404 errors.
+    application.application.use(function(request, response, next) {
+      RouteController.notFound(request, response);
     });
+
+    callback();
   });
 };
 
 /**
- * The type() hook.
+ * Process an array of routes.
  */
-route.type = function(types, callback) {
-  var self = this;
-  var newTypes = {};
+route.processRoutes = function(routes) {
+  for (var path in routes) {
+    this.processRoute(path, routes[path]);
+  }
+};
 
-  newTypes['route'] = {
-    title: 'Route',
-    description: 'A route tells how to respond to requests.',
-    process: function(path, settings) {
-      // Routes can be objects, strings or functions.
-      if (typeof settings === 'object') {
-        settings.path = path;
-      }
-      else if (typeof settings === 'function') {
-        settings = {
-          path: path,
-          callback: routeInfo,
-          access: true
-        };
-      }
-      else {
-        settings = {
-          path: path,
-          content: routeInfo,
-          access: true
-        };
-      }
+/**
+ * Process a single route.
+ */
+route.processRoute = function(path, route) {
+  // Normalize route settings. Routes can be objects, strings or functions.
+  if (typeof route === 'object') {
+    route.path = path;
+  }
+  else if (typeof route === 'function') {
+    route = {
+      path: path,
+      callback: routeInfo,
+      access: true
+    };
+  }
+  else {
+    route = {
+      path: path,
+      content: routeInfo,
+      access: true
+    };
+  }
 
-      return new RouteController(self.application, settings);
-    }
-  };
+  // Set default router to 'page'.
+  route.router = route.router || 'page';
 
-  callback(null, newTypes);
+  // Create route controller instance.
+  route.controller = new RouteController(this.application, route);
 };
