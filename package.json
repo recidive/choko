@@ -27,7 +27,7 @@
     "node-uuid": "1.4.x",
     "passport": "0.1.x",
     "passport-anonymous": "1.0.x",
-    "cors": "^2.4.1",
+    "cors": "2.4.1",
     "passport-http": "0.2.x",
     "passport-local": "0.1.x",
     "path-to-regexp": "0.1.x",
