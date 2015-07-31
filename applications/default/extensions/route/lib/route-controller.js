@@ -21,12 +21,24 @@ var RouteController = module.exports = function(application, settings) {
   this.application = application;
   this.settings = settings;
 
-  var self = this;
-  var app = this.application.application;
+  // Prepare route register params.
+  var params = [this.settings.path];
 
-  app.all(self.settings.path, function(request, response) {
+  // Prepare the middleware, if available.
+  if ('middleware' in this.settings) {
+    params.push(this.settings.middleware);
+  }
+
+  // Prepare the route handler.
+  var self = this;
+  params.push(function(request, response) {
     self.handle(request, response);
   });
+
+  // Register route on the appropriate router.
+  var router = this.application.routers[this.settings.router];
+  var method = this.settings.method || 'all';
+  router[method].apply(router, params);
 };
 
 /**
@@ -69,6 +81,9 @@ RouteController.prototype.handle = function(request, response) {
         RouteController.respond(request, response, content, code, responseDecorator);
       });
     }
+
+    // If there's no content nor a callback, return 404 error.
+    RouteController.notFound(request, response);
   });
 };
 
@@ -114,10 +129,13 @@ RouteController.prototype.access = function(request, response, callback) {
 RouteController.respond = function(request, response, content, code, decorator) {
   // Default to 200 (success).
   var code = code || 200;
+
+  // Create a payload envelope to pass to the decorator function.
   var payload = {
     status: {
       code: code
-    }
+    },
+    data: null
   };
 
   if (content) {
@@ -126,11 +144,15 @@ RouteController.respond = function(request, response, content, code, decorator) 
 
   if (decorator) {
     return decorator(payload, request, response, function() {
-      response.status(payload.status.code).send(payload);
+      response
+        .status(payload.status.code)
+        .send(payload.data);
     });
   }
 
-  response.status(code).send(payload);
+  response
+    .status(payload.status.code)
+    .send(payload.data);
 };
 
 /**
@@ -140,7 +162,7 @@ RouteController.respond = function(request, response, content, code, decorator) 
  * @param {Response} response Response object.
  */
 RouteController.error = function(request, response, error) {
-  RouteController.respond.call(this, request, response, {
+  RouteController.respond(request, response, {
     title: 'Server error',
     description: "The server couldn't process the request.",
     error: error.toString()
@@ -154,7 +176,7 @@ RouteController.error = function(request, response, error) {
  * @param {Response} response Response object.
  */
 RouteController.notFound = function(request, response) {
-  RouteController.respond.call(this, request, response, {
+  RouteController.respond(request, response, {
     title: 'Page not found',
     description: "The page you're looking for wasn't found."
   }, 404);
@@ -167,7 +189,7 @@ RouteController.notFound = function(request, response) {
  * @param {Response} response Response object.
  */
 RouteController.forbidden = function(request, response) {
-  RouteController.respond.call(this, request, response, {
+  RouteController.respond(request, response, {
     title: 'Forbidden',
     description: "You don't have permission to access this page."
   }, 403);

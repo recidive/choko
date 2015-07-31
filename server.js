@@ -1,18 +1,18 @@
 /*
- * Create and initialize the Choko server.
+ * Create and initialize the Choko application.
  */
-var Server = require('./lib/server');
+
+var Application = require('./lib/application');
 
 var args = getArguments();
+var app = new Application(args.path);
+app.start(args.port);
 
-var server = new Server(args.path);
-server.start(args.port);
-
-// Get port and applications folder path from command line arguments. Use port
-// from "-p" or fallback to 3000. Default folder is ./applicaions.
+// Get port and application folder path from command line arguments. Use port
+// from "-p" or fallback to 3000. Default folder is the current folder.
 function getArguments() {
   var port = 3000;
-  var path = './applications';
+  var path = '.';
   var args = process.argv.slice(2);
 
   while (args.length) {
@@ -22,7 +22,7 @@ function getArguments() {
         port = args.shift();
         break;
       default:
-        path = arg;
+        path = arg || path;
     }
   }
 

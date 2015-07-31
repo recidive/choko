@@ -8,7 +8,16 @@
   can manage your application and the content related to it on a central place,
   with flexible and powerful APIs.
 
+## Demo application
+
+  You can see Choko in action at [demo.choko.org](http://demo.choko.org).
+
 ## Installation
+
+  > **Please note:** since Choko is under very active development, to have
+  access to the latest functionality, it's advised to install Choko from the
+  sources. For instructions on how to do this, please refer to the [Installing
+  from the sources](#installing-from-the-sources) section bellow.
 
   You can install the latest version of Choko globally using
   [NPM](http://npmjs.org):
@@ -22,11 +31,11 @@
 
 ## Getting started
 
-  To create your first application with Choko, you should create a folder that
-  will be your applications repository, then run Choko on that folder.
+  To create your first application with Choko, you should call the choko
+  command passing a folder name or path that will be your application root
+  folder.
 
-    mkdir applications
-    choko applications
+    choko myApp
 
   Then follow the steps to have access to the installer.
 
@@ -36,10 +45,31 @@
 
     sudo npm update -g choko
 
+## Installing from the sources
+
+  If you have some specific development needs, or you want to be involved with
+  Choko core development, you might want to install and run Choko from the
+  sources. In order to do so, you can clone the repository and build Choko by
+  hand.
+
+    git clone https://github.com/recidive/choko.git
+    cd choko
+    npm install
+    bower install
+
+  Now you can start the Choko server by going to the choko main folder and
+  running it.
+
+    node server.js myApp
+
+  You can also run it using the choko script like this:
+
+    bin/choko
+
 ## Directory structure
 
 ```
-applications   -> Where all applications live.
+applications   -> Where core applications live.
   default      -> Default application, all other applications extend this.
     extensions -> Default application extensions.
     public     -> Default application public files.
@@ -52,6 +82,6 @@ repository folder.
 
 ## Coding style
 
-We try to conform to [Felix's Node.js Style Guide](http://nodeguide.com/style.html)
+We try to conform to [Felix's Node.js Style Guide](https://github.com/felixge/node-style-guide)
 for all of our JavaScript code. For coding documentation we use [JSDoc](http://usejsdoc.org/)
 style.

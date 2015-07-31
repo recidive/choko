@@ -15,9 +15,13 @@
     "theme": {},
     "rest": {},
     "form": {},
+    "content": {},
+    "article": {},
     "session": {},
     "user": {},
     "file": {},
-    "management": {}
+    "management": {},
+    "user-management": {},
+    "content-management": {}
   }
 }

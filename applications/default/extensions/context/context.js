@@ -1,5 +1,5 @@
 var async = require('async');
-var expressUtils = require('express/lib/utils');
+var pathToRegexp = require('path-to-regexp');
 var contextMiddleware = require('./lib/contextMiddleware');
 
 var context = module.exports;
@@ -8,12 +8,8 @@ var context = module.exports;
  * The init() hook.
  */
 context.init = function(application, callback) {
-  // Load all contexts.
-  var Context = this.application.type('context');
-  Context.list({}, function(err, contexts) {
-    application.application.use(contextMiddleware(application));
-    callback();
-  });
+  application.routers.page.use(contextMiddleware(application));
+  callback();
 };
 
 /**
@@ -35,6 +31,7 @@ context.permission = function(permissions, callback) {
  */
 context.type = function(types, callback) {
   var newTypes = {};
+  var application = this.application;
 
   newTypes['context'] = {
     title: 'Context',
@@ -43,10 +40,12 @@ context.type = function(types, callback) {
       name: {
         title: 'Name',
         type: 'text',
+        required: true
       },
       title: {
         title: 'Title',
         type: 'text',
+        required: true
       },
       conditions: {
         title: 'Conditions',
@@ -59,6 +58,10 @@ context.type = function(types, callback) {
           titleField: 'type'
         }
       },
+      matchAll: {
+        title: 'Match all conditions',
+        type: 'boolean',
+      },
       reactions: {
         title: 'Reactions',
         type: 'reference',
@@ -70,6 +73,20 @@ context.type = function(types, callback) {
         }
       }
     },
+    displays: {
+      'list-group-item': {
+        'heading': [{
+          fieldName: 'title',
+          format: 'title',
+          weight: 0
+        }],
+        'text': [{
+          fieldName: 'description',
+          format: 'paragraph',
+          weight: 5
+        }]
+      }
+    },
     access: {
       'list': 'manage-contexts',
       'load': 'manage-contexts',
@@ -78,31 +95,40 @@ context.type = function(types, callback) {
       'delete': 'manage-contexts'
     },
     methods: {
+      // @todo: move this to an extension method.
       execute: function(request, response, callback) {
-        var self = this;
-
-        // Call callback bellow on the first conditionType that pass.
-        // @todo: Eventually we may want to add an operator and also allow OR
-        // and ANDs.
+        // Initialize conditions.
         this.conditions = this.conditions || {};
-        async.detect(Object.keys(this.conditions), function(conditionTypeName, next) {
-          self.application.load('contextConditionType', conditionTypeName, function(err, conditionType) {
-            conditionType.check(request, self.conditions[conditionTypeName], function(match) {
+
+        var conditionTypeNames = Object.keys(this.conditions);
+
+        // Call callback bellow on the first conditionType that pass, if
+        // matchAll is enabled all conditions must pass.
+        var method = this.matchAll ? 'filter' : 'detect';
+        var context = this;
+        async[method](conditionTypeNames, function(conditionTypeName, next) {
+          application.pick('contextConditionType', conditionTypeName, function(error, conditionType) {
+            conditionType.check(request, context.conditions[conditionTypeName], function(match) {
               next(match);
             });
           });
-        }, function(result) {
-          if (!result) {
+        },
+        function(result) {
+          // If none matches or 'matchAll' is enabled and not all conditions
+          // matches, return false.
+          if (!result || (context.matchAll && result.length != conditionTypeNames.length)) {
             return callback(false);
           }
-          self.reactions = self.reactions || {};
-          async.each(Object.keys(self.reactions), function(reactionTypeName, next) {
-            self.application.load('contextReactionType', reactionTypeName, function(err, reactionType) {
-              reactionType.react(request, response, self.reactions[reactionTypeName], function(err) {
-                next(err);
+
+          context.reactions = context.reactions || {};
+          async.each(Object.keys(context.reactions), function(reactionTypeName, next) {
+            application.pick('contextReactionType', reactionTypeName, function(error, reactionType) {
+              reactionType.react(request, response, context.reactions[reactionTypeName], function(error) {
+                next(error);
               });
             });
-          }, function() {
+          },
+          function() {
             callback(true);
           });
         });
@@ -184,6 +210,7 @@ context.context = function(contexts, callback) {
  */
 context.contextConditionType = function(conditionTypes, callback) {
   var newConditionTypes = {};
+  var application = this.application;
 
   newConditionTypes['siteWide'] = {
     title: 'Site wide',
@@ -208,9 +235,61 @@ context.contextConditionType = function(conditionTypes, callback) {
     },
     check: function(request, urls, callback) {
       // Use express regex to match URL.
-      var regex = expressUtils.pathRegexp(urls);
-      async.detect(urls, function(url, next) {
-        next(regex.exec(request.url));
+      var regex = pathToRegexp(urls);
+      callback(regex.exec(request.url));
+    }
+  };
+
+  newConditionTypes['and'] = {
+    title: 'And',
+    standalone: false,
+    fields: {
+      value: {
+        title: 'Conditions',
+        type: 'reference',
+        reference: {
+          type: 'contextCondition',
+          multiple: true,
+          inline: true
+        }
+      }
+    },
+    check: function(request, conditions, callback) {
+      var conditionTypeNames = Object.keys(conditions);
+      async.filter(conditionNames, function(conditionTypeName, next) {
+        application.pick('contextConditionType', conditionTypeName, function(err, conditionType) {
+          conditionType.check(request, conditions[conditionTypeName], function(match) {
+            next(match);
+          });
+        });
+      }, function(result) {
+        // Check if all conditions passed.
+        callback(result.length == conditionTypeNames.length);
+      });
+    }
+  };
+
+  newConditionTypes['or'] = {
+    title: 'Or',
+    standalone: false,
+    fields: {
+      value: {
+        title: 'Conditions',
+        type: 'reference',
+        reference: {
+          type: 'contextCondition',
+          multiple: true,
+          inline: true
+        }
+      }
+    },
+    check: function(request, conditions, callback) {
+      async.detect(Object.keys(conditions), function(conditionTypeName, next) {
+        application.pick('contextConditionType', conditionTypeName, function(err, conditionType) {
+          conditionType.check(request, conditions[conditionTypeName], function(match) {
+            next(match);
+          });
+        });
       }, function(result) {
         callback(result !== undefined);
       });
@@ -256,6 +335,23 @@ context.contextReactionType = function(reactionTypes, callback) {
     },
     react: function(request, response, scripts, callback) {
       response.payload.scripts = response.payload.scripts ? response.payload.scripts.merge(scripts) : scripts;
+      callback();
+    }
+  };
+
+  newReactionTypes['pageTitle'] = {
+    title: 'Set page title',
+    description: 'Set the title of the page.',
+    standalone: false,
+    fields: {
+      title: {
+        title: 'Title',
+        description: 'Page title.',
+        type: 'text'
+      }
+    },
+    react: function(request, response, title, callback) {
+      response.payload.title = title;
       callback();
     }
   };

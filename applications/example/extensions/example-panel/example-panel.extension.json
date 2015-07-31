@@ -1,5 +1,0 @@
-{
-  "title": "Example Panel",
-  "description": "Show up how to create panels.",
-  "dependencies": ["panel"]
-}

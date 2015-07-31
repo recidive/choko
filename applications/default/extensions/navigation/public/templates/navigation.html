@@ -1,5 +1,5 @@
 <div ng-repeat="panel in panels[panel.name] | orderBy:'weight'" ng-controller="PanelController" ng-include="template" class="panel-wrapper" ng-class="{'pull-right': !panel.stacked}"></div>
 
 <ul ng-controller="NavigationController" ng-class="panel.classes">
-  <li ng-repeat="item in data.items" ng-class="{active: isActive(item.url)}"><a ng-click="isAbsolute(item.url) || goTo(item.url, $event)" ng-attr-href="{{isAbsolute(item.url) ? item.url : '#'}}">{{item.title}}</a></li>
+  <li ng-repeat="item in data.items" ng-class="{active: isActive(item.url)}"><a ng-click="isAbsolute(item.url) || goTo(item.url, $event)" ng-attr-href="{{isAbsolute(item.url) ? item.url : '#'}}"><span ng-if="item.icon" ng-class="item.icon"></span> {{item.title}}</a></li>
 </ul>

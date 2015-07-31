@@ -6,5 +6,6 @@
   "access": "manage-themes",
   "type": "list",
   "itemType": "theme",
-  "template": "templates/list-group.html"
+  "listStyle": "thumbnails",
+  "itemDisplay": "thumbnail"
 }

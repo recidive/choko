@@ -1,5 +1,5 @@
 <div ng-class="row.classes" class="container">
-  <div ng-if="row.region" ng-include="'templates/region.html'" ng-controller="RegionController"></div>
+  <div ng-if="row.region" ng-include="'/templates/region.html'" ng-controller="RegionController"></div>
   <!-- Columns -->
   <div ng-repeat="column in row.columns | orderBy:'weight'" ng-controller="ColumnController" ng-include="getTemplate()" ng-class="column.classes" class="column-{{column.name}} col-md-{{column.width}}"></div>
 </div>

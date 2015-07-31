@@ -1,0 +1,9 @@
+{
+  "title": "Darkly",
+  "description": "Flatly in night mode.",
+  "thumbnail": "/lib/bootswatch/darkly/thumbnail.png",
+  "styles": [
+    "/lib/bootswatch/darkly/bootstrap.min.css",
+    "/lib/font-awesome/css/font-awesome.min.css"
+  ]
+}

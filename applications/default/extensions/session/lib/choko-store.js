@@ -6,7 +6,7 @@
  * Module dependencies.
  */
 var util = require('util');
-var Store = require('express').session.Store;
+var Store = require('express-session').Store;
 var async = require('async');
 
 /**
@@ -90,7 +90,7 @@ ChokoStore.prototype.destroy = function(hash, callback) {
  * @param {Function} callback
  */
 ChokoStore.prototype.all = function(callback) {
-  this.model.query({}, function(error, sessions) {
+  this.model.list({}, function(error, sessions) {
     if (error) {
       return callback(error);
     }
@@ -116,7 +116,7 @@ ChokoStore.prototype.all = function(callback) {
  * @param {Function} callback
  */
 ChokoStore.prototype.clear = function(callback) {
-  this.model.query({}, function(error, sessions) {
+  this.model.list({}, function(error, sessions) {
     if (error) {
       return callback(error);
     }
@@ -139,7 +139,7 @@ ChokoStore.prototype.clear = function(callback) {
  * @param {Function} callback
  */
 ChokoStore.prototype.length = function(callback) {
-  this.model.query({}, function(error, sessions) {
+  this.model.list({}, function(error, sessions) {
     if (error) {
       return callback(error);
     }

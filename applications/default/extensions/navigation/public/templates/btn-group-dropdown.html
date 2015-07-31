@@ -1,10 +1,10 @@
 <div class="dropdown">
-  <button type="button" ng-class="item.classes" class="btn dropdown-toggle" data-toggle="dropdown">
+  <button type="button" ng-controller="NavigationItemController" ng-class="item.classes" class="btn dropdown-toggle" data-toggle="dropdown">
     {{item.title}}
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu">
-    <li ng-repeat="subItem in item.items">
+    <li ng-repeat="subItem in item.items" ng-controller="NavigationItemController">
       <a ng-click="isAbsolute(subItem.url) || goTo(subItem.url, $event)" ng-attr-href="{{isAbsolute(subItem.url) ? subItem.url : '#'}}">{{subItem.title}}</a>
     </li>
   </ul>
