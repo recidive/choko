@@ -10,8 +10,8 @@ before(function(done) {
     return app;
   };
 
-  app.start(3200, function () {
-    done();
+  app.start(3200, function (error, application) {
+    done(error);
   });
 });
 
