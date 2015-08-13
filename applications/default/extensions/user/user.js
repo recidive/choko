@@ -612,6 +612,7 @@ user.route = function(routes, callback) {
 
   // Current user route.
   newRoutes['/rest/user/current'] = {
+    middleware: passport.authenticate(['basic', 'anonymous']),
     access: true,
     callback: function(request, response, callback) {
       callback(null, request.user || {
