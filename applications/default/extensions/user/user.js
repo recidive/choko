@@ -610,6 +610,18 @@ user.route = function(routes, callback) {
     }
   };
 
+  // Current user route.
+  newRoutes['/rest/user/current'] = {
+    access: true,
+    callback: function(request, response, callback) {
+      callback(null, request.user || {
+        username: 'anonymous',
+        roles: ['anonymous']
+      });
+    },
+    router: 'rest'
+  };
+
   callback(null, newRoutes);
 };
 
