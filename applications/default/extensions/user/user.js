@@ -610,15 +610,27 @@ user.route = function(routes, callback) {
     }
   };
 
+  var anonymous = {
+    username: 'anonymous',
+    roles: ['anonymous']
+  };
+
   // Current user route.
   newRoutes['/rest/user/current'] = {
     middleware: passport.authenticate(['basic', 'anonymous']),
     access: true,
     callback: function(request, response, callback) {
-      callback(null, request.user || {
-        username: 'anonymous',
-        roles: ['anonymous']
-      });
+      callback(null, request.user || anonymous);
+    },
+    router: 'rest'
+  };
+
+  newRoutes['/rest/user/sign-out'] = {
+    access: 'sign-out',
+    callback: function(request, response, callback) {
+      // Log user out.
+      request.logout();
+      callback(null, anonymous);
     },
     router: 'rest'
   };
