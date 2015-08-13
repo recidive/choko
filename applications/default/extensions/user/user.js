@@ -610,12 +610,40 @@ user.route = function(routes, callback) {
     }
   };
 
+  // Anonymous user object.
   var anonymous = {
     username: 'anonymous',
     roles: ['anonymous']
   };
 
-  // Current user route.
+  newRoutes['/rest/user/sign-in'] = {
+    access: 'sign-in',
+    callback: function(request, response, callback) {
+      // Check if there are both an username and a password.
+      if (!request.body.username || !request.body.password) {
+        return callback(null, ['Please provide an username and a password.'], 400);
+      }
+      passport.authenticate('local', function(error, account, info) {
+        if (error) {
+          return callback(error);
+        }
+
+        if (!account) {
+          return callback(null, ['Invalid username or password.'], 401);
+        }
+
+        // Log user in.
+        request.login(account, function(error) {
+          if (error) {
+            return callback(error);
+          }
+          callback(null, account);
+        });
+
+      })(request, response, callback);
+    }
+  };
+
   newRoutes['/rest/user/current'] = {
     middleware: passport.authenticate(['basic', 'anonymous']),
     access: true,
