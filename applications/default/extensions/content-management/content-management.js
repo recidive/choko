@@ -24,28 +24,6 @@ contentManagement.page = function(pages, callback) {
     };
   }
 
-  newPages['manage-extensions'] = {
-    path: '/manage/extensions',
-    title: 'Extensions',
-    subtitle: 'The building blocks',
-    description: 'Extensions are groups of functionality.',
-    access: 'manage-extensions',
-    callback: function(request, response, callback) {
-      var extensions = self.application.extensions;
-      var result = {};
-      for (var extensionName in extensions) {
-        var extension = extensions[extensionName];
-        result[extensionName] = {
-          title: extension.settings.title,
-          description: extension.settings.description
-        };
-      }
-      response.payload.page.items = result;
-      callback();
-    },
-    template: '/templates/list-group.html'
-  };
-
   callback(null, newPages);
 };
 
