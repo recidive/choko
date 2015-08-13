@@ -1,4 +1,5 @@
 {
   "title": "REST",
-  "description": "The REST server."
+  "description": "The REST server.",
+  "dependencies": ["user"]
 }
