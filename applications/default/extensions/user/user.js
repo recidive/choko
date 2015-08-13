@@ -641,7 +641,8 @@ user.route = function(routes, callback) {
         });
 
       })(request, response, callback);
-    }
+    },
+    router: 'rest'
   };
 
   newRoutes['/rest/user/current'] = {
