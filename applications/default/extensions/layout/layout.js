@@ -94,6 +94,10 @@ layout.type = function(types, callback) {
       region: {
         title: 'Region',
         type: 'boolean'
+      },
+      alwaysRender: {
+        title: 'Always Render',
+        type: 'boolean'
       }
     }
   };
@@ -124,6 +128,10 @@ layout.type = function(types, callback) {
       },
       region: {
         title: 'Region',
+        type: 'boolean'
+      },
+      alwaysRender: {
+        title: 'Always Render',
         type: 'boolean'
       }
     }
