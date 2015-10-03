@@ -160,9 +160,14 @@ angular.module('choko')
         $scope.view.itemKey = Params.parse($scope.view.itemKey, $scope);
       }
 
-      // Parse other params.
-      Object.keys($scope.view.query || {}).forEach(function (param) {
+      // Parse query params.
+      Object.keys($scope.view.query || {}).forEach(function(param) {
         $scope.view.query[param] = Params.parse($scope.view.query[param], $scope);
+      });
+
+      // Parse other params.
+      Object.keys($scope.view.params || {}).forEach(function(param) {
+        $scope.view.params[param] = Params.parse($scope.view.params[param], $scope);
       });
 
       // Replace tokens in title.
@@ -257,6 +262,11 @@ angular.module('choko')
           if ($scope.view.itemKey) {
             url += '/' + $scope.view.itemKey;
           }
+
+          // Add params to data if any.
+          Object.keys($scope.view.params || {}).forEach(function(param) {
+            $scope.data[param] = $scope.data[param] || $scope.view.params[param];
+          });
 
           $http.post(url, $scope.data)
             .success(function(data, status, headers, config) {
