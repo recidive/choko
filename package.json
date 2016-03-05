@@ -32,9 +32,9 @@
     "path-to-regexp": "0.1.x",
     "prana": "0.1.x",
     "prompt": "0.2.x",
-    "sails-mongo": "0.10.x",
+    "sails-mongo": "0.12.x",
     "validator": "3.41.x",
-    "waterline": "0.10.x",
+    "waterline": "0.11.x",
     "waterline-prana": "recidive/waterline-prana#master"
   },
   "devDependencies": {
