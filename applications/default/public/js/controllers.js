@@ -223,7 +223,7 @@ angular.module('choko')
       // Handle 'form' type views.
       if ($scope.view.type === 'form' && ($scope.view.itemType || $scope.view.formName)) {
         $scope.data = {};
-        $scope.view.formName = $scope.view.itemType ?
+        $scope.view.formName = $scope.view.itemType && !$scope.view.formName ?
           'type-' + $scope.view.itemType :
           $scope.view.formName;
 
