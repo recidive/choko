@@ -1,11 +1,11 @@
-var Application = require('../lib/application');
+var Application = require('../../lib/application');
 var express = require('express');
 var async = require('async');
 var path = require('path');
 var app;
 
 before(function(done) {
-  app = new Application(path.normalize(__dirname + '/applications/test-app'));
+  app = new Application(path.normalize(__dirname + '/../applications/test-app'));
   this.getApp = function() {
     return app;
   };

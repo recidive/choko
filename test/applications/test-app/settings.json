@@ -1,5 +1,5 @@
 {
-  "database": "mongodb://localhost/test-application",
+  "database": "mongodb://172.17.0.2/test-application",
   "sessionSecret": "no-secrets",
   "application": {
     "name": "Test application"
