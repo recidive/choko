@@ -40,13 +40,15 @@
   },
   "devDependencies": {
     "bower": "*",
-    "gulp": "*",
+    "gulp": "^3.9.1",
     "gulp-bower": "*",
     "gulp-git": "*",
-    "mocha": "*",
-    "supertest": "0.13.x",
+    "gulp-protractor": "^2.3.0",
     "jasmine-spec-reporter": "^2.4.0",
-    "protractor": "3.0.0"
+    "mocha": "*",
+    "protractor": "3.0.0",
+    "require-dir": "^0.3.0",
+    "supertest": "0.13.x"
   },
   "bin": {
     "choko": "bin/choko"
