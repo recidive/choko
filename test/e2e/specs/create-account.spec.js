@@ -1,22 +1,22 @@
-var ChokoOrg = require('../page-objects/choko-org.po');
+var Home = require('../page-objects/home.po');
 var CreateAccountForm = require('../page-objects/create-account-form.po');
 var Messages = require('../page-objects/partials/messages.po');
 
 describe( 'Create account', function() {
 
-  var chokoOrg = new ChokoOrg();
+  var home = new Home();
   var createAccountForm = new CreateAccountForm();
   var messages = new Messages();
 
   beforeEach(function() {
-    chokoOrg.visit();
-    chokoOrg.createAccountLink.click();
+    home.visit();
+    home.createAccountLink.click();
   });
 
   it( 'navigate to create an account', function() {
 
     browser.getCurrentUrl().then(function(url) {
-      expect(url).toEqual('http://choko.org/create-account');
+      expect(url).toEqual('http://localhost:3000/create-account');
     });
 
   });
