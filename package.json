@@ -3,7 +3,7 @@
   "version": "0.0.6",
   "description": "High performance and high level web application framework.",
   "scripts": {
-    "test": "mocha test",
+    "test": "gulp test",
     "webdriver-update": "node ./node_modules/protractor/bin/webdriver-manager update"
   },
   "keywords": [
@@ -44,6 +44,8 @@
     "gulp-bower": "*",
     "gulp-git": "*",
     "gulp-protractor": "^2.3.0",
+    "gulp-sequence": "^0.4.5",
+    "gulp-spawn-mocha": "^2.2.2",
     "jasmine-spec-reporter": "^2.4.0",
     "mocha": "*",
     "protractor": "3.0.0",

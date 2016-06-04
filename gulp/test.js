@@ -3,6 +3,8 @@
  */
 
 var gulp = require('gulp'),
+  mocha = require('gulp-spawn-mocha'),
+  sequence = require('gulp-sequence'),
   spawn = require('child_process').spawn,
   app = require('./server');
 
@@ -31,3 +33,14 @@ gulp.task('test:e2e', ['server:test'], function (done) {
     process.exit();
   });
 });
+
+/**
+ * Unit test: uses Mocha to perform unit tests.
+ */
+gulp.task('test:unit', function() {
+  return gulp
+    .src(['test/unit/*.test.js'])
+    .pipe(mocha());
+});
+
+gulp.task('test', sequence('test:unit', 'test:e2e'));
